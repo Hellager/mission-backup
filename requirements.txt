@@ -1,0 +1,5 @@
+APScheduler==3.8.0
+jsonpath==0.82
+py7zr==0.16.1
+PyQt5==5.15.5
+watchdog==2.1.6
