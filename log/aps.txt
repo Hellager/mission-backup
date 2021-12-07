@@ -1,3 +1,0 @@
-2021-10-28 10:35:18,126 - C:\Users\hp\AppData\Local\Programs\Python\Python36-32\lib\site-packages\apscheduler\schedulers\base.py[line:886] - INFO: Added job "ScheduleRunner.compress" to job store "default"
-2021-10-28 10:36:18,131 - C:\Users\hp\AppData\Local\Programs\Python\Python36-32\lib\site-packages\apscheduler\executors\base.py[line:123] - INFO: Running job "ScheduleRunner.compress (trigger: interval[0:01:00], next run at: 2021-10-28 10:36:18 CST)" (scheduled at 2021-10-28 10:36:18.125306+08:00)
-2021-10-28 10:36:18,162 - C:\Users\hp\AppData\Local\Programs\Python\Python36-32\lib\site-packages\apscheduler\executors\base.py[line:144] - INFO: Job "ScheduleRunner.compress (trigger: interval[0:01:00], next run at: 2021-10-28 10:37:18 CST)" executed successfully
