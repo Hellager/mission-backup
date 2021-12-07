@@ -422,6 +422,11 @@ class Scheduler(object):
         if not os.path.exists(filepath):
             config_file = open(filepath, 'w')
             config_file.close()
+            remote_config = {
+                'is_any_webdav_service': 'False',
+                'is_any_samba_service': 'False'
+            }
+            self.on_sync_widget_remote_callback(remote_config)
             return
         if not os.path.getsize(filepath):
             remote_config = {
