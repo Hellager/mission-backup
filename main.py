@@ -3,7 +3,7 @@
 """
 Time:     2021/10/27 17:24
 Author:   Gu Jun jie
-Version:  V 1.0.0
+Version:  V 1.0.1
 File:     main.py
 Describe: an automatic backup software , Github link: https://github.com/Hellager/Backup-Schedule
 """
