@@ -22,6 +22,7 @@
 
 #### 安装教程
 下载压缩包，解压后直接运行即可 <br>
+可在 Release 中下载 Windows 端和 Linux 端编译好的程序
 [Backup-Schedule v1.0.1](https://pan.baidu.com/s/1lp-ar6vcfxS4mFqSZ-P7gA) 提取码: 63m1
 
 #### 使用说明
@@ -84,5 +85,3 @@ self.timer = threading.Timer(3, self.check_snap_shot)
 &nbsp;请避免同时需要监控的文件过多占用大量系统资源
 
 4. &nbsp; **远程同步备份不受限制** 当计划存在限制条件时 远程的备份不会自动同步进行限制即不会限制其数量/大小 <br>
-
-4. &nbsp; 理论上支持多平台 暂未测试 
