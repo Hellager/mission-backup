@@ -22,7 +22,7 @@
 
 #### 安装教程
 下载压缩包，解压后直接运行即可 <br>
-可在 Release 中下载 Windows 端和 Linux 端编译好的程序
+可在 Release 中下载 Windows 端和 Linux 端编译好的程序<br>
 [Backup-Schedule v1.0.1](https://pan.baidu.com/s/1lp-ar6vcfxS4mFqSZ-P7gA) 提取码: 63m1
 
 #### 使用说明
