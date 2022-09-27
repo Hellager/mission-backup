@@ -7,18 +7,22 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
-    "vue": "^3.2.37",
-    "@tauri-apps/api": "^1.1.0"
+    "@tauri-apps/api": "^1.1.0",
+    "vue": "^3.2.37"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.1.0",
     "@types/node": "^18.7.10",
     "@vitejs/plugin-vue": "^3.0.1",
     "typescript": "^4.6.4",
     "vite": "^3.0.2",
-    "vue-tsc": "^0.40.0",
-    "@tauri-apps/cli": "^1.1.0"
+    "vitepress": "1.0.0-alpha.17",
+    "vue-tsc": "^0.40.0"
   }
 }
