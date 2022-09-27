@@ -1,7 +1,0 @@
-APScheduler==3.8.0
-httpx==0.20.0
-py7zr==0.16.1
-PyQt5==5.15.6
-pysmb==1.2.7
-watchdog==2.1.6
-webdav4==0.9.3
