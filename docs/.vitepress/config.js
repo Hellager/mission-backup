@@ -1,6 +1,6 @@
 export default {
     title: '有备文档',
-    description: '简单的本地备份软件',
+    description: '简单好用的本地备份软件',
     themeConfig: {
         logo: '/icon.svg',
         sidebar: [
