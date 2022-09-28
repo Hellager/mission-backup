@@ -1,4 +1,5 @@
 export default {
+    base: '/Badkup-Schedule'
     title: '有备文档',
     description: '简单好用的本地备份软件',
     themeConfig: {
