@@ -1,5 +1,5 @@
 export default {
-    base: '/Backup-Schedule'
+    base: '/Youbei'
     title: '有备文档',
     description: '简单好用的本地备份软件',
     themeConfig: {
