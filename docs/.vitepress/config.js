@@ -45,7 +45,7 @@ export default {
             { icon: 'github', link: 'https://github.com/Hellager' },
         ],
         footer: {
-            message: 'Released under the MIT License.',
+            message: 'Released under the Apache License.',
             copyright: 'Copyright © 2022 present by Steins'
         }
 
