@@ -1,6 +1,8 @@
+
+
 export default {
-    base: '/Youbei'
-    title: '有备文档',
+    base: '/Youbei/',
+    title: '有备',
     description: '简单好用的本地备份软件',
     themeConfig: {
         logo: '/icon.svg',
