@@ -43,6 +43,15 @@
 
 初始化软件主题，与软件设置同步
 
+
+
+### initialize_timing_save_data
+
+- props
+- return
+
+定期保存当前数据
+
 ### build_router_transitionname
 
 - props
@@ -100,4 +109,13 @@
 - return
 
 监听 cron 任务执行事件更新事件
+
+
+
+### listen_to_timing_save_data
+
+- props
+- return
+
+监听定时备份数据事件
 

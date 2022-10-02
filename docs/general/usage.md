@@ -1,26 +1,8 @@
 # 使用
 
-## 下载安装
-
-### Github release
-
-在 [Release 界面](https://github.com/Hellager/Backup-Schedule/releases) 选择对应系统版本下载安装即可
-
-###  百度云网盘
-
-
-
-### 自行编译
-
-```shell
-git clone https://github.com/Hellager/Backup-Schedule
-pnpm install
-pnpm tauri build
-```
-
 ## 主界面
 
-[![xFEHrq.png](https://s1.ax1x.com/2022/09/22/xFEHrq.png)](https://imgse.com/i/xFEHrq)
+![主界面.gif](https://s2.loli.net/2022/09/30/X3rR4WkMbizJwta.gif)
 
 主界面展示当前所有储存的任务及实现功能页面跳转
 
@@ -30,13 +12,14 @@ pnpm tauri build
 
 ### 锁屏
 
-[![xFVSz9.png](https://s1.ax1x.com/2022/09/22/xFVSz9.png)](https://imgse.com/i/xFVSz9)
+![锁屏.gif](https://s2.loli.net/2022/09/30/IRh1kecduPYEifL.gif)
 
 通过锁屏限制所有操作，仅正确输入对应密码后可进入软件
 
 默认密码为 2022
 
 ### 添加任务
+![添加任务.gif](https://s2.loli.net/2022/09/30/RJgn1Q4bTk6jzAV.gif)
 
 点击托盘➕按钮即可跳转至添加任务界面
 
@@ -66,7 +49,7 @@ pnpm tauri build
 
 ## 设置界面
 
-[![xFmRyj.png](https://s1.ax1x.com/2022/09/22/xFmRyj.png)](https://imgse.com/i/xFmRyj)
+![设置界面.png](https://s2.loli.net/2022/09/30/8KBIsag3xJqo47P.png)
 
 | 设置项       | 描述                                             |
 | ------------ | ------------------------------------------------ |
@@ -81,7 +64,7 @@ pnpm tauri build
 
 ## 任务界面
 
-[![xFV0e0.png](https://s1.ax1x.com/2022/09/22/xFV0e0.png)](https://imgse.com/i/xFV0e0)
+![任务界面.png](https://s2.loli.net/2022/09/30/SvBEPZL4mcXAO5b.png)
 
 | 项目名称     | 是否必需         | 值类型 | 备注                                      |
 | ------------ | ---------------- | ------ | ----------------------------------------- |
@@ -101,7 +84,7 @@ pnpm tauri build
 
 ## 统计界面
 
-[![xFm5T0.png](https://s1.ax1x.com/2022/09/22/xFm5T0.png)](https://imgse.com/i/xFm5T0)
+![统计界面.png](https://s2.loli.net/2022/09/30/NlqF46s9wJD1Edc.png)
 
 ### 选择任务
 

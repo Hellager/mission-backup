@@ -1,16 +1,58 @@
-# Tauri + Vue 3 + TypeScript
+<p align="center"><img src="https://github.com/Hellager/MissionBackup/blob/main/docs/.vitepress/icon.svg" alt="Logo" width="100"/></p>
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+<h2 align="center">有备 - 简单好用的备份软件</h2>
 
-## Recommended IDE Setup
+<p align="center">
+<a href=""><img src="https://img.shields.io/github/license/hellager/MissionBackup"></a>
+<a href="https://youbei.hellagur.com/"><img src="https://img.shields.io/badge/docs-passing-brightgreen"></a>
+<a href=""><img src="https://img.shields.io/github/workflow/status/Hellager/MissionBackup/Deploy"></a>
+<a href="https://github.com/Hellager/MissionBackup/releases"><img src="https://img.shields.io/github/v/release/hellager/MissionBackup"></a>
+<a href=""><img src="https://img.shields.io/github/downloads/hellager/MissionBackup/total"></a>
+</p>
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## 特性
 
-## Type Support For `.vue` Imports in TS
+- 基于 Tauri，兼顾了 web 前端和 rust 后端
+- 5MB 的安装包，15MB 的程序，多平台可用
+- 基于 cron 和 notify 实现对目标定时/监控备份
+- 可自定义备份保存时长和空间
+- 通过图表直观展示备份情况
+- 完善的文档支持
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+## 安装
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+### 下载界面
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+前往文档的下载界面，选择渠道进行下载
+
+### Github Release
+
+前往 Github Release 界面，选择版本进行下载
+
+### 自编译
+
+```shell
+$ git clone https://github.com/Hellager/MissionBackup.git
+$ cd ./MissionBackup
+$ pnpm install
+$ pnpm tauri build
+```
+
+## 使用
+
+前往文档 使用界面 查看
+
+## 鸣谢
+
+[Tauri 框架](https://github.com/tauri-apps/tauri)
+
+[Element Plus UI](https://github.com/element-plus/element-plus)
+
+[hotwatch 监控文件](https://github.com/francesca64/hotwatch)
+
+[tokio-cron-scheduler cron 任务控制器](https://github.com/mvniekerk/tokio-cron-scheduler)
+
+## License
+
+[Apache](https://github.com/Hellager/youbei_template/blob/main/LICENSE) © Steins
+

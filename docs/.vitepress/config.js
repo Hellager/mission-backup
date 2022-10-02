@@ -1,7 +1,6 @@
 
 
 export default {
-    base: '/Youbei/',
     title: '有备',
     description: '简单好用的本地备份软件',
     themeConfig: {
@@ -10,6 +9,7 @@ export default {
             {
                 text: '项目简介',
                 items: [
+                  { text: '下载', link: '/general/download' },
                   { text: '使用', link: '/general/usage' },
                   { text: '开发', link: '/general/develop' },
                 ]

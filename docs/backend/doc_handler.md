@@ -105,6 +105,16 @@ pub dir_increment: HashMap<String, Vec<String>>			  // 文件夹增量内容，�
 
 
 
+### start_timing_save_data
+
+- params
+  - self
+- return
+
+开始定期保存数据
+
+
+
 ### AutoStartHandler
 
 开机自启动结构体

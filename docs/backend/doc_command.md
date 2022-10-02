@@ -20,6 +20,16 @@ tauri 前后端通信相关 command，包括改变软件设置及创建/删除�
 
 
 
+### close_splashscreen
+
+- params
+  - window: tauri::Window
+- return
+
+关闭加载界面
+
+
+
 ### get_drop_path_info
 
 - params

@@ -7,16 +7,20 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "youbei",
-    "version": "0.0.0"
+    "productName": "MissionBackup",
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
       "all": true
     },
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Utility",
       "copyright": "",
       "deb": {
         "depends": []
@@ -29,7 +33,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "steins",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -55,11 +59,28 @@
     },
     "windows": [
       {
+        "label": "main",
         "fullscreen": false,
-        "height": 600,
         "resizable": true,
-        "title": "youbei",
-        "width": 800
+        "title": "Mission Backup",
+        "width": 600,
+        "height": 300,
+        "minWidth": 600,
+        "minHeight": 360,
+        "visible": false,
+        "center": true,
+        "fileDropEnabled": true,
+        "decorations": false
+      },
+      {
+        "width": 500,
+        "height": 300,
+        "center": true,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen",
+        "title": "Loading",
+        "transparent": true
       }
     ]
   }

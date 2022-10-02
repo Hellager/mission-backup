@@ -90,3 +90,18 @@
 
 为程序添加阴影边框，在 linux 上暂不可用
 
+
+
+### check_instance
+
+- params
+  - name: &str
+- return
+
+检查程序是否为单一实例，若已存在实例则新实例将退出
+
+::: warning
+
+纯 Rust 环境可用，Tauri 环境目前多开实例仍将被视作单一实例，原因未知
+
+:::

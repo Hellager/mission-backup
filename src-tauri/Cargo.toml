@@ -11,12 +11,52 @@ rust-version = "1.57"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = "1.1"
+tauri-build = { version = "1.1", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = "1.1"
+tauri = { version = "1.1", features = ["api-all", "system-tray"] }
+fs_extra = "1.2.0"
+base64 = "0.13.0"
+log = "0.4.17"
+log4rs = "1.1.1"
+filetime = "0.2"
+hotwatch = "0.4.6"
+zip = "0.6.2"
+tar = "0.4"
+bzip2 = "0.4"
+flate2 = "1.0"
+xz2 = "0.1"
+tokio-cron-scheduler = "0.8.1"
+ignore = "0.4"
+walkdir = "2.3.2"
+wry = "0.20.2"
+native-dialog = "0.6.3"
+byte-unit = "4.0.14"
+chrono = "0.4.22"
+cron = "0.11.0"
+auto-launch = "0.4.0"
+window-shadows = "0.2.0"
+single-instance = "0.3"
+
+## Failed to build on linux and macos
+## check issue https://github.com/ioneyed/tauri-plugin-highlander/issues/10
+# [dependencies.tauri-plugin-highlander]
+# git = "https://github.com/ioneyed/tauri-plugin-highlander"
+# branch = "main"
+
+[dependencies.uuid]
+version = "1.1.2"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]
+
+[dependencies.path-absolutize]
+version = "*"
+features = ["once_cell_cache"]
 
 [features]
 # by default Tauri runs in production mode

@@ -3,17 +3,17 @@
 ## 本地开发
 
 ```shell
-git clone https://github.com/Hellager/Backup-Schedule
-cd Backup-Schedule
-pnpm install
-pnpm tauri dev
+$ git clone https://github.com/Hellager/MissionBackup.git
+$ cd ./MissionBackup
+$ pnpm install
+$ pnpm tauri dev
 ```
 
 ## 查看文档
 
 ```shell
-cd Backup-Schedule
-pnpm docs:dev
+$ cd ./MissionBackup
+$ pnpm docs:dev
 ```
 
 ## 计划支持

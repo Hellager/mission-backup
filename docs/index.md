@@ -2,18 +2,18 @@
 layout: home
 
 title: 有备
-titleTemplate: Youbei
+titleTemplate: MissionBackup
 
 hero:
   name: 有备
   text: 简单的本地备份软件
   image:
     src: /icon.svg
-    alt: Youbei
+    alt: MissionBackup
   actions:
     - theme: brand
       text: 下载使用
-      link: https://github.com/Hellager/Youbei/releases
+      link: /general/download
     - theme: alt
       text: 查看文档
       link: /general/usage

@@ -6,6 +6,7 @@
 
 ```typescript
 enum TauriCommand {
+    COMMAND_CLOSE_SPLASHSCREEN，                    // 关闭加载页面
     COMMAND_INITIALIZE_DATA,					    // 请求初始化数据
     COMMAND_IS_INITIALIZED,						    // 请求是否初始化
     COMMAND_INITIALIZE_PROGRAM_STATUS,				// 请求更新初始化状态
