@@ -1,12 +1,10 @@
 # 下载
 
-## 百度云盘
+## 百度网盘
 
-[Windows]() [Macos]() [Linux(.deb)]() [Linux(.AppImage)]()
+[Windows](https://pan.baidu.com/s/1xYZsU7koGduifIi40BnkDQ) [Macos](https://pan.baidu.com/s/1s_WSF9c7W8jdHJTSlAKd3g) [Linux(.deb)](https://pan.baidu.com/s/1jG_OFHOOp7U0DX1jt-yDDQ) [Linux(.AppImage)](https://pan.baidu.com/s/1cawywIKRUtMKuH0O1KDKDw)
 
-## 阿里云盘
-
-[Windows]() [Macos]() [Linux(.deb)]() [Linux(.AppImage)]()
+提取码均为 **ybwh**
 
 ## Github Release
 

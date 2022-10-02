@@ -5,8 +5,8 @@
 <p align="center">
 <a href=""><img src="https://img.shields.io/github/license/hellager/MissionBackup"></a>
 <a href="https://youbei.hellagur.com/"><img src="https://img.shields.io/badge/docs-passing-brightgreen"></a>
-<a href=""><img src="https://img.shields.io/github/workflow/status/Hellager/MissionBackup/Deploy"></a>
-<a href="https://github.com/Hellager/MissionBackup/releases"><img src="https://img.shields.io/github/v/release/hellager/MissionBackup"></a>
+<a href=""><img src="https://img.shields.io/github/workflow/status/Hellager/MissionBackup/Release"></a>
+<a href="https://github.com/Hellager/MissionBackup/releases"><img src="https://img.shields.io/github/v/release/Hellager/MissionBackup"></a>
 <a href=""><img src="https://img.shields.io/github/downloads/hellager/MissionBackup/total"></a>
 </p>
 
@@ -23,11 +23,11 @@
 
 ### 下载界面
 
-前往文档的下载界面，选择渠道进行下载
+前往文档 [下载界面](https://youbei.hellagur.com/general/download.html) 下载
 
 ### Github Release
 
-前往 Github Release 界面，选择版本进行下载
+前往 [Github Release](https://github.com/Hellager/MissionBackup/releases) 下载
 
 ### 自编译
 
@@ -40,7 +40,7 @@ $ pnpm tauri build
 
 ## 使用
 
-前往文档 使用界面 查看
+前往文档 [使用介绍](https://youbei.hellagur.com/general/usage.html) 查看使用指南
 
 ## 鸣谢
 
