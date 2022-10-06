@@ -3,8 +3,8 @@
 ## 本地开发
 
 ```shell
-$ git clone https://github.com/Hellager/MissionBackup.git
-$ cd ./MissionBackup
+$ git clone https://github.com/Hellager/mission-backup.git
+$ cd ./mission-backup
 $ pnpm install
 $ pnpm tauri dev
 ```
@@ -12,7 +12,7 @@ $ pnpm tauri dev
 ## 查看文档
 
 ```shell
-$ cd ./MissionBackup
+$ cd ./mission-backup
 $ pnpm docs:dev
 ```
 
