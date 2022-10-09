@@ -1,10 +1,15 @@
 <template>
     <div class="navigateTray">
-        <div
-            class="navigate position_down trigger"
-            @mouseenter="toggle_enter"
-            @mouseleave="toggle_leave"
-            v-if="!isShow"></div>
+        <transition
+            name="navigate_trigger_transition"
+            enter-active-class="animate__animated animate__slideInUp"
+            leave-active-class="animate__animated animate__slideOutDown">
+            <div
+                class="navigate position_down trigger"
+                @mouseover="toggle_hover"
+                v-if="!isShow"></div>        
+        </transition>
+
         <transition
             name="navigate_tray_transition"
             enter-active-class="animate__animated animate__slideInUp"
@@ -69,6 +74,10 @@ const toggle_enter = () => {
 
 const toggle_leave = () => {
     isShow.value = false;
+}
+
+const toggle_hover = () => {
+    isShow.value = true;
 }
 
 const jump_to = (to: string, params?: string) => {
