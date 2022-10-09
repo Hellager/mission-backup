@@ -1839,6 +1839,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "mission-backup"
+version = "0.0.0"
+dependencies = [
+ "auto-launch",
+ "base64",
+ "byte-unit",
+ "bzip2",
+ "chrono",
+ "cron 0.11.0",
+ "filetime",
+ "flate2",
+ "fs_extra",
+ "hotwatch",
+ "ignore",
+ "log",
+ "log4rs",
+ "native-dialog",
+ "path-absolutize",
+ "serde",
+ "serde_json",
+ "single-instance",
+ "tar",
+ "tauri",
+ "tauri-build",
+ "tokio-cron-scheduler",
+ "uuid 1.1.2",
+ "walkdir",
+ "window-shadows",
+ "wry 0.20.2",
+ "xz2",
+ "zip",
+]
+
+[[package]]
 name = "native-dialog"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4564,40 +4598,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
-]
-
-[[package]]
-name = "youbei"
-version = "0.0.0"
-dependencies = [
- "auto-launch",
- "base64",
- "byte-unit",
- "bzip2",
- "chrono",
- "cron 0.11.0",
- "filetime",
- "flate2",
- "fs_extra",
- "hotwatch",
- "ignore",
- "log",
- "log4rs",
- "native-dialog",
- "path-absolutize",
- "serde",
- "serde_json",
- "single-instance",
- "tar",
- "tauri",
- "tauri-build",
- "tokio-cron-scheduler",
- "uuid 1.1.2",
- "walkdir",
- "window-shadows",
- "wry 0.20.2",
- "xz2",
- "zip",
 ]
 
 [[package]]
