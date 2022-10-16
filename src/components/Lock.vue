@@ -1,30 +1,30 @@
-<template>
-    <LockCover :isLocked="pageLock" @validate="handle_validate" />
-    <NavigateTray :fns="props.tray"  @toggleLock="toggle_page_lock"/>
-</template>
 <script setup lang="ts">
-import { ref } from 'vue';
-import LockCover from '../components/LockCover.vue';
-import NavigateTray from '../components/NavigateTray.vue';
+import { ref } from 'vue'
+import LockCover from '../components/LockCover.vue'
+import NavigateTray from '../components/NavigateTray.vue'
 
 const props = defineProps({
-    tray: { type: Array, required: true },
+  tray: { type: Array, required: true },
 })
 
-const pageLock = ref(false);
+const pageLock = ref(false)
 
 const handle_validate = (res: boolean) => {
-    if (res) {
-        pageLock.value = false; 
-    }
+  if (res)
+    pageLock.value = false
 }
 
 const toggle_page_lock = () => {
-    if (!pageLock.value) {
-       pageLock.value = true; 
-    }
+  if (!pageLock.value)
+    pageLock.value = true
 }
 </script>
+
+<template>
+  <LockCover :is-locked="pageLock" @validate="handle_validate" />
+  <NavigateTray :fns="props.tray" @toggle-lock="toggle_page_lock" />
+</template>
+
 <style lang="less" scoped>
 @import "../assets/style/theme/default-vars.less";
 </style>

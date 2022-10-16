@@ -1,56 +1,55 @@
+<script lang="ts" setup>
+import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { appWindow } from '@tauri-apps/api/window'
+import { AppstoreOutlined, BorderOutlined } from '@vicons/antd'
+import { CloseBold, FullScreen, SemiSelect } from '@element-plus/icons-vue'
+import { useMissionStore, useSettingStore } from '../store/index'
+import { TauriCommand, execute_rust_command } from '../utils'
+import AppIcon from '~icons/icons/favicon'
+
+const { t, locale } = useI18n({ useScope: 'global' })
+const globalSetting = useSettingStore()
+const missionStore = useMissionStore()
+
+onMounted(() => {
+  (document.getElementById('titlebar-minimize') as HTMLElement).addEventListener('click', () => appWindow.minimize());
+  (document.getElementById('titlebar-maximize') as HTMLElement).addEventListener('click', () => appWindow.toggleMaximize());
+  (document.getElementById('titlebar-close') as HTMLElement).addEventListener('click', () => {
+    execute_rust_command(TauriCommand.COMMAND_UPDATE_LIST_INFO, missionStore.mission_list)
+    if (globalSetting.is_close_to_tray)
+      execute_rust_command(TauriCommand.COMMAND_CLOSE_TO_TRAY)
+    else
+      execute_rust_command(TauriCommand.COMMAND_EXIT_PROGRAM)
+  })
+})
+</script>
+
 <template>
   <div data-tauri-drag-region class="titlebar">
-    <div class="titlebar-left" id="titlebar-left">
-        <div class="titlebar-icon" id="titlebar-icon">
-            <el-icon class="app-icon">
-                <AppIcon />
-            </el-icon>
-        </div>
-        <div class="titlebar-title" id="titlebar-title">
-            {{t('general.AppTitle')}}
-        </div>        
+    <div id="titlebar-left" class="titlebar-left">
+      <div id="titlebar-icon" class="titlebar-icon">
+        <el-icon class="app-icon">
+          <AppIcon />
+        </el-icon>
+      </div>
+      <div id="titlebar-title" class="titlebar-title">
+        {{ t('general.AppTitle') }}
+      </div>
     </div>
-    <div class="titlebar-right" id="titlebar-right">
-        <div class="titlebar-button" id="titlebar-minimize">
-            <el-icon><SemiSelect /></el-icon>
-        </div>
-        <div class="titlebar-button" id="titlebar-maximize">
-            <el-icon><BorderOutlined /></el-icon>
-        </div>
-        <div class="titlebar-button" id="titlebar-close">
-            <el-icon><CloseBold /></el-icon>
-        </div>        
+    <div id="titlebar-right" class="titlebar-right">
+      <div id="titlebar-minimize" class="titlebar-button">
+        <el-icon><SemiSelect /></el-icon>
+      </div>
+      <div id="titlebar-maximize" class="titlebar-button">
+        <el-icon><BorderOutlined /></el-icon>
+      </div>
+      <div id="titlebar-close" class="titlebar-button">
+        <el-icon><CloseBold /></el-icon>
+      </div>
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { onMounted } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { appWindow } from '@tauri-apps/api/window';
-import { AppstoreOutlined, BorderOutlined } from '@vicons/antd';
-import { SemiSelect, FullScreen, CloseBold } from '@element-plus/icons-vue';
-import { useSettingStore, useMissionStore } from '../store/index';
-import { TauriCommand, execute_rust_command } from '../utils';
-import AppIcon from '~icons/icons/favicon';
-
-const { t, locale } = useI18n({ useScope: 'global' });
-const globalSetting = useSettingStore();
-const missionStore = useMissionStore();
-
-onMounted(() => {
-    (document.getElementById('titlebar-minimize') as HTMLElement).addEventListener('click', () => appWindow.minimize());
-    (document.getElementById('titlebar-maximize') as HTMLElement).addEventListener('click', () => appWindow.toggleMaximize());
-    (document.getElementById('titlebar-close') as HTMLElement).addEventListener('click', () => {
-        execute_rust_command(TauriCommand.COMMAND_UPDATE_LIST_INFO, missionStore.mission_list);
-        if (globalSetting.is_close_to_tray) {
-            execute_rust_command(TauriCommand.COMMAND_CLOSE_TO_TRAY);
-        } else {
-            execute_rust_command(TauriCommand.COMMAND_EXIT_PROGRAM);
-        }
-    });
-})
-</script>
 
 <style lang="less" scoped>
 @import "../assets/style/theme/default-vars.less";
@@ -84,14 +83,14 @@ onMounted(() => {
     }
 
     .titlebar-title {
-        padding-top: 6px;     
+        padding-top: 6px;
     }
   }
 
   .titlebar-right {
     display: flex;
     flex-direction: row;
-    
+
     .titlebar-button {
     display: inline-flex;
     justify-content: center;
@@ -101,13 +100,11 @@ onMounted(() => {
     }
     .titlebar-button:hover {
         background: var(--el-border-color);
-    }    
+    }
 
     #titlebar-close:hover {
         background: red;
     }
   }
 }
-
-
 </style>

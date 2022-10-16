@@ -3,15 +3,15 @@
 ## Lock
 
 ```vue
-<template>
-...
-	<Lock :tray="['lock', 'edit', 'add', 'setting', 'statistic']" />
-...
-</template>
-
 <script lang="ts" setup>
-import Lock from '../components/Lock.vue';    
+import Lock from '../components/Lock.vue'
 </script>
+
+<template>
+  ...
+  <Lock :tray="['lock', 'edit', 'add', 'setting', 'statistic']" />
+  ...
+</template>
 ```
 
 - props
@@ -24,24 +24,24 @@ import Lock from '../components/Lock.vue';
 ## LockCover
 
 ```vue
-<template>
-...
-	<LockCover :isLocked="locked" @validate="handleValidate" />
-...
-</template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
-import LockCover from '../components/LockCover.vue';    
-    
-const locked = ref(false);
-    
+import LockCover from '../components/LockCover.vue'
+
+const locked = ref(false)
+
 const handleValidate = (res: boolean) => {
-    if (res) {
-        locked.value = false
-    }
+  if (res)
+    locked.value = false
+
 }
 </script>
+
+<template>
+  ...
+  <LockCover :is-locked="locked" @validate="handleValidate" />
+  ...
+</template>
 ```
 
 - props
@@ -55,15 +55,15 @@ const handleValidate = (res: boolean) => {
 ## NavigateSideBar
 
 ```vue
-<template>
-...
-	<NavigateSideBar position="right" toPath="/" />
-...
-</template>
-
 <script lang="ts" setup>
 import NavigateSideBar from '../components/NavigateSideBar.vue'
 </script>
+
+<template>
+  ...
+  <NavigateSideBar position="right" to-path="/" />
+  ...
+</template>
 ```
 
 - props
@@ -75,33 +75,33 @@ import NavigateSideBar from '../components/NavigateSideBar.vue'
 ## NavigateTray
 
 ```vue
-<template>
-...
-    <LockCover :isLocked="pageLock" @validate="handleValidate" />
-    <NavigateTray :fns="tray"  @toggleLock="togglePageLock" />
-...
-</template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 import NavigateTray from '../components/NavigateTray.vue'
-    
-const tray = ref(['lock', 'edit', 'add', 'setting', 'statistic'])   
 
-const pageLock = ref(false);
-    
+const tray = ref(['lock', 'edit', 'add', 'setting', 'statistic'])
+
+const pageLock = ref(false)
+
 const handleValidate = (res: boolean) => {
-    if (res) {
-        pageLock.value = false; 
-    }
+  if (res)
+    pageLock.value = false
+
 }
 
 const togglePageLock = () => {
-    if (!pageLock.value) {
-       pageLock.value = true; 
-    }
+  if (!pageLock.value)
+    pageLock.value = true
+
 }
 </script>
+
+<template>
+  ...
+  <LockCover :is-locked="pageLock" @validate="handleValidate" />
+  <NavigateTray :fns="tray" @toggleLock="togglePageLock" />
+  ...
+</template>
 ```
 
 - props
@@ -114,18 +114,18 @@ const togglePageLock = () => {
 ## PageHeader
 
 ```vue
-<template>
-...
-	<page-header :title="pageTitle" to="/" />	
-...
-</template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
-import PageHeader from '../components/PageHeader.vue';    
+import PageHeader from '../components/PageHeader.vue'
 
 const pageTitle = ref('This is the page header')
 </script>
+
+<template>
+  ...
+  <PageHeader :title="pageTitle" to="/" />
+  ...
+</template>
 ```
 
 - props
@@ -137,15 +137,15 @@ const pageTitle = ref('This is the page header')
 ## TitleBar
 
 ```vue
-<template>
-...
-  <TitleBar />
-...
-</template>
-
 <script lang="ts" setup>
-import TitleBar from './components/TitleBar.vue';
+import TitleBar from './components/TitleBar.vue'
 </script>
+
+<template>
+  ...
+  <TitleBar />
+  ...
+</template>
 ```
 
 软件顶部状态栏组件，包括图标、标题及窗口操作按钮

@@ -1,22 +1,21 @@
+<script setup lang="ts">
+import NavigateSideBar from '../components/NavigateSideBar.vue'
+</script>
+
 <template>
-    <div class="container">
-        <div class="title">
-            This is the Lock Page            
-        </div>
-        <!-- <div class="action">
+  <div class="container">
+    <div class="title">
+      This is the Lock Page
+    </div>
+    <!-- <div class="action">
             <el-button type="primary" round @click="jumpTo('/table')">
                 to Table
             </el-button>
         </div>  -->
 
-        <NavigateSideBar position="right" toPath="/table"/>
-    </div>
+    <NavigateSideBar position="right" to-path="/table" />
+  </div>
 </template>
-
-<script setup lang="ts">
-import NavigateSideBar from '../components/NavigateSideBar.vue';
-
-</script>
 
 <style lang="less" scoped>
 .container {
