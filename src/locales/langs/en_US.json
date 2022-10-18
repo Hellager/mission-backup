@@ -101,7 +101,8 @@
     "jobRunningError": "Some job is executing",
     "cronNotTriggerYet": "not trigger yet",
     "unavailablePath": "unavailable path",
-    "invalidNumber": "Current number invalid"
+    "invalidNumber": "Current number invalid",
+    "anotherInstance": "Program already running"
   },
   "component": {
     "inputPassword": "Please input password",

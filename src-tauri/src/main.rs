@@ -16,7 +16,7 @@ use app::{ create_system_tray, handle_system_tray_event, handle_app_event, initi
 use handler::{ MissionHandler, MissionHandlerWrapper, initialize_cron_scheduler, AutoStartHandler, AutoStartHandlerWrapper };
 
 // Plugin related
-// use plugins::initialize_plugin_highlander;
+use plugins::initialize_plugin_highlander;
 
 // General
 use tauri::async_runtime::block_on;
@@ -36,7 +36,7 @@ fn main() {
   // initialize plugins
   // failed to build on linux and macos 
   // check issue https://github.com/ioneyed/tauri-plugin-highlander/issues/10
-  // let plugin_highlander = initialize_plugin_highlander("detectAnotherInstance");
+  let plugin_highlander = initialize_plugin_highlander("another_instance");
 
   let context = tauri::generate_context!();
   let _app = tauri::Builder::default()
@@ -45,7 +45,7 @@ fn main() {
 
       // check webview2
       app::check_webview2_available(app.app_handle().clone());
-      app::check_instance(app_name);
+      // app::check_instance(app_name);
       
       // initialize data
       let data = app::load_data_file();
@@ -123,9 +123,11 @@ fn main() {
       // app.emit_all("initialize", APPData { setting: data.setting, list: data.list.clone() });
       Ok(())
     })
+    .plugin(plugin_highlander)
     .system_tray(create_system_tray())
     .on_system_tray_event(handle_system_tray_event)
     .invoke_handler(tauri::generate_handler![
+        command::show_mainwindow,
         command::close_splashscreen,
         command::initialize_data,
         command::is_program_initialized,

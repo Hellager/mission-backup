@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/tauri'
 
 enum TauriCommand {
+  COMMAND_SHOW_MAIN_WINDOW,
   COMMAND_CLOSE_SPLASHSCREEN,
   COMMAND_INITIALIZE_DATA,
   COMMAND_IS_INITIALIZED,
@@ -37,6 +38,13 @@ async function execute_rust_command(command: Number, data?: any, additional?: an
   // console.error('id  ' + data + " date_type " + additional + " time " + additional2 + " unit " + additional3);
 
   switch (command) {
+    case TauriCommand.COMMAND_SHOW_MAIN_WINDOW:
+      console.log('send command')
+      result = await invoke('show_mainwindow')
+        .then((res) => { return res })
+        .catch(err => console.error(err))
+      break
+
     case TauriCommand.COMMAND_CLOSE_SPLASHSCREEN:
       result = await invoke('close_splashscreen')
         .then((res) => { return res })

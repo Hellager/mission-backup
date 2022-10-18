@@ -30,7 +30,7 @@ use std::env::consts;
 use window_shadows::set_shadow;
 
 // Single instance
-use single_instance::SingleInstance;
+// use single_instance::SingleInstance;
 
 // General
 use crate::data_types::APPData;
@@ -255,26 +255,26 @@ pub fn initialize_window_shadow(window: &TauriWindow, is_shadow_enable: bool) {
   }
 }
 
-/**
- * Make sure there is only one instance running
- * Not working now
- */
-pub fn check_instance(name: &str) {
+// /**
+//  * Make sure there is only one instance running
+//  * Not working now
+//  */
+// pub fn check_instance(name: &str) {
   
-  let instance = SingleInstance::new(name).unwrap();
-  debug!("Check instance {} whether single {}", name, instance.is_single());
-  if !instance.is_single() {
-    MessageDialog::new()
-    .set_type(MessageType::Error)
-    .set_title("Error")
-    .set_text("Existing instance")
-    .show_confirm()
-    .unwrap();
+//   let instance = SingleInstance::new(name).unwrap();
+//   debug!("Check instance {} whether single {}", name, instance.is_single());
+//   if !instance.is_single() {
+//     MessageDialog::new()
+//     .set_type(MessageType::Error)
+//     .set_title("Error")
+//     .set_text("Existing instance")
+//     .show_confirm()
+//     .unwrap();
 
-    debug!("{} is not single", name);
-    std::process::exit(0);
+//     debug!("{} is not single", name);
+//     std::process::exit(0);
 
-  } else {
-      debug!("{} is single", name);
-  }
-}
+//   } else {
+//       debug!("{} is single", name);
+//   }
+// }

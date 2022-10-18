@@ -101,7 +101,8 @@
     "jobRunningError": "有任务正在执行",
     "cronNotTriggerYet": "暂未触发",
     "unavailablePath": "无效路径",
-    "invalidNumber": "无效数字"
+    "invalidNumber": "无效数字",
+    "anotherInstance": "已有程序运行中"
   },
   "component": {
     "inputPassword": "请输入密码解锁",

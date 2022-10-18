@@ -39,6 +39,12 @@ pub fn check_path_valid(path: &str, expected: &str) -> bool {
 }
 
 #[tauri::command]
+pub async fn show_mainwindow(window: tauri::Window) {
+  // Show main window
+  window.get_window("main").unwrap().show().unwrap();
+}
+
+#[tauri::command]
 pub async fn close_splashscreen(window: tauri::Window) {
   // Close splashscreen
   if let Some(splashscreen) = window.get_window("splashscreen") {

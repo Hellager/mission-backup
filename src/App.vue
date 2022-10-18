@@ -178,12 +178,29 @@ async function listen_to_cron_mission_run_time_update() {
     const mission_info = event.payload.info
     missionStore.update_mission_info(mission_id, mission_info)
   })
+
+  listen_dict.set('cron_time_update', unlisten)
 }
 
 async function listen_to_timing_save_data() {
-  const unlisten = await listen('save_data', (event: any) => {
+  const unlisten = await listen('save_data', (_event: any) => {
     execute_rust_command(TauriCommand.COMMAND_TIMING_SAVE_DATA)
   })
+
+  listen_dict.set('save_data', unlisten)
+}
+
+async function listen_to_another_instance() {
+  const unlisten = await listen('another_instance', (_event: any) => {
+    execute_rust_command(TauriCommand.COMMAND_SHOW_MAIN_WINDOW)
+    ElMessage.error({
+      showClose: true,
+      message: t('error.anotherInstance'),
+      center: true,
+    })
+  })
+
+  listen_dict.set('another_instance', unlisten)
 }
 
 onMounted(() => {
@@ -201,6 +218,7 @@ onMounted(() => {
     })
   }
 
+  listen_to_another_instance()
   listen_to_close_event()
   listen_to_any_error()
   listen_to_drop_event()

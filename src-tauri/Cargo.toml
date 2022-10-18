@@ -38,13 +38,10 @@ chrono = "0.4.22"
 cron = "0.11.0"
 auto-launch = "0.4.0"
 window-shadows = "0.2.0"
-single-instance = "0.3"
 
-## Failed to build on linux and macos
-## check issue https://github.com/ioneyed/tauri-plugin-highlander/issues/10
-# [dependencies.tauri-plugin-highlander]
-# git = "https://github.com/ioneyed/tauri-plugin-highlander"
-# branch = "main"
+[dependencies.tauri-plugin-highlander]
+git = "https://github.com/Hellager/tauri-plugin-highlander"
+branch = "fix-platform-build-error"
 
 [dependencies.uuid]
 version = "1.1.2"
