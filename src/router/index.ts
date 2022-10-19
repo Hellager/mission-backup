@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TablePage from '../views/TablePage.vue'
 import MissionConfig from '../views/MissionConfig.vue'
 import GlobalSetting from '../views/GlobalSetting.vue'
-// import LockPage from '../views/LockPage.vue';
+import PasswordSetting from '../views/PasswordSetting.vue'
 import StatisticPage from '../views/StatisticPage.vue'
 
 const routes = [
@@ -28,10 +28,10 @@ const routes = [
     path: '/setting',
     component: GlobalSetting,
   },
-  // {
-  //     path: '/lock',
-  //     component: LockPage,
-  // },
+  {
+    path: '/password_setting',
+    component: PasswordSetting,
+  },
   {
     path: '/statistic',
     component: StatisticPage,

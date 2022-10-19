@@ -131,6 +131,7 @@ fn main() {
         command::close_splashscreen,
         command::initialize_data,
         command::is_program_initialized,
+        command::is_password_set,
         command::initialize_program_status,
         command::exit_program,
         command::close_to_tray,

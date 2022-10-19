@@ -5,6 +5,7 @@ enum TauriCommand {
   COMMAND_CLOSE_SPLASHSCREEN,
   COMMAND_INITIALIZE_DATA,
   COMMAND_IS_INITIALIZED,
+  COMMAND_IS_PASSWORD_SET,
   COMMAND_INITIALIZE_PROGRAM_STATUS,
   COMMAND_EXIT_PROGRAM,
   COMMAND_CLOSE_TO_TRAY,
@@ -59,6 +60,12 @@ async function execute_rust_command(command: Number, data?: any, additional?: an
 
     case TauriCommand.COMMAND_IS_INITIALIZED:
       result = await invoke('is_program_initialized')
+        .then((res) => { return res })
+        .catch(err => console.error(err))
+      break
+
+    case TauriCommand.COMMAND_IS_PASSWORD_SET:
+      result = await invoke('is_password_set')
         .then((res) => { return res })
         .catch(err => console.error(err))
       break

@@ -47,14 +47,14 @@ pub fn load_data_file() -> APPData {
     let mut data_file = OpenOptions::new().read(true).write(true).create(true).open(data_file_path.to_str().unwrap()).unwrap();
   
     if data_file.metadata().unwrap().len() == 0 {
-      debug!("create config.dat file");
+      debug!("Create config.dat file");
       let default_config = r#"
       {
         "setting": {
           "is_auto_start": true,
           "is_light_theme": true,
           "is_password_protected": true,
-          "password": "2022",
+          "password": "not set yet",
           "is_close_to_tray": true,
           "language": "zh-CN",
           "monitor_delay": 5,

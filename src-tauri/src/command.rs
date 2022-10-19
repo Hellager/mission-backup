@@ -74,6 +74,17 @@ pub fn is_program_initialized(state_handler: State<MissionHandlerWrapper>) -> bo
 }
 
 #[command]
+pub fn is_password_set(state_handler: State<MissionHandlerWrapper>) -> bool {
+  let current_password = state_handler.0.lock().unwrap().setting.password.clone();
+
+  if current_password == "not set yet" {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+#[command]
 pub fn initialize_program_status(state_handler: State<MissionHandlerWrapper>) -> bool {
   state_handler.0.lock().unwrap().is_initialized = true;
 

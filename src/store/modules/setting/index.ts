@@ -7,6 +7,8 @@ export const useSettingStore = defineStore(
   {
     state: () => ({
       is_initialized: false,
+      is_page_initialized: false,
+
       is_auto_start: false,
       is_light_theme: true,
       is_close_to_tray: false,
@@ -67,6 +69,10 @@ export const useSettingStore = defineStore(
 
       update_version(data: string) {
         this.software_version = data
+      },
+
+      update_page_initialized_status(status: boolean) {
+        this.is_page_initialized = status
       },
 
       // toggleChangeLanguage(lang: string) {

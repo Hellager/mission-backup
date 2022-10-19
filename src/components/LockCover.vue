@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 // import NavigateBar from '../components/NavigateBar.vue';
 import { useI18n } from 'vue-i18n'
+import router from '../router'
 import { TauriCommand, execute_rust_command } from '../utils'
 const props = defineProps({
   isLocked: { type: Boolean, required: true },
+  isSetMode: { type: Boolean },
 })
 
 const emit = defineEmits<{
@@ -17,29 +19,65 @@ const { t, locale } = useI18n({ useScope: 'global' })
 
 const input = ref('')
 const locked = ref(props.isLocked)
+const placeholder_message = ref(t('component.inputPassword'))
 
 watch(
   props,
   (newProps) => {
     locked.value = newProps.isLocked
+    placeholder_message.value = newProps.isSetMode ? t('component.setPassword') : t('component.inputPassword')
   },
 )
 
+onMounted(() => {
+  placeholder_message.value = props.isSetMode ? t('component.setPassword') : t('component.inputPassword')
+})
+
 async function validate_unlock() {
-  const res = await execute_rust_command(TauriCommand.COMMAND_UNLOCK, input.value)
-  if (res) {
-    emit('validate', true)
-    input.value = ''
-    return true
-  }
-  else {
+  if (input.value.trim() === '') {
     ElMessage.error({
       showClose: true,
-      message: t('error.verifyUnlockFailed'),
+      message: t('error.emptyPassword'),
       center: true,
     })
     input.value = ''
     return false
+  }
+
+  if (props.isSetMode) {
+    await execute_rust_command(TauriCommand.COMMAND_CHANGE_SETTING_PASSWORD, 'not set yet', input.value)
+      .then((res) => {
+        if (res) {
+          router.push({ path: '/', query: { mode: 'after_set' } })
+          return true
+        }
+        else {
+          ElMessage.error({
+            showClose: true,
+            message: t('error.verifyUnlockFailed'),
+            center: true,
+          })
+          input.value = ''
+          return false
+        }
+      })
+  }
+  else {
+    const res = await execute_rust_command(TauriCommand.COMMAND_UNLOCK, input.value)
+    if (res) {
+      emit('validate', true)
+      input.value = ''
+      return true
+    }
+    else {
+      ElMessage.error({
+        showClose: true,
+        message: t('error.verifyUnlockFailed'),
+        center: true,
+      })
+      input.value = ''
+      return false
+    }
   }
 }
 </script>
@@ -55,11 +93,14 @@ async function validate_unlock() {
         <el-input
           v-model="input"
           type="password"
-          :placeholder="t('component.inputPassword')"
+          :placeholder="placeholder_message"
           show-password
           @change="validate_unlock"
         />
       </div>
+      <el-button type="primary" class="confirm" @change="validate_unlock">
+        {{ t("general.confirm") }}
+      </el-button>
     </div>
   </transition>
 </template>
@@ -78,11 +119,18 @@ async function validate_unlock() {
 .input {
     width: 30%;
     height: 10%;
+    margin-right: -5%;
+}
+
+.confirm {
+  margin-left: 6%;
+  margin-top: -6px;
 }
 
 .cover {
     position: absolute;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     left: 0;

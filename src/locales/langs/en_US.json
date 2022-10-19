@@ -102,10 +102,12 @@
     "cronNotTriggerYet": "not trigger yet",
     "unavailablePath": "unavailable path",
     "invalidNumber": "Current number invalid",
-    "anotherInstance": "Program already running"
+    "anotherInstance": "Program already running",
+    "emptyPassword": "Empty password!"
   },
   "component": {
     "inputPassword": "Please input password",
+    "setPassword": "Please set your screen lock password",
     "pageHeaderBack": "Back",
     "pageHeaderGlobalSetting": "Global Setting",
     "pageHeaderMissionConfig": "Mission Config",

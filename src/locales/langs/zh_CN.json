@@ -102,10 +102,12 @@
     "cronNotTriggerYet": "暂未触发",
     "unavailablePath": "无效路径",
     "invalidNumber": "无效数字",
-    "anotherInstance": "已有程序运行中"
+    "anotherInstance": "已有程序运行中",
+    "emptyPassword": "密码不能为空!"
   },
   "component": {
     "inputPassword": "请输入密码解锁",
+    "setPassword": "请设置锁屏密码",
     "pageHeaderBack": "返回",
     "pageHeaderGlobalSetting": "系统设置",
     "pageHeaderMissionConfig": "任务配置",

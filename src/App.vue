@@ -206,6 +206,10 @@ async function listen_to_another_instance() {
 onMounted(() => {
   document.addEventListener('DOMContentLoaded', () => {
     execute_rust_command(TauriCommand.COMMAND_CLOSE_SPLASHSCREEN)
+    execute_rust_command(TauriCommand.COMMAND_IS_PASSWORD_SET).then((res) => {
+      if (!res)
+        router.push({ path: '/password_setting' })
+    })
   })
 
   if (!is_initialized.value) {

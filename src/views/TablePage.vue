@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Clock, Delete, Edit, Loading, VideoPause, VideoPlay, View, Warning } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 import router from '../router'
 import Lock from '../components/Lock.vue'
-import { useMissionStore } from '../store/index'
+import { useMissionStore, useSettingStore } from '../store/index'
 import { TauriCommand, execute_rust_command } from '../utils'
 // import { ElMessage } from 'element-plus';
+
+const default_lock = ref(false)
+
+const route = useRoute()
 
 const { t, locale } = useI18n({
   useScope: 'global',
@@ -15,6 +20,8 @@ const { t, locale } = useI18n({
 })
 
 const missionStore = useMissionStore()
+const settingStore = useSettingStore()
+const { is_page_initialized } = storeToRefs(settingStore)
 const { mission_list, current_mission } = storeToRefs(missionStore)
 
 const indexMethod = (index: number) => {
@@ -23,6 +30,17 @@ const indexMethod = (index: number) => {
 
 onMounted(() => {
   current_mission.value = mission_list.value.length > 0 ? undefined : mission_list.value[0]
+
+  if (is_page_initialized.value === false) {
+    default_lock.value = true
+    settingStore.update_page_initialized_status(true)
+  }
+  else {
+    default_lock.value = false
+  }
+
+  if (route.query.mode === 'after_set')
+    default_lock.value = false
 })
 
 const toggle_row_click = (row: any) => {
@@ -32,6 +50,11 @@ const toggle_row_click = (row: any) => {
 const toggle_row_db_click = (row: any) => {
   current_mission.value = row
   router.push({ path: '/config', query: { mode: 'edit' } })
+}
+
+const toggle_change_default_lock = (res: boolean) => {
+  default_lock.value = res
+  console.log('change default lock')
 }
 
 async function toggle_edit_click(id: string) {
@@ -168,7 +191,7 @@ async function toggle_delete_dlick(id: string) {
       </el-table>
     </div>
 
-    <Lock :tray="['lock', 'edit', 'add', 'setting', 'statistic']" />
+    <Lock :tray="['lock', 'edit', 'add', 'setting', 'statistic']" :default-lock="default_lock" @changeDefaultLock="toggle_change_default_lock" />
   </div>
 </template>
 
