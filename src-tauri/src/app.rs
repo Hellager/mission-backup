@@ -1,3 +1,4 @@
+use chrono::Local;
 // Tauri related
 use tauri::{ Wry, Manager, AppHandle, Window as TauriWindow,
     SystemTray, CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent,
@@ -46,23 +47,26 @@ pub fn load_data_file() -> APPData {
     #[allow(unused_mut)]
     let mut data_file = OpenOptions::new().read(true).write(true).create(true).open(data_file_path.to_str().unwrap()).unwrap();
   
+    let local_time_offset = Local::now().offset().local_minus_utc();
+    let local_language = if local_time_offset == (8 * 3600) {"zh-CN"} else {"en-US"};
+
     if data_file.metadata().unwrap().len() == 0 {
       debug!("Create config.dat file");
-      let default_config = r#"
-      {
-        "setting": {
-          "is_auto_start": true,
-          "is_light_theme": true,
-          "is_password_protected": true,
-          "password": "not set yet",
-          "is_close_to_tray": true,
-          "language": "zh-CN",
-          "monitor_delay": 5,
-          "software_version": "1.0.0"
-        },
-        "list": []
-      }
-      "#;
+      let default_config = format!(
+        r#"{{
+          "setting": {{
+            "is_auto_start": true,
+            "is_light_theme": true,
+            "is_password_protected": true,
+            "password": "not set yet",
+            "is_close_to_tray": true,
+            "language": "{}",
+            "monitor_delay": 5,
+            "software_version": "1.0.0"
+          }},
+          "list": []
+        }}
+      "#, local_language);
   
       let _create_data_file = data_file.write(encode(&default_config.as_bytes()).as_bytes());
     }
