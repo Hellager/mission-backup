@@ -24,6 +24,7 @@ use std::path::Path;
  * to specific log pattern, see https://docs.rs/log4rs/latest/log4rs/encode/pattern/
  */
 pub fn initialize_logger(log_file_path: &str) {
+    println!("log file path: {}", log_file_path);
     // define log level filter
     let global_log_level = LevelFilter::Debug;
     let stdout_log_level = LevelFilter::Debug;

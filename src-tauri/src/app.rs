@@ -8,8 +8,7 @@ use tauri::{ Wry, Manager, AppHandle, Window as TauriWindow,
 // Data file related
 use std::fs::{ OpenOptions, read_to_string };
 use std::io::Write;
-use std::path::{ Path, PathBuf };
-use std::env::current_dir;
+use std::path::PathBuf;
 
 // base64 related
 use base64::{ encode, decode };
@@ -37,12 +36,44 @@ use window_shadows::set_shadow;
 use crate::data_types::APPData;
 use log::{ debug, error };
 
+// Using absolute path
+use std::env::current_dir;
+use tauri::api::path::home_dir;
+
+// Const varibles
+static APP_VERSION: &str = "1.0.0";
+
+#[allow(unused)]
+static APP_DIR: &str = "mission-backup";
+
+pub fn get_app_home_dir() -> PathBuf {
+  #[cfg(target_os = "windows")]
+  if let Err(e) = current_dir() {
+    error!("Failed to get app home dir. Errmsg: {}", e);
+    std::process::exit(-1);
+  } else {
+    return current_dir().unwrap();
+  }
+
+  #[cfg(not(target_os = "windows"))]
+  if let Err(e) = home_dir() {
+    error!("Failed to get app home dir. Errmsg: {}", e);
+    std::process::exit(-1);
+  } else {
+    return current_dir().unwrap().join(APP_DIR);
+  }
+}
+
+pub fn get_app_log_dir() -> PathBuf {
+  get_app_home_dir().join("logs")
+}
+
 /**
  * Load data from ./config.dat file, if not exists, create file
  */
 pub fn load_data_file() -> APPData {
-    let current_dir: PathBuf = current_dir().unwrap();
-    let data_file_path = Path::new(&current_dir).join("config.dat");
+    let app_home_dir = get_app_home_dir();
+    let data_file_path = app_home_dir.join("config.dat");
   
     #[allow(unused_mut)]
     let mut data_file = OpenOptions::new().read(true).write(true).create(true).open(data_file_path.to_str().unwrap()).unwrap();
@@ -62,11 +93,11 @@ pub fn load_data_file() -> APPData {
             "is_close_to_tray": true,
             "language": "{}",
             "monitor_delay": 5,
-            "software_version": "1.0.0"
+            "software_version": "{}"
           }},
           "list": []
         }}
-      "#, local_language);
+      "#, local_language, APP_VERSION);
   
       let _create_data_file = data_file.write(encode(&default_config.as_bytes()).as_bytes());
     }
@@ -85,8 +116,8 @@ pub fn load_data_file() -> APPData {
  * Save data to file
  */
 pub fn save_data_to_file(data: APPData) -> bool {
-  let current_dir: PathBuf = current_dir().unwrap();
-  let data_file_path = Path::new(&current_dir).join("config.dat");
+  let app_home_dir = get_app_home_dir();
+  let data_file_path = app_home_dir.join("config.dat");
 
   let mut data_file = OpenOptions::new().write(true).create(true).truncate(true).open(data_file_path.to_str().unwrap()).unwrap();
 
