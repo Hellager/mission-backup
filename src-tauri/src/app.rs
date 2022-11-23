@@ -56,11 +56,14 @@ pub fn get_app_home_dir() -> PathBuf {
   }
 
   #[cfg(not(target_os = "windows"))]
-  if let Err(e) = home_dir() {
-    error!("Failed to get app home dir. Errmsg: {}", e);
-    std::process::exit(-1);
-  } else {
-    return current_dir().unwrap().join(APP_DIR);
+  match home_dir() {
+    None => {
+      error!("Failed to get app home dir");
+      std::process::exit(-1);      
+    },
+    Some(path) => {
+      return path.join(APP_DIR);
+    }
   }
 }
 
