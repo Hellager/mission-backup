@@ -12,7 +12,7 @@ mod handler;
 mod modules;
 
 // Module related
-use app::{ create_system_tray, handle_system_tray_event, handle_app_event, initialize_window_shadow };
+use app::{ get_app_log_dir, create_system_tray, handle_system_tray_event, handle_app_event, initialize_window_shadow };
 use handler::{ MissionHandler, MissionHandlerWrapper, initialize_cron_scheduler, AutoStartHandler, AutoStartHandlerWrapper };
 
 // Plugin related
@@ -31,7 +31,8 @@ use tauri::Manager;
 
 fn main() {
   // initialize log
-  logger::initialize_logger("logs/output.log");
+  let app_log_dir = get_app_log_dir();
+  logger::initialize_logger(app_log_dir.join("output.log").to_str().unwrap());
 
   // initialize plugins
   // failed to build on linux and macos 
