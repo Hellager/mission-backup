@@ -102,9 +102,9 @@ fn main() {
 
       // waiting for rust
       // let splashscreen_window = app.get_window("splashscreen").unwrap();
-      let main_window = app.get_window("main").unwrap();
+      let _main_window = app.get_window("main").unwrap();
       // main_window.hide().unwrap();
-      let shadow_window = main_window.clone();
+      let _shadow_window = _main_window.clone();
       
       // // we perform the initialization code on a new task so the app doesn't freeze
       // tauri::async_runtime::spawn(async move {
@@ -119,7 +119,8 @@ fn main() {
       // });
 
       // add window shadows to app, not available on linux now
-      initialize_window_shadow(&shadow_window, true);
+      #[cfg(not(target_os = "linux"))]
+      initialize_window_shadow(&_shadow_window, true);
 
       // app.emit_all("initialize", APPData { setting: data.setting, list: data.list.clone() });
       Ok(())
