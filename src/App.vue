@@ -254,6 +254,7 @@ html, body {
     display: none;
   }
 
+  width: 100% !important;
   -ms-overflow-style: none;
   scrollabr-width: none;
   // scroll-behavior: smooth;
