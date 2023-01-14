@@ -5,7 +5,7 @@
 <p align="center">
 <a href=""><img src="https://img.shields.io/github/license/hellager/mission-backup"></a>
 <a href="https://youbei.hellagur.com/"><img src="https://img.shields.io/badge/docs-passing-brightgreen"></a>
-<a href=""><img src="https://img.shields.io/github/workflow/status/Hellager/mission-backup/Release"></a>
+<a href=""><img src="https://img.shields.io/github/actions/workflow/status/Hellager/mission-backup/release.yml"></a>
 <a href="https://github.com/Hellager/mission-backup/releases"><img src="https://img.shields.io/github/v/release/Hellager/mission-backup"></a>
 <a href=""><img src="https://img.shields.io/github/downloads/hellager/mission-backup/total"></a>
 </p>
