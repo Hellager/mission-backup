@@ -34,7 +34,11 @@
     "targetDelay": "延时时间（秒）",
     "version": "版本",
     "changePasswordSuccess": "修改锁屏密码成功",
-    "changeDelaySuccess": "修改监控延时成功"
+    "changeDelaySuccess": "修改监控延时成功",
+    "checkUpdate": "检查更新",
+    "clickToCheckUpdate": "点击检查",
+    "userGuidance": "用户手册",
+    "clickToOpenGuidance": "点击打开"
   },
   "config": {
     "name": "任务名称",

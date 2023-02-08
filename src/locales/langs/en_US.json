@@ -34,7 +34,11 @@
     "targetDelay": "Delay Time(s)",
     "version": "Version",
     "changePasswordSuccess": "Success change unlock password",
-    "changeDelaySuccess": "Success change monitor delay"
+    "changeDelaySuccess": "Success change monitor delay",
+    "checkUpdate": "Check Update",
+    "clickToCheckUpdate": "Click to check",
+    "userGuidance": "User Guidance",
+    "clickToOpenGuidance": "Click to open"
   },
   "config": {
     "name": "Mission Name",

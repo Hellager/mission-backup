@@ -12,7 +12,10 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "http": {
+        "scope": ["https://api.github.com/repos/Hellager/*"]
+      }
     },
     "macOSPrivateApi": true,
     "systemTray": {

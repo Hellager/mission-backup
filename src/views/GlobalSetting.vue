@@ -4,6 +4,7 @@ import type { FormInstance } from 'element-plus'
 import { InfoFilled, Moon, Sunny } from '@element-plus/icons-vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { fetch } from '@tauri-apps/api/http'
 import { useMissionStore, useSettingStore } from '../store/index'
 import PageHeader from '../components/PageHeader.vue'
 import Lock from '../components/Lock.vue'
@@ -183,6 +184,39 @@ async function toggle_change_monitor_delay() {
     show_error_message('delay')
   }
 }
+
+async function check_for_update() {
+  console.log('manual check update')
+
+  console.log(globalSetting.software_version)
+
+  const unsafe_response = await fetch(
+    'https://api.github.com/repos/Hellager/mission-backup/releases/latest',
+    {
+      method: 'GET',
+      timeout: 30,
+    },
+  )
+
+  const response: any = Object.assign({}, unsafe_response)
+
+  if (response.code === 204) {
+    console.log('no latest')
+  }
+  else {
+    const note = response.data.body
+    const source = response.data.html_url
+    const name = response.data.name
+    const tag = response.data.tag_name
+    const time = response.data.published_at
+
+    console.log(response.data)
+  }
+}
+
+async function open_user_guidance() {
+  console.log('click to open user guidance')
+}
 </script>
 
 <template>
@@ -249,6 +283,20 @@ async function toggle_change_monitor_delay() {
             <el-form-item :label="t('setting.resetMonitorDelay')">
               <el-button type="primary" @click="change_delay_dialog_visiable = true">
                 {{ t('setting.clickToReset') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :pull="2">
+            <el-form-item :label="t('setting.checkUpdate')">
+              <el-button type="primary" @click="check_for_update">
+                {{ t('setting.clickToCheckUpdate') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="t('setting.userGuidance')">
+              <el-button type="primary" @click="open_user_guidance">
+                {{ t('setting.clickToOpenGuidance') }}
               </el-button>
             </el-form-item>
           </el-col>
