@@ -9,6 +9,10 @@ import { useMissionStore, useSettingStore } from '../store/index'
 import PageHeader from '../components/PageHeader.vue'
 import Lock from '../components/Lock.vue'
 import { TauriCommand, execute_rust_command } from '../utils'
+import PasswordReSet from './SettingDialogs/PasswordReSet.vue'
+import DelaySetting from './SettingDialogs/DelaySetting.vue'
+import NotifySetting from './SettingDialogs/NotifySetting.vue'
+import ContactSetting from './SettingDialogs/ContactSetting.vue'
 // import { ElMessage } from 'element-plus';
 
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -38,11 +42,9 @@ const langOptions = [
   },
 ]
 
-const input_origin_password = ref('')
-const input_new_password = ref('')
-const change_password_dialog_visiable = ref(false)
-const input_delay_time = ref(monitor_delay.value)
-const change_delay_dialog_visiable = ref(false)
+const password_dialog_display = ref(false)
+const delay_dialog_display = ref(false)
+const notify_dialog_display = ref(false)
 
 const show_error_message = (mode: string) => {
   let msg = ''
@@ -58,13 +60,6 @@ const show_error_message = (mode: string) => {
     message: msg,
     center: true,
   })
-}
-
-const toggle_dialog_cancel = () => {
-  input_origin_password.value = ''
-  input_new_password.value = ''
-  change_password_dialog_visiable.value = false
-  change_delay_dialog_visiable.value = false
 }
 
 async function toggle_change_auto_start(data: boolean) {
@@ -125,66 +120,6 @@ async function toggle_change_password_protect(data: boolean) {
   }
 }
 
-async function toggle_change_password() {
-  const res = await execute_rust_command(TauriCommand.COMMAND_CHANGE_SETTING_PASSWORD, input_origin_password.value, input_new_password.value)
-  if (res) {
-    input_origin_password.value = ''
-    input_new_password.value = ''
-    change_password_dialog_visiable.value = false
-    ElMessage.success({
-      showClose: true,
-      message: t('setting.changePasswordSuccess'),
-      center: true,
-    })
-  }
-  else {
-    input_origin_password.value = ''
-    input_new_password.value = ''
-    show_error_message('password')
-  }
-}
-
-async function toggle_change_monitor_delay() {
-  let any_trouble = false
-  if (typeof input_delay_time.value != 'number') {
-    ElMessage.error({
-      showClose: true,
-      message: t('error.dataFormatError'),
-      center: true,
-    })
-    any_trouble = true
-  }
-
-  mission_list.value.forEach((item) => {
-    if (item.config.monitor_enable && item.info.status === 'executing') {
-      ElMessage.error({
-        showClose: true,
-        message: t('error.jobRunningError'),
-        center: true,
-      })
-    }
-
-    any_trouble = true
-  })
-
-  if (any_trouble)
-    return
-
-  const res = await execute_rust_command(TauriCommand.COMMAND_CHANGE_SETTING_MONITOR_DELAY, input_delay_time.value)
-  if (res) {
-    globalSetting.update_monitor_delay(input_delay_time.value)
-    change_delay_dialog_visiable.value = false
-    ElMessage.success({
-      showClose: true,
-      message: t('setting.changeDelaySuccess'),
-      center: true,
-    })
-  }
-  else {
-    show_error_message('delay')
-  }
-}
-
 async function check_for_update() {
   console.log('manual check update')
 
@@ -216,6 +151,31 @@ async function check_for_update() {
 
 async function open_user_guidance() {
   console.log('click to open user guidance')
+}
+
+const show_dialog = (dialog: String) => {
+  switch (dialog) {
+    case 'password':
+      password_dialog_display.value = !password_dialog_display.value
+      break
+
+    case 'delay':
+      delay_dialog_display.value = !delay_dialog_display.value
+      break
+
+    case 'notify':
+      notify_dialog_display.value = !notify_dialog_display.value
+      break
+
+    default:
+      break
+  }
+}
+
+const close_dialog = () => {
+  password_dialog_display.value = false
+  delay_dialog_display.value = false
+  notify_dialog_display.value = false
 }
 </script>
 
@@ -274,29 +234,42 @@ async function open_user_guidance() {
           </el-col>
           <el-col :span="12" :pull="2">
             <el-form-item :label="t('setting.resetPassword')">
-              <el-button type="primary" @click="change_password_dialog_visiable = true">
+              <el-button type="primary" @click="show_dialog('password')">
                 {{ t('setting.clickToReset') }}
               </el-button>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="t('setting.resetMonitorDelay')">
-              <el-button type="primary" @click="change_delay_dialog_visiable = true">
+              <el-button type="primary" @click="show_dialog('delay')">
                 {{ t('setting.clickToReset') }}
               </el-button>
             </el-form-item>
           </el-col>
           <el-col :span="12" :pull="2">
-            <el-form-item :label="t('setting.checkUpdate')">
-              <el-button type="primary" @click="check_for_update">
-                {{ t('setting.clickToCheckUpdate') }}
+            <el-form-item :label="t('setting.userGuidance')">
+              <el-button type="primary" @click="open_user_guidance">
+                {{ t('setting.clickToOpenGuidance') }}
               </el-button>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="t('setting.userGuidance')">
-              <el-button type="primary" @click="open_user_guidance">
-                {{ t('setting.clickToOpenGuidance') }}
+            <el-form-item :label="t('setting.setNotify')">
+              <el-button type="primary" @click="show_dialog('notify')">
+                {{ t('setting.clickToSet') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" :pull="2">
+            <el-form-item :label="t('setting.contactDeveloper')">
+              <ContactSetting />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item :label="t('setting.checkUpdate')">
+              <el-button type="primary" @click="check_for_update">
+                {{ t('setting.clickToCheckUpdate') }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -311,39 +284,9 @@ async function open_user_guidance() {
       </el-form>
     </div>
 
-    <el-dialog v-model="change_password_dialog_visiable" :show-close="false" :title="t('setting.resetPassword')">
-      <el-form class="setting-dialog" label-position="right" :label-width="language === 'zh-CN' ? 'auto' : '110px'">
-        <el-form-item :label="t('setting.originPassword')">
-          <el-input v-model="input_origin_password" class="oldPasswordInput" show-password />
-        </el-form-item>
-        <el-form-item :label="t('setting.newPassword')">
-          <el-input v-model="input_new_password" show-password />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="toggle_dialog_cancel">{{ t('general.cancel') }}</el-button>
-          <el-button type="primary" @click="toggle_change_password">{{ t('general.confirm') }}</el-button>
-        </span>
-      </template>
-    </el-dialog>
-
-    <el-dialog v-model="change_delay_dialog_visiable" :show-close="false" :title="t('setting.resetMonitorDelay')">
-      <el-form class="setting-dialog" label-position="right" :label-width="language === 'zh-CN' ? 'auto' : '110px'">
-        <el-form-item :label="t('setting.targetDelay')">
-          <el-input-number v-model="input_delay_time" :min="1" :max="60" />
-        </el-form-item>
-      </el-form>
-      <span class="delayTip">
-        {{ t('general.validAfterRestart') }}
-      </span>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="toggle_dialog_cancel">{{ t('general.cancel') }}</el-button>
-          <el-button type="primary" @click="toggle_change_monitor_delay">{{ t('general.confirm') }}</el-button>
-        </span>
-      </template>
-    </el-dialog>
+    <PasswordReSet :is-show="password_dialog_display" :title="t('setting.resetPassword')" @close="close_dialog" />
+    <DelaySetting :is-show="delay_dialog_display" :title="t('setting.resetMonitorDelay')" @close="close_dialog" />
+    <NotifySetting :is-show="notify_dialog_display" :title="t('setting.setNotify')" @close="close_dialog" />
 
     <Lock :tray="['lock', 'home']" />
   </div>
