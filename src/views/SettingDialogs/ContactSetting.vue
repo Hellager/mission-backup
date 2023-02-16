@@ -41,11 +41,11 @@ async function copy_to_clipboard(data: string) {
         <el-button type="" text :icon="GithubFilled" @click="open_an_url(REPO_ADDRESS)" />
       </el-tooltip>
 
-      <el-tooltip :content="t('setting.throughtEmail')" placement="top" :show-after="1000">
+      <el-tooltip :content="t('setting.withhEmail')" placement="top" :show-after="1000">
         <el-button type="warning" text :icon="MailOutlined" @click="copy_to_clipboard(EMAIL_ADDRESS)" />
       </el-tooltip>
 
-      <el-tooltip :content="t('setting.throughTwitter')" placement="top" :show-after="1000">
+      <el-tooltip :content="t('setting.toTwitter')" placement="top" :show-after="1000">
         <el-button type="primary" text :icon="TwitterOutlined" @click="open_an_url(TWITTER_ADDRESS)" />
       </el-tooltip>
     </el-button-group>

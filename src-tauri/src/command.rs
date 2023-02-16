@@ -505,3 +505,12 @@ pub fn get_mission_backups_status(id: String, date_type: String, start_datetime:
 
   Response { code: 200, data: SavePathInfo { count: count_res, size: size_res }, msg: "".to_string() }
 }
+
+#[command]
+pub fn open_url(url: String, app_handle: tauri::AppHandle) {
+  let _ = tauri::scope::ShellScope::open(
+    &app_handle.shell_scope(),
+    &url,
+    None,
+  );
+}

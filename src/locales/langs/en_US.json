@@ -41,7 +41,12 @@
     "checkUpdate": "Check Update",
     "clickToCheckUpdate": "Click to check",
     "userGuidance": "User Guidance",
-    "clickToOpenGuidance": "Click to open"
+    "clickToOpenGuidance": "Click to open",
+    "toGithubRepo": "Go to Github Repo",
+    "withhEmail": "Contact with Email",
+    "copyEmailAddress": "Copy Email Address",
+    "copySuccess": "Copy Email Address Success!",
+    "toTwitter": "Contact with Twitter"
   },
   "config": {
     "name": "Mission Name",

@@ -30,6 +30,7 @@ enum TauriCommand {
   COMMAND_GET_DROP_PATH_INFO,
   COMMAND_UPDATE_LIST_INFO,
   COMMAND_GET_MISSION_BACKUPS_STATUS,
+  COMMAND_OPEN_URL,
 }
 
 // tauri command 参数只能是驼峰命名
@@ -202,6 +203,12 @@ async function execute_rust_command(command: Number, data?: any, additional?: an
 
     case TauriCommand.COMMAND_GET_MISSION_BACKUPS_STATUS:
       result = await invoke('get_mission_backups_status', { id: data, dateType: additional, startDatetime: additional2, sizeUnit: additional3 })
+        .then((res) => { return res })
+        .catch(err => console.error(err))
+      break
+
+    case TauriCommand.COMMAND_OPEN_URL:
+      result = await invoke('open_url', { url: data })
         .then((res) => { return res })
         .catch(err => console.error(err))
       break

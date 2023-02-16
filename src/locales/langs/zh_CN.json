@@ -41,7 +41,11 @@
     "checkUpdate": "检查更新",
     "clickToCheckUpdate": "点击检查",
     "userGuidance": "用户手册",
-    "clickToOpenGuidance": "点击打开"
+    "clickToOpenGuidance": "点击打开",
+    "toGithubRepo": "前往 Github 仓库",
+    "withhEmail": "通过 Email 联系",
+    "copySuccess": "拷贝 Email 地址成功!",
+    "toTwitter": "通过 Twitter 联系"
   },
   "config": {
     "name": "任务名称",

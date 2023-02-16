@@ -158,7 +158,8 @@ fn main() {
         command::edit_mission,
         command::delete_mission,
         command::force_delete_mission,
-        command::get_mission_backups_status
+        command::get_mission_backups_status,
+        command::open_url
     ])
     .build(context)
     .expect("error while running tauri application");
