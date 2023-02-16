@@ -24,6 +24,7 @@
     "echarts": "^5.3.3",
     "element-plus": "^2.2.9",
     "pinia": "^2.0.16",
+    "turndown": "^7.1.1",
     "vue": "^3.2.37",
     "vue-echarts": "^6.2.3",
     "vue-i18n": "9.2.2",
@@ -52,6 +53,7 @@
     "unplugin-icons": "^0.14.10",
     "unplugin-vue-components": "^0.21.1",
     "vite": "^3.0.2",
+    "vite-plugin-md": "^0.21.5",
     "vitepress": "1.0.0-alpha.17",
     "vue-tsc": "^0.40.0"
   }

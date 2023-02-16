@@ -13,6 +13,7 @@ import PasswordReSet from './SettingDialogs/PasswordReSet.vue'
 import DelaySetting from './SettingDialogs/DelaySetting.vue'
 import NotifySetting from './SettingDialogs/NotifySetting.vue'
 import ContactSetting from './SettingDialogs/ContactSetting.vue'
+import UpdateMessage from './SettingDialogs/UpdateMessage.vue'
 // import { ElMessage } from 'element-plus';
 
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -45,6 +46,9 @@ const langOptions = [
 const password_dialog_display = ref(false)
 const delay_dialog_display = ref(false)
 const notify_dialog_display = ref(false)
+const update_dialog_display = ref(false)
+const update_msg = ref('')
+const release_url = ref('')
 
 const show_error_message = (mode: string) => {
   let msg = ''
@@ -54,12 +58,44 @@ const show_error_message = (mode: string) => {
     msg = t('error.changePasswordFailed')
   else if (mode === 'delay')
     msg = t('error.changeDelayFailed')
+  else if (mode === 'update')
+    msg = t('error.checkUpdateFailed')
 
   ElMessage.error({
     showClose: true,
     message: msg,
     center: true,
   })
+}
+
+const show_dialog = (dialog: String) => {
+  switch (dialog) {
+    case 'password':
+      password_dialog_display.value = !password_dialog_display.value
+      break
+
+    case 'delay':
+      delay_dialog_display.value = !delay_dialog_display.value
+      break
+
+    case 'notify':
+      notify_dialog_display.value = !notify_dialog_display.value
+      break
+
+    case 'update':
+      update_dialog_display.value = !update_dialog_display.value
+      break
+
+    default:
+      break
+  }
+}
+
+const close_dialog = () => {
+  password_dialog_display.value = false
+  delay_dialog_display.value = false
+  notify_dialog_display.value = false
+  update_dialog_display.value = false
 }
 
 async function toggle_change_auto_start(data: boolean) {
@@ -121,9 +157,7 @@ async function toggle_change_password_protect(data: boolean) {
 }
 
 async function check_for_update() {
-  console.log('manual check update')
-
-  console.log(globalSetting.software_version)
+  const local_version: any = globalSetting.software_version
 
   const unsafe_response = await fetch(
     'https://api.github.com/repos/Hellager/mission-backup/releases/latest',
@@ -136,46 +170,44 @@ async function check_for_update() {
   const response: any = Object.assign({}, unsafe_response)
 
   if (response.code === 204) {
-    console.log('no latest')
+    show_error_message('update')
   }
   else {
-    const note = response.data.body
-    const source = response.data.html_url
-    const name = response.data.name
-    const tag = response.data.tag_name
-    const time = response.data.published_at
+    update_msg.value = response.data.body
+    release_url.value = response.data.html_url
+    const remote_version = response.data.tag_name
+
+    if (local_version === null || remote_version === null)
+      show_error_message('update')
+
+    const local_ver_arr = local_version.match(/\d+/g)
+    const remote_ver_arr = remote_version.match(/\d+/g)
+
+    remote_ver_arr[2] += 1
+
+    let isNeedUpdate = false
+
+    for (let i = 0; i < 3; i++) {
+      if (parseInt(remote_ver_arr[i]) > parseInt(local_ver_arr[i])) {
+        isNeedUpdate = true
+        break
+      }
+    }
 
     console.log(response.data)
+    console.log(update_msg.value)
+    if (isNeedUpdate) { show_dialog('update') }
+    else {
+      ElMessage({
+        showClose: true,
+        message: t('setting.noNeedUpdate'),
+      })
+    }
   }
 }
 
 async function open_user_guidance() {
   console.log('click to open user guidance')
-}
-
-const show_dialog = (dialog: String) => {
-  switch (dialog) {
-    case 'password':
-      password_dialog_display.value = !password_dialog_display.value
-      break
-
-    case 'delay':
-      delay_dialog_display.value = !delay_dialog_display.value
-      break
-
-    case 'notify':
-      notify_dialog_display.value = !notify_dialog_display.value
-      break
-
-    default:
-      break
-  }
-}
-
-const close_dialog = () => {
-  password_dialog_display.value = false
-  delay_dialog_display.value = false
-  notify_dialog_display.value = false
 }
 </script>
 
@@ -287,8 +319,9 @@ const close_dialog = () => {
     <PasswordReSet :is-show="password_dialog_display" :title="t('setting.resetPassword')" @close="close_dialog" />
     <DelaySetting :is-show="delay_dialog_display" :title="t('setting.resetMonitorDelay')" @close="close_dialog" />
     <NotifySetting :is-show="notify_dialog_display" :title="t('setting.setNotify')" @close="close_dialog" />
-
-    <Lock :tray="['lock', 'home']" />
+    <UpdateMessage :is-show="update_dialog_display" :title="t('setting.goUpdate')" :message="update_msg" :release-url="release_url" @close="close_dialog">
+      <Lock :tray="['lock', 'home']" />
+    </updatemessage>
   </div>
 </template>
 

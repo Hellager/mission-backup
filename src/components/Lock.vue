@@ -17,7 +17,6 @@ const pageLock = ref(false)
 const handle_validate = (res: boolean) => {
   if (res)
     pageLock.value = false
-  console.log(props.defaultLock)
   emit('changeDefaultLock', false)
 }
 

@@ -35,6 +35,8 @@
     "version": "Version",
     "changePasswordSuccess": "Success change unlock password",
     "changeDelaySuccess": "Success change monitor delay",
+    "inputOriginPassword": "Please input your origin password",
+    "inputNewPassword": "Please input your new password",
     "setNotify": "Set Notify",
     "clickToSet": "Click to Set",
     "contactDeveloper": "Contact RD",
@@ -46,7 +48,9 @@
     "withhEmail": "Contact with Email",
     "copyEmailAddress": "Copy Email Address",
     "copySuccess": "Copy Email Address Success!",
-    "toTwitter": "Contact with Twitter"
+    "toTwitter": "Contact with Twitter",
+    "goUpdate": "Download new version",
+    "noNeedUpdate": "No need to update"
   },
   "config": {
     "name": "Mission Name",
@@ -115,7 +119,8 @@
     "unavailablePath": "unavailable path",
     "invalidNumber": "Current number invalid",
     "anotherInstance": "Program already running",
-    "emptyPassword": "Empty password!"
+    "emptyPassword": "Empty password!",
+    "checkUpdateFailed": "Failed to check update"
   },
   "component": {
     "inputPassword": "Please input password",

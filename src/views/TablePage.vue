@@ -54,7 +54,6 @@ const toggle_row_db_click = (row: any) => {
 
 const toggle_change_default_lock = (res: boolean) => {
   default_lock.value = res
-  console.log('change default lock')
 }
 
 async function toggle_edit_click(id: string) {

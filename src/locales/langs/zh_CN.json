@@ -35,6 +35,8 @@
     "version": "版本",
     "changePasswordSuccess": "修改锁屏密码成功",
     "changeDelaySuccess": "修改监控延时成功",
+    "inputOriginPassword": "请输入原密码",
+    "inputNewPassword": "请输入新密码",
     "setNotify": "通知设置",
     "clickToSet": "点击设置",
     "contactDeveloper": "联系作者",
@@ -45,7 +47,9 @@
     "toGithubRepo": "前往 Github 仓库",
     "withhEmail": "通过 Email 联系",
     "copySuccess": "拷贝 Email 地址成功!",
-    "toTwitter": "通过 Twitter 联系"
+    "toTwitter": "通过 Twitter 联系",
+    "goUpdate": "下载新版本",
+    "noNeedUpdate": "无需更新"
   },
   "config": {
     "name": "任务名称",
@@ -114,7 +118,8 @@
     "unavailablePath": "无效路径",
     "invalidNumber": "无效数字",
     "anotherInstance": "已有程序运行中",
-    "emptyPassword": "密码不能为空!"
+    "emptyPassword": "密码不能为空!",
+    "checkUpdateFailed": "检查更新失败"
   },
   "component": {
     "inputPassword": "请输入密码解锁",

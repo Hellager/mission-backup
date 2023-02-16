@@ -10,11 +10,13 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import Markdown from 'vite-plugin-md'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    Markdown(),
     visualizer({
       emitFile: true,
       filename: 'report.html',
