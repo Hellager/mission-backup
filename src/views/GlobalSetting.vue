@@ -173,7 +173,15 @@ async function check_for_update() {
     show_error_message('update')
   }
   else {
-    update_msg.value = response.data.body
+    console.log(response.data)
+    const en_abstract_idx = response.data.body.indexOf('English Abstract:')
+    const cn_abstract_idx = response.data.body.indexOf('中文摘要：')
+
+    update_msg.value = (globalSetting.language === 'en-US'
+      ? response.data.body.substring(en_abstract_idx + 'English Abstract:'.length + 2, cn_abstract_idx)
+      : response.data.body.substring(cn_abstract_idx + '中文摘要：'.length + 2)
+    )
+
     release_url.value = response.data.html_url
     const remote_version = response.data.tag_name
 
@@ -194,8 +202,6 @@ async function check_for_update() {
       }
     }
 
-    console.log(response.data)
-    console.log(update_msg.value)
     if (isNeedUpdate) { show_dialog('update') }
     else {
       ElMessage({

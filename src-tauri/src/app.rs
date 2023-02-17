@@ -41,7 +41,7 @@ use std::env::current_dir;
 use tauri::api::path::home_dir;
 
 // Const varibles
-static APP_VERSION: &str = "1.0.0";
+static APP_VERSION: &str = "v1.0.0";
 
 #[allow(unused)]
 static APP_DIR: &str = "mission-backup";
