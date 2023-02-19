@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n'
 import type { UnlistenFn } from '@tauri-apps/api/event'
 import { listen } from '@tauri-apps/api/event'
 import { appWindow } from '@tauri-apps/api/window'
+import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification'
 import { useMissionStore, useSettingStore } from './store/index'
 import { TauriCommand, execute_rust_command } from './utils/index'
 import router from './router'
@@ -13,7 +14,12 @@ import TitleBar from './components/TitleBar.vue'
 const { t, locale } = useI18n({ useScope: 'global' })
 const globalSetting = useSettingStore()
 const missionStore = useMissionStore()
-const { is_initialized, language } = storeToRefs(globalSetting)
+const {
+  is_initialized,
+  language,
+  is_notify_when_create_backup_success,
+  is_notify_when_create_backup_failed,
+} = storeToRefs(globalSetting)
 
 /**
  * initialize data when mounted
@@ -92,22 +98,40 @@ const build_router_transitionname = (name: any): string => {
 }
 
 /**
+ * Notification related
+ */
+async function get_notify_permission() {
+  let permission_granted = await isPermissionGranted()
+  if (!permission_granted) {
+    const permission = await requestPermission()
+    permission_granted = permission === 'granted'
+  }
+
+  return permission_granted
+}
+
+/**
  * listen events
  */
 const listen_dict: Map<string, UnlistenFn> = new Map()
 
 async function listen_to_any_error() {
+  const is_notify_permission_granted = await get_notify_permission()
   const unlisten = await listen('error', (event: any) => {
     const error_code = event.payload.code
     switch (error_code) {
       case 1: {
-        // create backups failed error
-        const errMsg = `${event.payload.data.name}: ${t('error.createBackupsFailed')}`
-        ElMessage.error({
-          showClose: true,
-          message: errMsg,
-          center: true,
-        })
+        const errMsg = `${t('general.mission')} ${event.payload.data.name} ${t('error.createBackupsFailed')}`
+        if (is_notify_permission_granted && is_notify_when_create_backup_failed) {
+          sendNotification({ title: t('general.mission'), body: errMsg })
+        }
+        else {
+          ElMessage.error({
+            showClose: true,
+            message: errMsg,
+            center: true,
+          })
+        }
       }
         break
 
@@ -115,6 +139,36 @@ async function listen_to_any_error() {
         break
     }
   })
+
+  listen_dict.set('error', unlisten)
+}
+
+async function listen_to_any_success() {
+  const is_notify_permission_granted = await get_notify_permission()
+  const unlisten = await listen('success', (event: any) => {
+    const success_code = event.payload.code
+    switch (success_code) {
+      case 1: {
+        const success_msg = `${t('general.mission')} ${event.payload.data.name} ${t('success.createBackupsSuccess')}`
+        if (is_notify_permission_granted && is_notify_when_create_backup_success) {
+          sendNotification({ title: t('general.mission'), body: success_msg })
+        }
+        else {
+          ElMessage.error({
+            showClose: true,
+            message: success_msg,
+            center: true,
+          })
+        }
+      }
+        break
+
+      default:
+        break
+    }
+  })
+
+  listen_dict.set('success', unlisten)
 }
 
 async function listen_to_close_event() {
@@ -225,6 +279,7 @@ onMounted(() => {
   listen_to_another_instance()
   listen_to_close_event()
   listen_to_any_error()
+  listen_to_any_success()
   listen_to_drop_event()
   listen_to_system_tray_event()
   listen_to_mission_status_update()

@@ -38,6 +38,7 @@ use log::{ debug, error };
 
 // Using absolute path
 use std::env::current_dir;
+#[allow(unused_imports)]
 use tauri::api::path::home_dir;
 
 // Const varibles
@@ -96,7 +97,9 @@ pub fn load_data_file() -> APPData {
             "is_close_to_tray": true,
             "language": "{}",
             "monitor_delay": 5,
-            "software_version": "{}"
+            "software_version": "{}",
+            "is_notify_when_create_backup_success": true,
+            "is_notify_when_create_backup_failed": true
           }},
           "list": []
         }}

@@ -159,7 +159,9 @@ fn main() {
         command::delete_mission,
         command::force_delete_mission,
         command::get_mission_backups_status,
-        command::open_url
+        command::open_url,
+        command::change_setting_is_notify_when_create_backup_success,
+        command::change_setting_is_notify_when_create_backup_failed
     ])
     .build(context)
     .expect("error while running tauri application");

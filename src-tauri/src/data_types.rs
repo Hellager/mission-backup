@@ -27,6 +27,8 @@ pub struct Setting {
     pub is_close_to_tray: bool,
     pub language: String,
     pub monitor_delay: u16,
+    pub is_notify_when_create_backup_success: bool,
+    pub is_notify_when_create_backup_failed: bool,
     // is_webdav_enable: bool,
     // is_webdav_available: bool,
     // webdav_host_address: String,
@@ -111,6 +113,10 @@ pub struct Response<T> {
     pub msg: String,
 }
 
+/**
+ * code:
+ *  1 - Create backup related
+ */
 impl<T> Response<T> {
     pub fn new(code: i32, data: T, msg: &str) -> Response<T> {
         Response {

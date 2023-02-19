@@ -37,20 +37,23 @@
     "changeDelaySuccess": "Success change monitor delay",
     "inputOriginPassword": "Please input your origin password",
     "inputNewPassword": "Please input your new password",
-    "setNotify": "Set Notify",
-    "clickToSet": "Click to Set",
+    "setNotify": "Set Notification",
+    "setNotifyTitle": "Notification Setting",
+    "clickToSet": "Click to Setup",
     "contactDeveloper": "Contact RD",
     "checkUpdate": "Check Update",
-    "clickToCheckUpdate": "Click to check",
+    "clickToCheckUpdate": "Click to Check",
     "userGuidance": "User Guidance",
-    "clickToOpenGuidance": "Click to open",
+    "clickToOpenGuidance": "Click to Open",
     "toGithubRepo": "Go to Github Repo",
     "withhEmail": "Contact with Email",
     "copyEmailAddress": "Copy Email Address",
     "copySuccess": "Copy Email Address Success!",
     "toTwitter": "Contact with Twitter",
     "goUpdate": "What's new?",
-    "noNeedUpdate": "No need to update"
+    "noNeedUpdate": "No need to update",
+    "notifyWhenBackupSuccess": "When Backup Success",
+    "notifyWhenBackupFailed": "When Backup Failed"
   },
   "config": {
     "name": "Mission Name",
@@ -102,6 +105,9 @@
     "count": "Count",
     "size": "Size"
   },
+  "success": {
+    "createBackupsSuccess": "create backup success"
+  },
   "error": {
     "changeSettingFailed": "Failed to change current setting",
     "changePasswordFailed": "Failed to change unlock password",
@@ -112,7 +118,7 @@
     "stopMissionFailed": "Failed to stop target mission",
     "deleteMissionFailed": "Failed to delete target mission",
     "changeDelayFailed": "Failed to change delay time",
-    "createBackupsFailed": "Failed to create backup",
+    "createBackupsFailed": "failed to create backup for",
     "dataFormatError": "Wrong data format",
     "jobRunningError": "Some job is executing",
     "cronNotTriggerYet": "not trigger yet",
@@ -120,7 +126,8 @@
     "invalidNumber": "Current number invalid",
     "anotherInstance": "Program already running",
     "emptyPassword": "Empty password!",
-    "checkUpdateFailed": "Failed to check update"
+    "checkUpdateFailed": "Failed to check update",
+    "changeNotifyFailed": "Failed to change notification"
   },
   "component": {
     "inputPassword": "Please input password",
@@ -134,6 +141,7 @@
     "AppTitle": "Mission Backup",
     "cancel": "Cancel",
     "confirm": "Confirm",
+    "mission": "Mission",
     "validAfterRestart": "🔸valid after program restart"
   }
 }

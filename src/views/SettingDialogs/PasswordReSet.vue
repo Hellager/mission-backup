@@ -106,7 +106,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       :rules="rules"
       class="setting-dialog"
       label-position="right"
-      :label-width="language === 'zh-CN' ? 'auto' : '110px'"
+      :label-width="language === 'zh-CN' ? 'auto' : '120px'"
     >
       <el-form-item :label="t('setting.originPassword')" prop="origin_password">
         <el-input v-model="ruleForm.origin_password" class="oldPasswordInput" show-password />

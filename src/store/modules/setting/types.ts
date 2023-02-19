@@ -5,6 +5,8 @@ export interface Setting {
   language: string
   is_password_protected: boolean
   monitor_delay: number
+  is_notify_when_create_backup_success: boolean
+  is_notify_when_create_backup_failed: boolean
   // is_webdav_enable: boolean;
   // is_webdav_available: boolean;
   // webdav_host_address: string;

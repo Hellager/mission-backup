@@ -31,6 +31,8 @@ enum TauriCommand {
   COMMAND_UPDATE_LIST_INFO,
   COMMAND_GET_MISSION_BACKUPS_STATUS,
   COMMAND_OPEN_URL,
+  COMMAND_CHANGE_IS_NOTIFY_WHEN_CREATE_BACKUP_SUCCESS,
+  COMMAND_CHANGE_IS_NOTIFY_WHEN_CREATE_BACKUP_FAILED,
 }
 
 // tauri command 参数只能是驼峰命名
@@ -41,7 +43,6 @@ async function execute_rust_command(command: Number, data?: any, additional?: an
 
   switch (command) {
     case TauriCommand.COMMAND_SHOW_MAIN_WINDOW:
-      console.log('send command')
       result = await invoke('show_mainwindow')
         .then((res) => { return res })
         .catch(err => console.error(err))
@@ -213,9 +214,20 @@ async function execute_rust_command(command: Number, data?: any, additional?: an
         .catch(err => console.error(err))
       break
 
+    case TauriCommand.COMMAND_CHANGE_IS_NOTIFY_WHEN_CREATE_BACKUP_SUCCESS:
+      result = await invoke('change_setting_is_notify_when_create_backup_success', { isNotify: data })
+        .then((res) => { return res })
+        .catch(err => console.error(err))
+      break
+
+    case TauriCommand.COMMAND_CHANGE_IS_NOTIFY_WHEN_CREATE_BACKUP_FAILED:
+      result = await invoke('change_setting_is_notify_when_create_backup_failed', { isNotify: data })
+        .then((res) => { return res })
+        .catch(err => console.error(err))
+      break
+
     default:
       console.error('No command matches')
-      return false
       break
   }
 

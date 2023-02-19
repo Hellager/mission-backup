@@ -56,7 +56,7 @@ onMounted(() => {
 .titlebar {
   height: 30px;
   color: var(--el-text-color-regular);
-  background-color: var(--el-bg-color);
+  background-color: var(--el-bg-color-page);
   user-select: none;
   display: flex;
   flex-direction: row;

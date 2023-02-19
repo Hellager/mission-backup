@@ -173,7 +173,7 @@ async function check_for_update() {
     show_error_message('update')
   }
   else {
-    console.log(response.data)
+    // console.log(response.data)
     const en_abstract_idx = response.data.body.indexOf('English Abstract:')
     const cn_abstract_idx = response.data.body.indexOf('中文摘要：')
 
@@ -324,7 +324,7 @@ async function open_user_guidance() {
 
     <PasswordReSet :is-show="password_dialog_display" :title="t('setting.resetPassword')" @close="close_dialog" />
     <DelaySetting :is-show="delay_dialog_display" :title="t('setting.resetMonitorDelay')" @close="close_dialog" />
-    <NotifySetting :is-show="notify_dialog_display" :title="t('setting.setNotify')" @close="close_dialog" />
+    <NotifySetting :is-show="notify_dialog_display" :title="t('setting.setNotifyTitle')" @close="close_dialog" />
     <UpdateMessage :is-show="update_dialog_display" :title="t('setting.goUpdate')" :message="update_msg" :release-url="release_url" @close="close_dialog">
       <Lock :tray="['lock', 'home']" />
     </updatemessage>

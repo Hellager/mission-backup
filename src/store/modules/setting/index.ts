@@ -15,6 +15,8 @@ export const useSettingStore = defineStore(
       language: 'zh-CN',
       is_password_protected: true,
       monitor_delay: 3,
+      is_notify_when_create_backup_success: true,
+      is_notify_when_create_backup_failed: true,
       // is_webdav_enable: false,
       // is_webdav_available: false,
       // webdav_server: '',
@@ -41,6 +43,8 @@ export const useSettingStore = defineStore(
         this.language = data.language
         this.is_password_protected = data.is_password_protected
         this.software_version = data.software_version
+        this.is_notify_when_create_backup_success = data.is_notify_when_create_backup_success
+        this.is_notify_when_create_backup_failed = data.is_notify_when_create_backup_failed
       },
 
       update_auto_start(data: boolean) {
@@ -73,6 +77,14 @@ export const useSettingStore = defineStore(
 
       update_page_initialized_status(status: boolean) {
         this.is_page_initialized = status
+      },
+
+      update_notify_when_create_backup_success(data: boolean) {
+        this.is_notify_when_create_backup_success = data
+      },
+
+      update_notify_when_create_backup_failed(data: boolean) {
+        this.is_notify_when_create_backup_success = data
       },
 
       // toggleChangeLanguage(lang: string) {

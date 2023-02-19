@@ -109,6 +109,12 @@ impl MissionHandler {
 
                             MissionHandler::update_mission_status("unavailable",&callback_config, &callback_app_handle);                    
                         } else {
+                            let _ = &callback_app_handle.emit_all("success", Response::<MissionConfig> {
+                                code: 1,
+                                data: callback_config.clone(),
+                                msg: "".to_string()
+                            }).unwrap();
+                            
                             MissionHandler::update_mission_status("monitoring",&callback_config, &callback_app_handle);                    
                         }
                     }
@@ -129,6 +135,12 @@ impl MissionHandler {
 
                         MissionHandler::update_mission_status("unavailable",&callback_config, &callback_app_handle);                    
                     } else {
+                        let _ = &callback_app_handle.emit_all("success", Response::<MissionConfig> {
+                            code: 1,
+                            data: callback_config.clone(),
+                            msg: "".to_string()
+                        }).unwrap();
+
                         MissionHandler::update_mission_status("timing",&callback_config, &callback_app_handle);                    
                     }
                 }).unwrap();

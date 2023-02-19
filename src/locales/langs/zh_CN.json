@@ -38,6 +38,7 @@
     "inputOriginPassword": "请输入原密码",
     "inputNewPassword": "请输入新密码",
     "setNotify": "通知设置",
+    "setNotifyTitle": "通知设置",
     "clickToSet": "点击设置",
     "contactDeveloper": "联系作者",
     "checkUpdate": "检查更新",
@@ -49,7 +50,9 @@
     "copySuccess": "拷贝 Email 地址成功!",
     "toTwitter": "通过 Twitter 联系",
     "goUpdate": "更新概要",
-    "noNeedUpdate": "无需更新"
+    "noNeedUpdate": "无需更新",
+    "notifyWhenBackupSuccess": "成功备份时通知",
+    "notifyWhenBackupFailed": "备份失败时通知"
   },
   "config": {
     "name": "任务名称",
@@ -101,6 +104,9 @@
     "count": "数量",
     "size": "大小"
   },
+  "success": {
+    "createBackupsSuccess": "创建备份成功"
+  },
   "error": {
     "changeSettingFailed": "修改当前设置失败",
     "changePasswordFailed": "修改锁屏密码失败",
@@ -119,7 +125,8 @@
     "invalidNumber": "无效数字",
     "anotherInstance": "已有程序运行中",
     "emptyPassword": "密码不能为空!",
-    "checkUpdateFailed": "检查更新失败"
+    "checkUpdateFailed": "检查更新失败",
+    "changeNotifyFailed": "通知设置失败"
   },
   "component": {
     "inputPassword": "请输入密码解锁",
@@ -133,6 +140,7 @@
     "AppTitle": "有备",
     "cancel": "取消",
     "confirm": "确认",
+    "mission": "任务",
     "validAfterRestart": "🔸该项设置仅在软件重启后生效"
   }
 }

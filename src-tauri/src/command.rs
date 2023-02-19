@@ -514,3 +514,18 @@ pub fn open_url(url: String, app_handle: tauri::AppHandle) {
     None,
   );
 }
+
+#[command]
+pub fn change_setting_is_notify_when_create_backup_success(is_notify: bool, state_handler: State<MissionHandlerWrapper>) -> bool {
+  state_handler.0.lock().unwrap().setting.is_notify_when_create_backup_success = is_notify;
+  debug!("Change setting is_notify_when_create_backup_success to {}", is_notify);
+  true
+}
+
+#[command]
+pub fn change_setting_is_notify_when_create_backup_failed(is_notify: bool, state_handler: State<MissionHandlerWrapper>) -> bool {
+  state_handler.0.lock().unwrap().setting.is_notify_when_create_backup_failed = is_notify;
+  debug!("Change setting is_notify_when_create_backup_failed to {}", is_notify);
+  true
+}
+
