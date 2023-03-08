@@ -314,7 +314,7 @@ async function submit_form(formEl: FormInstance | undefined) {
             submit_to_backend()
               .then((submit_res) => {
                 if (submit_res.code === 200) {
-                  route.query.mode === 'add'
+                  route.query.mode === 'add' || route.query.mode === 'drop'
                     ? missionStore.append_new_mission(submit_res.data)
                     : missionStore.edit_mission(form.id, submit_res.data)
                   router.push('/table')
