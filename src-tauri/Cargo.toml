@@ -31,6 +31,9 @@ sevenz-rust={version="0.5.4", features=["compress"]}
 walkdir = "2.5.0"
 ignore = "0.4.22"
 fs_extra = "1.3.0"
+dark-light = "1.1.1"
+wry = "0.24.6"
+rand = "0.8.5"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
