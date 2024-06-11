@@ -1,10 +1,13 @@
 [package]
 name = "mission-backup"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A cross-platform application helps you keeping local backups for your data."
+authors = ["stein"]
 edition = "2021"
-
+# documentation = "https://mission-backup.hellagur.com"
+homepage = "https://mission-backup.hellagur.com"
+repository = "https://github.com/Hellager/mission-backup"
+license = "Apache-2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
