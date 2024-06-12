@@ -21,6 +21,7 @@ fn main() {
         .plugin(tauri_plugin_single_instance::init(on_another_instance))
         .system_tray(core::tray::create_system_tray())
         .on_system_tray_event(core::tray::on_system_tray_event)
+        .on_window_event(core::window::on_window_event)
         .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
