@@ -32,3 +32,27 @@ pub fn setup_handler(app: &mut App) -> Result<(), Box<dyn std::error::Error + 's
 
     Ok(())
 }
+
+/// Setup tauri commands.
+/// 
+/// # Arguments
+/// 
+/// # Examples
+/// 
+/// ```
+/// use core::setup::setup_command;
+/// 
+/// fn main() {
+///     tauri::Builder::default()
+///         .invoke_handler(crate::core::setup::setup_command())
+///         .run(tauri::generate_context!())
+///         .expect("error while running tauri application");
+/// }
+/// ```
+pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
+    use super::cmd::*;
+
+    Box::new(tauri::generate_handler![
+        greet
+    ])
+}

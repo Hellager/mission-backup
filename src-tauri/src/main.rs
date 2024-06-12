@@ -9,12 +9,6 @@ mod core;
 use tauri_plugin_autostart::MacosLauncher;
 use plugins::on_another_instance;
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec![])))
@@ -23,7 +17,7 @@ fn main() {
         .system_tray(core::tray::create_system_tray())
         .on_system_tray_event(core::tray::on_system_tray_event)
         .on_window_event(core::window::on_window_event)
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(crate::core::setup::setup_command())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
