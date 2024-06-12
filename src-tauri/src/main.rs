@@ -19,6 +19,7 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec![])))
         .plugin(tauri_plugin_single_instance::init(on_another_instance))
+        .setup(crate::core::setup::setup_handler)
         .system_tray(core::tray::create_system_tray())
         .on_system_tray_event(core::tray::on_system_tray_event)
         .on_window_event(core::window::on_window_event)
