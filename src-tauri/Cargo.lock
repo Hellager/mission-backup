@@ -2350,6 +2350,7 @@ dependencies = [
  "tauri-plugin-autostart",
  "tauri-plugin-single-instance",
  "time",
+ "toml 0.8.12",
  "url",
  "walkdir",
  "wry",

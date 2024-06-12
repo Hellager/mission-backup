@@ -3,6 +3,7 @@
 
 mod utils;
 mod plugins;
+mod config;
 
 use tauri_plugin_autostart::MacosLauncher;
 use plugins::on_another_instance;
