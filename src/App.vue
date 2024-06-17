@@ -2,6 +2,16 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Greet from "./components/Greet.vue";
+import { onMounted } from 'vue'
+import { execute, Command } from './utils/cmd';
+
+onMounted(() => {
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(async () => {
+      await execute(Command.ShowMainWindow);
+    }, 3000);
+  })
+})
 </script>
 
 <template>

@@ -53,6 +53,6 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
     use super::cmd::*;
 
     Box::new(tauri::generate_handler![
-        greet
+        show_main_window
     ])
 }

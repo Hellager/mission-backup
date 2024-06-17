@@ -21,7 +21,19 @@
       {
         "title": "mission-backup",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "center": true,
+        "visible": false
+      },
+      {
+        "width": 500,
+        "height": 300,
+        "center": true,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen",
+        "title": "Loading",
+        "transparent": true
       }
     ],
     "systemTray": {
