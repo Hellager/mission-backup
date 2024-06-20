@@ -1,4 +1,4 @@
-import { camelCase, snakeCase, isArray, transform, isObject  } from "lodash";
+import { camelCase, isArray, isObject, snakeCase, transform } from 'lodash'
 
 // https://stackoverflow.com/questions/59769649/recursively-convert-an-object-fields-from-snake-case-to-camelcase
 
@@ -8,11 +8,11 @@ import { camelCase, snakeCase, isArray, transform, isObject  } from "lodash";
  * @returns The object with keys in snake_case.
  */
 export function toSnakeCase(data: any): unknown {
-    return transform(data, (acc: any, value: unknown, key: string, target) => {
-        const snakeKey = isArray(target) ? key : snakeCase(key);
+  return transform(data, (acc: any, value: unknown, key: string, target) => {
+    const snakeKey = isArray(target) ? key : snakeCase(key)
 
-        acc[snakeKey] = isObject(value) ? toSnakeCase(value) : value;
-    })
+    acc[snakeKey] = isObject(value) ? toSnakeCase(value) : value
+  })
 }
 
 /**
@@ -21,11 +21,11 @@ export function toSnakeCase(data: any): unknown {
  * @returns The object with keys in camelCase.
  */
 export function toCamelCase(data: any): unknown {
-    return transform(data, (acc: any, value: unknown, key: string, target) => {
-        const camelKey = isArray(target) ? key : camelCase(key);
+  return transform(data, (acc: any, value: unknown, key: string, target) => {
+    const camelKey = isArray(target) ? key : camelCase(key)
 
-        acc[camelKey] = isObject(value) ? toCamelCase(value) : value;
-    })
+    acc[camelKey] = isObject(value) ? toCamelCase(value) : value
+  })
 }
 
 /**
@@ -36,7 +36,7 @@ export function toCamelCase(data: any): unknown {
  * @returns Returns true if the two objects have the same keys, otherwise returns false.
  */
 export function compareKeys(a: any, b: any) {
-    var aKeys = Object.keys(a).sort();
-    var bKeys = Object.keys(b).sort();
-    return JSON.stringify(aKeys) === JSON.stringify(bKeys);
+  const aKeys = Object.keys(a).sort()
+  const bKeys = Object.keys(b).sort()
+  return JSON.stringify(aKeys) === JSON.stringify(bKeys)
 }
