@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tauri-apps/api": "^1",
@@ -22,6 +23,7 @@
     "@types/lodash": "^4.17.5",
     "@vitejs/plugin-vue": "^5.0.4",
     "eslint": "^9.5.0",
+    "husky": "^9.0.11",
     "typescript": "^5.0.2",
     "vite": "^5.0.0",
     "vue-tsc": "^1.8.5"
