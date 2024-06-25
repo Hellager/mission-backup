@@ -4,7 +4,8 @@ import { compareKeys } from '../common'
  * Represents various commands for execution.
  */
 enum Command {
-  ShowMainWindow,
+  InitApp,
+  ShutdownApp,
 }
 
 /**
@@ -15,6 +16,31 @@ interface Response<T> {
   code: number
   data: T
   msg: string
+}
+
+/**
+ * Represents the status of different handlers.
+ */
+interface HandlerStatus {
+  /**
+   * Indicates the status of the log handler.
+   */
+  log: boolean
+
+  /**
+   * Indicates the status of the app handler.
+   */
+  app: boolean
+
+  /**
+   * Indicates the status of the config handler.
+   */
+  config: boolean
+
+  /**
+   * Indicates the status of the database handler.
+   */
+  database: boolean
 }
 
 /**
@@ -41,4 +67,4 @@ function isResponse(data: any): boolean {
 }
 
 export { Command, defaultResponse, isResponse }
-export type { Response }
+export type { Response, HandlerStatus }

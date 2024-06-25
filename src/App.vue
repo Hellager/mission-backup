@@ -2,57 +2,67 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { onMounted } from 'vue'
-import Greet from './components/Greet.vue'
 import { Command, execute } from './utils/cmd'
+import SideMenu from './components/SideMenu.vue'
+
+/**
+ * Initializes the handler by executing the init command and setting the status.
+ */
+async function initApp() {
+  await execute(Command.InitApp)
+}
 
 onMounted(() => {
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(async () => {
-      await execute(Command.ShowMainWindow)
-    }, 3000)
+  document.addEventListener('DOMContentLoaded', async () => {
+    await initApp()
   })
 })
 </script>
 
 <template>
-  <div class="container">
-    <h1>Welcome to Tauri!</h1>
-
-    <div class="row">
-      <a href="https://vitejs.dev" target="_blank">
-        <img src="/vite.svg" class="logo vite" alt="Vite logo">
-      </a>
-      <a href="https://tauri.app" target="_blank">
-        <img src="/tauri.svg" class="logo tauri" alt="Tauri logo">
-      </a>
-      <a href="https://vuejs.org/" target="_blank">
-        <img src="./assets/vue.svg" class="logo vue" alt="Vue logo">
-      </a>
-    </div>
-
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-    <p>
-      Recommended IDE setup:
-      <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-      +
-      <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-      +
-      <a href="https://github.com/tauri-apps/tauri-vscode" target="_blank">Tauri</a>
-      +
-      <a href="https://github.com/rust-lang/rust-analyzer" target="_blank">rust-analyzer</a>
-    </p>
-
-    <Greet />
+  <div class="main">
+    <el-config-provider>
+      <el-container>
+        <el-container>
+          <el-aside class="container__aside">
+            <SideMenu />
+          </el-aside>
+          <el-main class="container__main">
+            <!-- <router-view /> -->
+            <router-view v-slot="{ Component, route }">
+              <transition :name="(route.meta.transition as string)">
+                <component :is="Component" :key="route.path" />
+              </transition>
+            </router-view>
+          </el-main>
+        </el-container>
+      </el-container>
+    </el-config-provider>
   </div>
 </template>
 
-<style scoped>
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+<style lang="less">
+@import "./assets/style/reset.css";
+
+html, body {
+  &::-webkit-scrollbar {
+    display: none;
+    -ms-overflow-style: none;
+  }
 }
 
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #249b73);
+.container__aside {
+  width: 140px;
+}
+
+.container__aside::-webkit-scrollbar {
+  width: 0;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+.container__main {
+  width: 100%;
+  padding: 0;
+  overflow-x: hidden;
 }
 </style>
