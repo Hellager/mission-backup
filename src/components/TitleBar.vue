@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window'
+import { useI18n } from 'vue-i18n'
 import {
   Close,
   Logo,
   Maxmize,
   Minimize,
 } from '../assets/icons'
+
+/**
+ * Used for internationalization.
+ */
+const { t } = useI18n({ useScope: 'global' })
 
 /**
  * Minimizes the application window.
@@ -40,7 +46,7 @@ async function onActionCloseClicked() {
       </el-icon>
 
       <el-text class="bar__title__text">
-        {{ "Mission Backup" }}
+        {{ t("common.appName") }}
       </el-text>
     </div>
 
