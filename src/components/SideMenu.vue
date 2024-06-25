@@ -14,11 +14,6 @@ interface ASideMenuItems {
 }
 
 /**
- * Indicates whether the application is in debug mode.
- */
-const debugmode = ref(import.meta.env.DEV)
-
-/**
  * Contains key-value pairs for menu items.
  */
 const menuitems: ASideMenuItems[] = [
@@ -65,6 +60,6 @@ const menuitems: ASideMenuItems[] = [
     justify-content: center;
   }
 
-  // overflow-y: hidden;
+  height: calc(100vh - 25px);
 }
 </style>

@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Icons from 'unplugin-icons/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
@@ -13,6 +15,16 @@ export default defineConfig(async () => ({
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+    }),
+    Icons({
+      compiler: 'vue3',
+      autoInstall: true,
+      customCollections: {
+        'custom-icons': FileSystemIconLoader(
+          'src/assets/icons',
+          svg => svg.replace(/^<svg /, '<svg fill="currentColor" '),
+        ),
+      },
     }),
   ],
 

@@ -3,6 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { onMounted } from 'vue'
 import { Command, execute } from './utils/cmd'
+import TitleBar from './components/TitleBar.vue'
 import SideMenu from './components/SideMenu.vue'
 
 /**
@@ -23,6 +24,9 @@ onMounted(() => {
   <div class="main">
     <el-config-provider>
       <el-container>
+        <el-header class="container__header">
+          <TitleBar />
+        </el-header>
         <el-container>
           <el-aside class="container__aside">
             <SideMenu />
@@ -51,8 +55,15 @@ html, body {
   }
 }
 
+.container__header {
+  width: 100%;
+  height: 25px;
+  padding: 0;
+}
+
 .container__aside {
   width: 140px;
+  height: calc(100vh - 25px);
 }
 
 .container__aside::-webkit-scrollbar {
@@ -62,6 +73,7 @@ html, body {
 
 .container__main {
   width: 100%;
+  height: calc(100vh - 25px);
   padding: 0;
   overflow-x: hidden;
 }
