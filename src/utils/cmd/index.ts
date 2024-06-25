@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/tauri'
+import type { HandlerStatus } from '../../store/status/types'
 import { Command } from './types'
-import type { HandlerStatus, Response } from './types'
+import type { Response } from './types'
 
 /**
  * Executes a command with optional arguments and returns the result.

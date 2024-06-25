@@ -19,31 +19,6 @@ interface Response<T> {
 }
 
 /**
- * Represents the status of different handlers.
- */
-interface HandlerStatus {
-  /**
-   * Indicates the status of the log handler.
-   */
-  log: boolean
-
-  /**
-   * Indicates the status of the app handler.
-   */
-  app: boolean
-
-  /**
-   * Indicates the status of the config handler.
-   */
-  config: boolean
-
-  /**
-   * Indicates the status of the database handler.
-   */
-  database: boolean
-}
-
-/**
  * Generates a default response object with a boolean data value.
  *
  * @returns A Response object with code 200, data set to true, and an empty message.
@@ -67,4 +42,4 @@ function isResponse(data: any): boolean {
 }
 
 export { Command, defaultResponse, isResponse }
-export type { Response, HandlerStatus }
+export type { Response }

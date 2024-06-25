@@ -2,15 +2,25 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { onMounted } from 'vue'
+import type { HandlerStatus } from './store/status/types'
 import { Command, execute } from './utils/cmd'
 import TitleBar from './components/TitleBar.vue'
 import SideMenu from './components/SideMenu.vue'
+import { useStatusStore } from './store'
+
+/**
+ * Represents the status store instance.
+ */
+const statusStore = useStatusStore()
 
 /**
  * Initializes the handler by executing the init command and setting the status.
  */
 async function initApp() {
   await execute(Command.InitApp)
+    .then((res: HandlerStatus) => {
+      statusStore.setHandlerStatus(res)
+    })
 }
 
 onMounted(() => {
