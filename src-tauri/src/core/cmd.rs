@@ -92,17 +92,17 @@ pub async fn init_app(window: Window, state: State<'_, MissionHandlerState>) -> 
             error!("Failed to initialize state, errMsg: {:?}", error);
             return Err(Response::<bool>::error(500, format!("{:?}", error)));
         }     
-    }
 
-    // close splashscreen
-    if let Some(splashscreen) = window.get_window("splashscreen") {
-        if let Err(error) = splashscreen.close() {
-            error!("failed to init app, errMsg: {:?}", error);
-            return Err(Response::<bool>::error(500, format!("{:?}", error)));
-        }
-    } else {
-        error!("missing splashsceen window");
-        return Err(Response::<bool>::error(404, format!("missing splashsceen window")));
+        // close splashscreen
+        if let Some(splashscreen) = window.get_window("splashscreen") {
+            if let Err(error) = splashscreen.close() {
+                error!("failed to init app, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        } else {
+            error!("missing splashsceen window");
+            return Err(Response::<bool>::error(404, format!("missing splashsceen window")));
+        }        
     }
 
     // Show main window
