@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 /**
  * Interface with optional properties `key` (string) and `name` (string) for menu items.
  *
