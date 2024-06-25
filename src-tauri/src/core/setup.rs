@@ -22,13 +22,31 @@ use tauri::{App, Manager};
 /// }
 /// ```
 pub fn setup_handler(app: &mut App) -> Result<(), Box<dyn std::error::Error + 'static>> {
+    use super::state::{ MissionHandler, HandlerStatus, MissionHandlerState };
     use super::window;
+    use crate::config::AppConfig;
+    use tokio::sync::Mutex;
+    use log::error;
 
-    let main_window = app.get_window("main").unwrap();
+    if let Some(main_window) = app.get_window("main") {
+        // add window shadows to app, not available on linux now
+        #[cfg(not(target_os = "linux"))]
+        window::init_window_shadow(&main_window, true);
+    } else {
+        error!("failed to init window shadow");
+    }
 
-    // add window shadows to app, not available on linux now
-    #[cfg(not(target_os = "linux"))]
-    window::init_window_shadow(&main_window, true);
+    let state = MissionHandlerState(Mutex::new(MissionHandler {
+        is_set: false,
+        status: HandlerStatus::default(),
+        config: AppConfig::default(),
+
+        app_handler: Some(app.handle().clone()),
+        log_handler: None,
+        db_handler: None,
+    }));
+
+    app.manage(state);
 
     Ok(())
 }
@@ -53,6 +71,7 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
     use super::cmd::*;
 
     Box::new(tauri::generate_handler![
-        show_main_window
+        init_app,
+        shutdown_app
     ])
 }
