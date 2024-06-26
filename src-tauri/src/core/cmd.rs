@@ -4,7 +4,7 @@
 
 use tauri::{ command, AppHandle, Manager, State, Window };
 use serde::{Serialize, Deserialize};
-use log::error;
+use log::{info, warn, error};
 use crate::core::state::{ HandlerStatus, MissionHandlerState };
 
 /// Struct for command response
@@ -147,4 +147,46 @@ pub async fn shutdown_app(app: AppHandle, state: State<'_, MissionHandlerState>)
             return Err(Response::<bool>::error(500, format!("{:?}", error)));
         }
     }
+}
+
+/// Command for web log.
+/// 
+/// # Arguments
+/// 
+/// # Examples
+/// 
+/// ```js
+/// import { invoke } from '@tauri-apps/api/tauri'
+/// 
+/// await invoke('web_log', { level: "info", msg: "message from web" })
+///     .then(res => {
+///         console.log(res.data)
+///     })
+///     .catch(err => {
+///         console.error(err)
+///     })
+/// ```
+#[command]
+pub async fn web_log(level: &str, msg: &str, state: State<'_, MissionHandlerState>) -> Result<Response<bool>, Response<bool>> {
+    let mut guard = state.0.lock().await;
+    
+    if let Some(_) = &mut guard.log_handler {
+        match level {
+            "info" => {
+                info!("{}", msg);
+            },
+            "warn" => {
+                warn!("{}", msg);
+            },
+            "error" => {
+                error!("{}", msg);
+            },
+            _ => {
+                error!("Failed to log, errMsg: no match for level {}", level);
+                return Err(Response::<bool>::error(400, format!("no match for level {}", level)));
+            }
+        }            
+    }
+
+    Ok(Response::success(true))
 }

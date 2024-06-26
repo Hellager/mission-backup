@@ -6,6 +6,7 @@ import { compareKeys } from '../common'
 enum Command {
   InitApp,
   ShutdownApp,
+  WebLog,
 }
 
 /**
