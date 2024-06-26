@@ -1,11 +1,11 @@
 import { createApp } from 'vue'
-import './styles.css'
 import App from './App.vue'
 import router from './router'
 import i18n from './locales'
 import pinia from './store'
 import { errorHandler } from './utils/error'
 
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/theme-chalk/el-message.css'
 
 /**

@@ -1,10 +1,9 @@
 //! # Cmd
 //! 
 //! `Cmd` module contains all commands that interacts with frontend.
-
 use tauri::{ command, AppHandle, Manager, State, Window };
-use serde::{Serialize, Deserialize};
-use log::{info, warn, error};
+use serde::{ Serialize, Deserialize };
+use log::{ debug, info, warn, error };
 use crate::core::state::{ HandlerStatus, MissionHandlerState };
 
 /// Struct for command response
@@ -189,4 +188,34 @@ pub async fn web_log(level: &str, msg: &str, state: State<'_, MissionHandlerStat
     }
 
     Ok(Response::success(true))
+}
+
+#[command]
+pub async fn sync_config(group: &str, config: crate::config::AppConfig, overwrite: bool, state: State<'_, MissionHandlerState>) -> Result<Response<crate::config::AppConfig>, Response<bool>> {
+    let mut guard = state.0.lock().await;
+    
+    let cur = &mut guard.config;
+    if overwrite {
+        match group {
+            "system" => {
+                cur.system = config.system.clone();
+            },
+            "notify" => {
+                cur.notify = config.notify.clone();
+            },
+            "watcher" => {
+                cur.watcher = config.watcher.clone();
+            },
+            "screensaver" => {
+                cur.screensaver = config.screensaver.clone();
+            },
+            _ => {
+                error!("Failed to overwrite config, errMsg: no match for group {}", group);
+                return Err(Response::<bool>::error(400, format!("no match for group {}", group)));
+            }
+        }    
+    }
+    debug!("sync config: {:?}, overwrite: {}", config, overwrite);
+
+    return Ok(Response::success(cur.clone()));
 }

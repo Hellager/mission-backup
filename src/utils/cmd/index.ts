@@ -1,5 +1,9 @@
 import { invoke } from '@tauri-apps/api/tauri'
+import { set as _set } from 'lodash'
 import type { HandlerStatus } from '../../store/status/types'
+import { toCamelCase, toSnakeCase } from '../common/index'
+import { defaultAppConfig } from '../../store'
+import type { AppConfig } from '../../store/types'
 import { Command } from './types'
 import type { Response } from './types'
 
@@ -43,6 +47,29 @@ async function execute(command: number, arg0?: any, arg1?: any) {
           throw error
         })
       break
+
+    case Command.InitConfig: {
+      const defaultConfig = defaultAppConfig()
+      await invoke<Response<any>>('sync_config', { group: arg0, overwrite: false, config: toSnakeCase(defaultConfig) })
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as AppConfig
+        })
+        .catch((error: any) => {
+          throw error
+        })
+    } break
+
+    case Command.UpdateConfig: {
+      const curConfig = defaultAppConfig()
+      _set(curConfig, arg0, arg1)
+      await invoke<Response<any>>('sync_config', { group: arg0, overwrite: true, config: toSnakeCase(curConfig) })
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as AppConfig
+        })
+        .catch((error: any) => {
+          throw error
+        })
+    } break
 
     default:
       throw new Error('invalid command')

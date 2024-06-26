@@ -13,8 +13,11 @@ pub struct NotifyConfig {
     /// Whether enable notify
     pub enable: bool,
 
-    /// Whether enable mission notify
-    pub mission_notify: bool,
+    /// Whether enable create backup notify
+    pub create_backup: bool,
+
+    /// Whether enable failed backup notify
+    pub failed_backup: bool
 }
 
 impl Default for NotifyConfig {
@@ -22,7 +25,8 @@ impl Default for NotifyConfig {
         NotifyConfig {
             is_granted: false,
             enable: false,
-            mission_notify: false,
+            create_backup: false,
+            failed_backup: false
         }
     }
 }

@@ -73,6 +73,7 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
     Box::new(tauri::generate_handler![
         init_app,
         shutdown_app,
-        web_log
+        web_log,
+        sync_config
     ])
 }

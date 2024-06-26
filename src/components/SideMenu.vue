@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 /**
  * Interface with optional properties `key` (string) and `name` (string) for menu items.
  *
@@ -10,6 +11,11 @@ interface ASideMenuItems {
   key?: string
   name?: string
 }
+
+/**
+ * Used for internationalization.
+ */
+const { t } = useI18n({ useScope: 'global' })
 
 /**
  * Contains key-value pairs for menu items.
@@ -41,12 +47,12 @@ const menuitems: ASideMenuItems[] = [
 <template>
   <div class="aside">
     <el-menu
-      default-active="/mission"
+      default-active="/config"
       class="aside__menu"
       router
     >
       <el-menu-item v-for="item in menuitems" :key="item.key" :index="item.key">
-        <span> {{ item.name }}</span>
+        <span> {{ t(`sidemenu.${item.name}`) }}</span>
       </el-menu-item>
     </el-menu>
   </div>

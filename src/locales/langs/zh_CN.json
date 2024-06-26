@@ -1,5 +1,53 @@
 {
   "common": {
-    "appName": "有备"
+    "appName": "有备",
+    "confirm": "确认",
+    "cancel": "取消"
+  },
+  "sidemenu": {
+    "mission": "任务",
+    "procedure": "程序",
+    "backup": "备份",
+    "statistic": "统计",
+    "config": "设置"
+  },
+  "config": {
+    "general": {
+      "notify": "通知",
+      "screensaver": "屏保",
+      "watcher": "监控",
+      "system": "系统"
+    },
+    "notify": {
+      "enable": "启用通知",
+      "createBackup": "创建备份",
+      "failedBackup": "备份失败"
+    },
+    "screensaver": {
+      "enable": "启用屏保",
+      "password": "锁屏密码",
+      "edit": "修改",
+      "title": "修改屏保密码",
+      "oldPwd": "旧密码",
+      "newPwd": "新密码"
+    },
+    "watcher": {
+      "title": "修改监控延时",
+      "edit": "修改",
+      "timeout": "监控延时",
+      "relunch": "重启以生效"
+    },
+    "system": {
+      "theme": "主题",
+      "themeLight": "明亮",
+      "themeDark": "暗黑",
+      "autoStart": "开机启动",
+      "closeOption": "关闭选项",
+      "closeExit": "退出程序",
+      "closeTray": "最小化至托盘",
+      "language": "语言",
+      "langCN": "中文",
+      "langEN": "英文"
+    }
   }
 }

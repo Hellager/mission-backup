@@ -1,5 +1,53 @@
 {
   "common": {
-    "appName": "Mission Backup"
+    "appName": "Mission Backup",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "sidemenu": {
+    "mission": "Mission",
+    "procedure": "Procedure",
+    "backup": "Backup",
+    "statistic": "Statistic",
+    "config": "Config"
+  },
+  "config": {
+    "general": {
+      "notify": "Notify",
+      "screensaver": "Screensaver",
+      "watcher": "Watcher",
+      "system": "System"
+    },
+    "notify": {
+      "enable": "Enable",
+      "createBackup": "Create Backup",
+      "failedBackup": "Failed Backup"
+    },
+    "screensaver": {
+      "enable": "Enable",
+      "password": "Password",
+      "edit": "Edit",
+      "title": "Edit password",
+      "oldPwd": "Old password",
+      "newPwd": "New password"
+    },
+    "watcher": {
+      "title": "Edit timeout",
+      "edit": "Edit",
+      "timeout": "Timeout",
+      "relunch": "Relunch to effect"
+    },
+    "system": {
+      "theme": "Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "autoStart": "Auto Start",
+      "closeOption": "Close Option",
+      "closeExit": "Exit",
+      "closeTray": "Minimize",
+      "language": "Language",
+      "langCN": "Chinese",
+      "langEN": "English"
+    }
   }
 }

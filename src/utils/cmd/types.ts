@@ -7,6 +7,8 @@ enum Command {
   InitApp,
   ShutdownApp,
   WebLog,
+  InitConfig,
+  UpdateConfig,
 }
 
 /**
