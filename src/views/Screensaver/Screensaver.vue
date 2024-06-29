@@ -50,7 +50,7 @@ async function onInputConfirmed() {
   >
     <div v-if="true" class="screensaver">
       <div class="screensaver__input">
-        <el-form>
+        <el-form @submit.prevent>
           <el-input
             v-model="inputPwd"
             type="password"
