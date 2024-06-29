@@ -14,6 +14,9 @@ importers:
       '@vueuse/core':
         specifier: ^10.11.0
         version: 10.11.0(vue@3.4.21(typescript@5.4.2))
+      dayjs:
+        specifier: ^1.11.11
+        version: 1.11.11
       element-plus:
         specifier: ^2.7.6
         version: 2.7.6(vue@3.4.21(typescript@5.4.2))

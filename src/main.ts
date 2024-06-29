@@ -1,4 +1,6 @@
 import { createApp } from 'vue'
+import * as dayjs from 'dayjs'
+import * as utc from 'dayjs/plugin/utc'
 import App from './App.vue'
 import router from './router'
 import i18n from './locales'
@@ -12,6 +14,11 @@ import 'element-plus/theme-chalk/el-message.css'
  * Creates the Vue application instance.
  */
 const app = createApp(App)
+
+/**
+ * Extends dayjs with UTC plugin.
+ */
+dayjs.extend(utc)
 
 /**
  * Uses the router plugin.
