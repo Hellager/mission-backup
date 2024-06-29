@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { appWindow } from '@tauri-apps/api/window'
 import { useI18n } from 'vue-i18n'
 import {
@@ -7,11 +8,23 @@ import {
   Maxmize,
   Minimize,
 } from '../assets/icons'
+import { useSystemStore } from '../store'
+import CloseDialog from './CloseDialog.vue'
 
 /**
  * Used for internationalization.
  */
 const { t } = useI18n({ useScope: 'global' })
+
+/**
+ * Custom stores for system settings.
+ */
+const systemStore = useSystemStore()
+
+/**
+ * Indicates whether the close dialog is visible.
+ */
+const showCloseDialog = ref<boolean>(false)
 
 /**
  * Minimizes the application window.
@@ -31,7 +44,10 @@ function onActionMaxmizeClicked() {
  * Handles the close action of the application window.
  */
 async function onActionCloseClicked() {
-  await appWindow.close()
+  if (systemStore.closeConfirm())
+    showCloseDialog.value = !showCloseDialog.value
+  else
+    systemStore.tryClose(undefined, undefined)
 }
 </script>
 
@@ -79,6 +95,11 @@ async function onActionCloseClicked() {
       </div>
     </div>
   </div>
+
+  <CloseDialog
+    :visiable="showCloseDialog"
+    @hide="showCloseDialog = false"
+  />
 </template>
 
 <style scoped lang="less">

@@ -11,6 +11,10 @@
     "statistic": "Statistic",
     "config": "Config"
   },
+  "closeDialog": {
+    "title": "Close Option",
+    "remember": "Remember Choice"
+  },
   "config": {
     "general": {
       "notify": "Notify",

@@ -11,6 +11,10 @@
     "statistic": "统计",
     "config": "设置"
   },
+  "closeDialog": {
+    "title": "退出选项",
+    "remember": "记住选项"
+  },
   "config": {
     "general": {
       "notify": "通知",
