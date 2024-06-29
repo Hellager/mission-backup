@@ -193,104 +193,104 @@ pub fn update_mission_record(
         .get_result(conn)
 }
 
-/// Update mission status in database.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// * `stat` - The status to update.
-/// * `mid` - Which mission to update.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, mission::update_mission_status};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     let status = 1;
-///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
-///     match update_mission_time(&mut conn, status, mid) {
-///         Ok(record) => {
-///             println!("update mission time: {:?}", record);
-///         },
-///         Err(error) => {
-///             println!("failed to update mission time, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn update_mission_status(
-    conn: &mut SqliteConnection,
-    stat: i16,
-    mid: &str,
-) -> Result<Mission, diesel::result::Error> {
-    use super::schema::mission::dsl::*;
+// /// Update mission status in database.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// * `stat` - The status to update.
+// /// * `mid` - Which mission to update.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, mission::update_mission_status};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     let status = 1;
+// ///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
+// ///     match update_mission_time(&mut conn, status, mid) {
+// ///         Ok(record) => {
+// ///             println!("update mission time: {:?}", record);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to update mission time, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn update_mission_status(
+//     conn: &mut SqliteConnection,
+//     stat: i16,
+//     mid: &str,
+// ) -> Result<Mission, diesel::result::Error> {
+//     use super::schema::mission::dsl::*;
 
-    diesel::update(mission)
-        .filter(mission_id.eq(mid))
-        .set(status.eq(stat))
-        .returning(Mission::as_returning())
-        .get_result(conn)
-}
+//     diesel::update(mission)
+//         .filter(mission_id.eq(mid))
+//         .set(status.eq(stat))
+//         .returning(Mission::as_returning())
+//         .get_result(conn)
+// }
 
-/// Update mission next_runtime or last_trigger time in database.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// * `label` - Determine which time to update.('next', 'last')
-/// * `time` - The time to update.
-/// * `mid` - Which mission to update.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, mission::update_mission_time};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     let label = "next";
-///     let time = chrono::Utc::now().naive_utc();
-///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
-///     match update_mission_time(&mut conn, label &time, mid) {
-///         Ok(record) => {
-///             println!("update mission time: {:?}", record);
-///         },
-///         Err(error) => {
-///             println!("failed to update mission time, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn update_mission_time(
-    conn: &mut SqliteConnection,
-    label: &str,
-    time: &chrono::DateTime<chrono::Utc>,
-    mid: &str,
-) -> Result<Mission, diesel::result::Error> {
-    use super::schema::mission::dsl::*;
+// /// Update mission next_runtime or last_trigger time in database.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// * `label` - Determine which time to update.('next', 'last')
+// /// * `time` - The time to update.
+// /// * `mid` - Which mission to update.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, mission::update_mission_time};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     let label = "next";
+// ///     let time = chrono::Utc::now().naive_utc();
+// ///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
+// ///     match update_mission_time(&mut conn, label &time, mid) {
+// ///         Ok(record) => {
+// ///             println!("update mission time: {:?}", record);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to update mission time, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn update_mission_time(
+//     conn: &mut SqliteConnection,
+//     label: &str,
+//     time: &chrono::DateTime<chrono::Utc>,
+//     mid: &str,
+// ) -> Result<Mission, diesel::result::Error> {
+//     use super::schema::mission::dsl::*;
 
-    let runtime = time.naive_utc();
+//     let runtime = time.naive_utc();
 
-    match label {
-        "next" => {
-            diesel::update(mission)
-                .filter(mission_id.eq(mid))
-                .set(next_runtime.eq(runtime))
-                .returning(Mission::as_returning())
-                .get_result(conn)
-        },
-        "last" => {
-            diesel::update(mission)
-                .filter(mission_id.eq(mid))
-                .set(last_trigger.eq(runtime))
-                .returning(Mission::as_returning())
-                .get_result(conn)
-        },
-        _ => {
-            return Err(diesel::result::Error::NotFound);
-        }
-    }
-}
+//     match label {
+//         "next" => {
+//             diesel::update(mission)
+//                 .filter(mission_id.eq(mid))
+//                 .set(next_runtime.eq(runtime))
+//                 .returning(Mission::as_returning())
+//                 .get_result(conn)
+//         },
+//         "last" => {
+//             diesel::update(mission)
+//                 .filter(mission_id.eq(mid))
+//                 .set(last_trigger.eq(runtime))
+//                 .returning(Mission::as_returning())
+//                 .get_result(conn)
+//         },
+//         _ => {
+//             return Err(diesel::result::Error::NotFound);
+//         }
+//     }
+// }
 
 /// Get mission records from database.
 /// 
@@ -414,45 +414,45 @@ pub fn clear_mission_record(
         .execute(conn)
 }
 
-/// Clean 'mission' table records.
-/// 
-/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, mission::clean_mission_record};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     match clean_mission_record(&mut conn) {
-///         Ok(cnt) => {
-///             println!("cleaned {} records", cnt);
-///         },
-///         Err(error) => {
-///             println!("failed to clean records, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn clean_mission_record(
-    conn: &mut SqliteConnection, 
-) -> Result<usize, diesel::result::Error> {
-    use super::schema::mission::dsl::*;
+// /// Clean 'mission' table records.
+// /// 
+// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, mission::clean_mission_record};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     match clean_mission_record(&mut conn) {
+// ///         Ok(cnt) => {
+// ///             println!("cleaned {} records", cnt);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to clean records, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn clean_mission_record(
+//     conn: &mut SqliteConnection, 
+// ) -> Result<usize, diesel::result::Error> {
+//     use super::schema::mission::dsl::*;
 
-    let cleaned: usize = diesel::delete(mission.filter(is_deleted.eq(1))).execute(conn)?;
+//     let cleaned: usize = diesel::delete(mission.filter(is_deleted.eq(1))).execute(conn)?;
 
-    let mut remaining: Vec<Mission> = mission.select(Mission::as_select()).load(conn)?;
-    for (idx, item) in remaining.iter_mut().enumerate() {
-        let new_id = (idx + 1) as i32;
-        diesel::update(mission)
-            .filter(mission_id.eq(&item.mission_id))
-            .set(id.eq(new_id))
-            .execute(conn)?;
-    }
+//     let mut remaining: Vec<Mission> = mission.select(Mission::as_select()).load(conn)?;
+//     for (idx, item) in remaining.iter_mut().enumerate() {
+//         let new_id = (idx + 1) as i32;
+//         diesel::update(mission)
+//             .filter(mission_id.eq(&item.mission_id))
+//             .set(id.eq(new_id))
+//             .execute(conn)?;
+//     }
 
-    Ok(cleaned)   
-}
+//     Ok(cleaned)   
+// }

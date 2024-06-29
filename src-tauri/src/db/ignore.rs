@@ -312,83 +312,83 @@ pub fn clear_ignore_record(
         .execute(conn)
 }
 
-/// Clean 'ignore' table records.
-/// 
-/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, ignore::clean_ignore_record};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     match clean_ignore_record(&mut conn) {
-///         Ok(cnt) => {
-///             println!("cleaned {} records", cnt);
-///         },
-///         Err(error) => {
-///             println!("failed to clean records, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn clean_ignore_record(
-    conn: &mut SqliteConnection, 
-) -> Result<usize, diesel::result::Error> {
-    use super::schema::ignore::dsl::*;
+// /// Clean 'ignore' table records.
+// /// 
+// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, ignore::clean_ignore_record};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     match clean_ignore_record(&mut conn) {
+// ///         Ok(cnt) => {
+// ///             println!("cleaned {} records", cnt);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to clean records, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn clean_ignore_record(
+//     conn: &mut SqliteConnection, 
+// ) -> Result<usize, diesel::result::Error> {
+//     use super::schema::ignore::dsl::*;
 
-    let cleaned: usize = diesel::delete(ignore.filter(is_deleted.eq(1))).execute(conn)?;
+//     let cleaned: usize = diesel::delete(ignore.filter(is_deleted.eq(1))).execute(conn)?;
 
-    let mut remaining: Vec<Ignore> = ignore.select(Ignore::as_select()).load(conn)?;
-    for (idx, item) in remaining.iter_mut().enumerate() {
-        let new_id = (idx + 1) as i32;
-        diesel::update(ignore)
-            .filter(ignore_id.eq(&item.ignore_id))
-            .set(id.eq(new_id))
-            .execute(conn)?;
-    }
+//     let mut remaining: Vec<Ignore> = ignore.select(Ignore::as_select()).load(conn)?;
+//     for (idx, item) in remaining.iter_mut().enumerate() {
+//         let new_id = (idx + 1) as i32;
+//         diesel::update(ignore)
+//             .filter(ignore_id.eq(&item.ignore_id))
+//             .set(id.eq(new_id))
+//             .execute(conn)?;
+//     }
 
-    Ok(cleaned)   
-}
+//     Ok(cleaned)   
+// }
 
-/// Get procedure related ignores.
-/// 
-/// # Arguments
-/// 
-/// * `pid` - Target procedure.
-/// * `conn` - Connection to database.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, ignore::get_procedure_ignores};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     let pid = "e56da9c2-851e-4cb5-a896-f371f2e3997f";
-///     match get_procedure_ignores(pid, &mut conn) {
-///         Ok(ignores) => {
-///             println!("get ignores {:?} for procedure {}", ignores, pid);
-///         },
-///         Err(error) => {
-///             println!("failed to get ignores for procedure {}, errMsg: {:?}", pid, error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn get_procedure_ignores(pid: &str, conn: &mut SqliteConnection) -> Vec<String> {
-    let mut data = Vec::new();
-    if let Ok(ignores) = query_ignore_record(conn, Some(pid)) {
-        for ignore in ignores.iter() {
-            if ignore.is_deleted == 1 {
-                continue;
-            }
-            data.push(ignore.keyword.clone());
-        }
-    }   
+// /// Get procedure related ignores.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `pid` - Target procedure.
+// /// * `conn` - Connection to database.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, ignore::get_procedure_ignores};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     let pid = "e56da9c2-851e-4cb5-a896-f371f2e3997f";
+// ///     match get_procedure_ignores(pid, &mut conn) {
+// ///         Ok(ignores) => {
+// ///             println!("get ignores {:?} for procedure {}", ignores, pid);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to get ignores for procedure {}, errMsg: {:?}", pid, error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn get_procedure_ignores(pid: &str, conn: &mut SqliteConnection) -> Vec<String> {
+//     let mut data = Vec::new();
+//     if let Ok(ignores) = query_ignore_record(conn, Some(pid)) {
+//         for ignore in ignores.iter() {
+//             if ignore.is_deleted == 1 {
+//                 continue;
+//             }
+//             data.push(ignore.keyword.clone());
+//         }
+//     }   
 
-    data
-}
+//     data
+// }

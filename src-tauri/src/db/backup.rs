@@ -233,77 +233,77 @@ pub fn query_backup_record(
     }  
 }
 
-/// Get backup records from database for statistic.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// * `mid` - Uuid for mission, query mission related backups.
-/// * `start` - Start date for backup.
-/// * `stop` - Stop date for backup.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, backup::query_backup_record_with_date};
-/// use chrono::{Duration, NaiveDateTime, Utc};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     let mid = "1c69eead-b7cf-457e-95e2-9c9f459120ff";
-///     let start = Utc::now().naive_utc();
-///     let stop_at = Utc::now() + Duration::days(1);
-///     let stop = stop_at.naive_utc();
-///     match query_backup_record_with_date(&mut conn, mid, start, stop) {
-///         Ok(records) => {
-///             println!("get records: {:?}", records);
-///         },
-///         Err(error) => {
-///             println!("failed to get records, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn query_backup_record_with_date(
-    conn: &mut SqliteConnection,
-    mid: &str,
-    start: Option<&NaiveDateTime>,
-    stop: Option<&NaiveDateTime>,
-) -> Result<Vec<Backup>, diesel::result::Error> {
-    use super::schema::backup::dsl::*;
+// /// Get backup records from database for statistic.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// * `mid` - Uuid for mission, query mission related backups.
+// /// * `start` - Start date for backup.
+// /// * `stop` - Stop date for backup.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, backup::query_backup_record_with_date};
+// /// use chrono::{Duration, NaiveDateTime, Utc};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     let mid = "1c69eead-b7cf-457e-95e2-9c9f459120ff";
+// ///     let start = Utc::now().naive_utc();
+// ///     let stop_at = Utc::now() + Duration::days(1);
+// ///     let stop = stop_at.naive_utc();
+// ///     match query_backup_record_with_date(&mut conn, mid, start, stop) {
+// ///         Ok(records) => {
+// ///             println!("get records: {:?}", records);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to get records, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn query_backup_record_with_date(
+//     conn: &mut SqliteConnection,
+//     mid: &str,
+//     start: Option<&NaiveDateTime>,
+//     stop: Option<&NaiveDateTime>,
+// ) -> Result<Vec<Backup>, diesel::result::Error> {
+//     use super::schema::backup::dsl::*;
 
-    if start == None && stop == None {
-        return  backup.filter(mission_id.eq(mid))
-            .filter(is_deleted.eq(0))
-            .select(Backup::as_select())
-            .load(conn);     
-    }
+//     if start == None && stop == None {
+//         return  backup.filter(mission_id.eq(mid))
+//             .filter(is_deleted.eq(0))
+//             .select(Backup::as_select())
+//             .load(conn);     
+//     }
 
-    if let Some(s_date) = start{
-        if let Some(e_date) = stop {
-            return     backup.filter(mission_id.eq(mid))
-                .filter(is_deleted.eq(0))
-                .filter(create_at.between(s_date, e_date))
-                .select(Backup::as_select())
-                .load(conn);
-        } else {
-            return     backup.filter(mission_id.eq(mid))
-                .filter(is_deleted.eq(0))
-                .filter(create_at.ge(s_date))
-                .select(Backup::as_select())
-                .load(conn);
-        }
-    } else {
-        if let Some(e_date) = stop {
-            return     backup.filter(mission_id.eq(mid))
-            .filter(is_deleted.eq(0))
-            .filter(create_at.le(e_date))
-            .select(Backup::as_select())
-            .load(conn); 
-        }
-    }
+//     if let Some(s_date) = start{
+//         if let Some(e_date) = stop {
+//             return     backup.filter(mission_id.eq(mid))
+//                 .filter(is_deleted.eq(0))
+//                 .filter(create_at.between(s_date, e_date))
+//                 .select(Backup::as_select())
+//                 .load(conn);
+//         } else {
+//             return     backup.filter(mission_id.eq(mid))
+//                 .filter(is_deleted.eq(0))
+//                 .filter(create_at.ge(s_date))
+//                 .select(Backup::as_select())
+//                 .load(conn);
+//         }
+//     } else {
+//         if let Some(e_date) = stop {
+//             return     backup.filter(mission_id.eq(mid))
+//             .filter(is_deleted.eq(0))
+//             .filter(create_at.le(e_date))
+//             .select(Backup::as_select())
+//             .load(conn); 
+//         }
+//     }
 
-    Err(diesel::result::Error::NotFound)
-}
+//     Err(diesel::result::Error::NotFound)
+// }
 
 /// Delete backup record in database logically.
 /// 
@@ -389,104 +389,104 @@ pub fn clear_backup_record(
         .execute(conn)
 }
 
-/// Clean 'backup' table records.
-/// 
-/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, backup::clean_backup_record};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     match clean_backup_record(&mut conn) {
-///         Ok(cnt) => {
-///             println!("cleaned {} records", cnt);
-///         },
-///         Err(error) => {
-///             println!("failed to clean records, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn clean_backup_record(
-    conn: &mut SqliteConnection, 
-) -> Result<usize, diesel::result::Error> {
-    use super::schema::backup::dsl::*;
-    use std::path::Path;
+// /// Clean 'backup' table records.
+// /// 
+// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, backup::clean_backup_record};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     match clean_backup_record(&mut conn) {
+// ///         Ok(cnt) => {
+// ///             println!("cleaned {} records", cnt);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to clean records, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn clean_backup_record(
+//     conn: &mut SqliteConnection, 
+// ) -> Result<usize, diesel::result::Error> {
+//     use super::schema::backup::dsl::*;
+//     use std::path::Path;
 
-    // delete invalid backups
-    let cur_backups = query_backup_record(conn, None, None)?;
-    for item in cur_backups.iter() {
-        if !Path::new(&item.save_path).exists() {
-            delete_backup_record(conn, Some(&item.backup_id), None)?;
-        }
-    }
+//     // delete invalid backups
+//     let cur_backups = query_backup_record(conn, None, None)?;
+//     for item in cur_backups.iter() {
+//         if !Path::new(&item.save_path).exists() {
+//             delete_backup_record(conn, Some(&item.backup_id), None)?;
+//         }
+//     }
 
-    // physically delete backup records
-    let cleaned: usize = diesel::delete(backup.filter(is_deleted.eq(1))).execute(conn)?;
+//     // physically delete backup records
+//     let cleaned: usize = diesel::delete(backup.filter(is_deleted.eq(1))).execute(conn)?;
 
-    // reorder remaining records
-    let mut remaining: Vec<Backup> = backup.select(Backup::as_select()).load(conn)?;
-    for (idx, item) in remaining.iter_mut().enumerate() {
-        let new_id = (idx + 1) as i32;
-        diesel::update(backup)
-            .filter(backup_id.eq(&item.backup_id))
-            .set(id.eq(new_id))
-            .execute(conn)?;
-    }
+//     // reorder remaining records
+//     let mut remaining: Vec<Backup> = backup.select(Backup::as_select()).load(conn)?;
+//     for (idx, item) in remaining.iter_mut().enumerate() {
+//         let new_id = (idx + 1) as i32;
+//         diesel::update(backup)
+//             .filter(backup_id.eq(&item.backup_id))
+//             .set(id.eq(new_id))
+//             .execute(conn)?;
+//     }
 
-    Ok(cleaned)   
-}
+//     Ok(cleaned)   
+// }
 
-/// Physically delete backup in disk.
-/// 
-/// Logically delete backup in record.
-/// 
-/// # Arguments
-/// 
-/// * `bid` - Uuid for backup.
-/// * `conn` - Connection to database.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, backup::delete_backup};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     let bid = "661b7d0e-a52c-457e-89e1-2ffe9a230c14";
-///     match delete_backup(backup_id, &mut conn) {
-///         Ok(cnt) => {
-///             println!("remove {} backup with id {}", cnt, backup_id);
-///         },
-///         Err(error) => {
-///             println!("failed to remove backup, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn delete_backup(bid: &str, conn: &mut SqliteConnection) -> Result<(), std::io::Error> {
-    use crate::utils::explorer::remove_all;
-    use std::path::Path;
-    use std::io::{ Error, ErrorKind };
+// /// Physically delete backup in disk.
+// /// 
+// /// Logically delete backup in record.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `bid` - Uuid for backup.
+// /// * `conn` - Connection to database.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, backup::delete_backup};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     let bid = "661b7d0e-a52c-457e-89e1-2ffe9a230c14";
+// ///     match delete_backup(backup_id, &mut conn) {
+// ///         Ok(cnt) => {
+// ///             println!("remove {} backup with id {}", cnt, backup_id);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to remove backup, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn delete_backup(bid: &str, conn: &mut SqliteConnection) -> Result<(), std::io::Error> {
+//     use crate::utils::explorer::remove_all;
+//     use std::path::Path;
+//     use std::io::{ Error, ErrorKind };
     
-    if let Ok(record) = query_backup_record(conn, Some(bid), None) {
-        if record.len() > 0 {
-            let backup = record[0].clone();
+//     if let Ok(record) = query_backup_record(conn, Some(bid), None) {
+//         if record.len() > 0 {
+//             let backup = record[0].clone();
 
-            if let Some(backup_dir) = Path::new(&backup.save_path).parent() {
-                remove_all(backup_dir.display().to_string().as_str())?;
+//             if let Some(backup_dir) = Path::new(&backup.save_path).parent() {
+//                 remove_all(backup_dir.display().to_string().as_str())?;
 
-                if let Ok(_) = delete_backup_record(conn, Some(bid), None) {
-                    return Ok(());
-                }
-            }            
-        }
-    }
+//                 if let Ok(_) = delete_backup_record(conn, Some(bid), None) {
+//                     return Ok(());
+//                 }
+//             }            
+//         }
+//     }
 
-    Err(Error::from(ErrorKind::NotFound))
-}
+//     Err(Error::from(ErrorKind::NotFound))
+// }

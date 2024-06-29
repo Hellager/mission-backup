@@ -383,45 +383,45 @@ pub fn clear_procedure_record(
         .execute(conn)
 }
 
-/// Clean 'procedure' table records.
-/// 
-/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-/// 
-/// # Arguments
-/// 
-/// * `conn` - Connection to database.
-/// 
-/// # Examples
-/// 
-/// ```
-/// use db::{establish_sqlite_connection, procedure::clean_procedure_record};
-/// 
-/// if let Ok(mut conn) = establish_sqlite_connection() {
-///     match clean_procedure_record(&mut conn) {
-///         Ok(cnt) => {
-///             println!("cleaned {} records", cnt);
-///         },
-///         Err(error) => {
-///             println!("failed to clean records, errMsg: {:?}", error);
-///         }
-///     }   
-/// }
-/// ```
-pub fn clean_procedure_record(
-    conn: &mut SqliteConnection, 
-) -> Result<usize, diesel::result::Error> {
-    use super::schema::procedure::dsl::*;
+// /// Clean 'procedure' table records.
+// /// 
+// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+// /// 
+// /// # Arguments
+// /// 
+// /// * `conn` - Connection to database.
+// /// 
+// /// # Examples
+// /// 
+// /// ```
+// /// use db::{establish_sqlite_connection, procedure::clean_procedure_record};
+// /// 
+// /// if let Ok(mut conn) = establish_sqlite_connection() {
+// ///     match clean_procedure_record(&mut conn) {
+// ///         Ok(cnt) => {
+// ///             println!("cleaned {} records", cnt);
+// ///         },
+// ///         Err(error) => {
+// ///             println!("failed to clean records, errMsg: {:?}", error);
+// ///         }
+// ///     }   
+// /// }
+// /// ```
+// pub fn clean_procedure_record(
+//     conn: &mut SqliteConnection, 
+// ) -> Result<usize, diesel::result::Error> {
+//     use super::schema::procedure::dsl::*;
 
-    let cleaned: usize = diesel::delete(procedure.filter(is_deleted.eq(1))).execute(conn)?;
+//     let cleaned: usize = diesel::delete(procedure.filter(is_deleted.eq(1))).execute(conn)?;
 
-    let mut remaining: Vec<Procedure> = procedure.select(Procedure::as_select()).load(conn)?;
-    for (idx, item) in remaining.iter_mut().enumerate() {
-        let new_id = (idx + 1) as i32;
-        diesel::update(procedure)
-            .filter(procedure_id.eq(&item.procedure_id))
-            .set(id.eq(new_id))
-            .execute(conn)?;
-    }
+//     let mut remaining: Vec<Procedure> = procedure.select(Procedure::as_select()).load(conn)?;
+//     for (idx, item) in remaining.iter_mut().enumerate() {
+//         let new_id = (idx + 1) as i32;
+//         diesel::update(procedure)
+//             .filter(procedure_id.eq(&item.procedure_id))
+//             .set(id.eq(new_id))
+//             .execute(conn)?;
+//     }
 
-    Ok(cleaned)   
-}
+//     Ok(cleaned)   
+// }
