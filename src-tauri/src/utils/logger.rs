@@ -304,7 +304,7 @@ mod test {
                 create_dir_all(logger_dir.clone()).unwrap();
                 if let Ok(log_path) = initialize_logger(None, log_file.to_str()) {
                     assert_eq!(Path::new(&logger_dir).exists(), true);
-                    // assert_eq!(Path::new(&log_path).exists(), true);                        
+                    assert_eq!(Path::new(&log_path).exists(), true);                        
                 }
 
                 let _ = remove_dir_all(logger_dir).unwrap();
