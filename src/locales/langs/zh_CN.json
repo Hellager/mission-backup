@@ -20,8 +20,8 @@
     },
     "notify": {
       "enable": "启用通知",
-      "createBackup": "创建备份",
-      "failedBackup": "备份失败"
+      "whenCreate": "当创建备份",
+      "whenFailed": "当备份失败"
     },
     "screensaver": {
       "enable": "启用屏保",

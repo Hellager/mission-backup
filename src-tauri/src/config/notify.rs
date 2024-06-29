@@ -14,10 +14,10 @@ pub struct NotifyConfig {
     pub enable: bool,
 
     /// Whether enable create backup notify
-    pub create_backup: bool,
+    pub when_create: bool,
 
     /// Whether enable failed backup notify
-    pub failed_backup: bool
+    pub when_failed: bool
 }
 
 impl Default for NotifyConfig {
@@ -25,8 +25,8 @@ impl Default for NotifyConfig {
         NotifyConfig {
             is_granted: false,
             enable: false,
-            create_backup: false,
-            failed_backup: false
+            when_create: false,
+            when_failed: false
         }
     }
 }

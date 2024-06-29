@@ -20,8 +20,8 @@
     },
     "notify": {
       "enable": "Enable",
-      "createBackup": "Create Backup",
-      "failedBackup": "Failed Backup"
+      "whenCreate": "When create",
+      "whenFailed": "When failed"
     },
     "screensaver": {
       "enable": "Enable",

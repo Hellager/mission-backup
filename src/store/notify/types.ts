@@ -11,11 +11,11 @@ export interface NotifyConfig {
    */
   enable: boolean
   /**
-   * Indicates if `create backup` notifications are enabled.
+   * Indicates if `when create` notifications are enabled.
    */
-  createBackup: boolean
+  whenCreate: boolean
   /**
-   * Indicates if `failed backup` notifications are enabled.
+   * Indicates if `when failed` notifications are enabled.
    */
-  failedBackup: boolean
+  whenFailed: boolean
 }
