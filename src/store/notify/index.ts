@@ -8,8 +8,8 @@ import type { NotifyConfig } from './types'
 export const useNotifyStore = defineStore('notify', () => {
   const isGranted = ref<boolean>(false)
   const enable = ref<boolean>(false)
-  const createBackup = ref<boolean>(false)
-  const failedBackup = ref<boolean>(false)
+  const whenCreate = ref<boolean>(false)
+  const whenFailed = ref<boolean>(false)
 
   /**
    * Get the current notification configuration.
@@ -19,8 +19,8 @@ export const useNotifyStore = defineStore('notify', () => {
     return {
       isGranted: isGranted.value,
       enable: enable.value,
-      createBackup: createBackup.value,
-      failedBackup: failedBackup.value,
+      whenCreate: whenCreate.value,
+      whenFailed: whenFailed.value,
     }
   }
 
@@ -31,8 +31,8 @@ export const useNotifyStore = defineStore('notify', () => {
   function setConfig(config: NotifyConfig) {
     isGranted.value = config.isGranted
     enable.value = config.enable
-    createBackup.value = config.createBackup
-    failedBackup.value = config.failedBackup
+    whenCreate.value = config.whenCreate
+    whenFailed.value = config.whenFailed
   }
 
   /**
@@ -68,9 +68,9 @@ export const useNotifyStore = defineStore('notify', () => {
    * Update the create backup notification setting.
    * @param value - The value to set for create backup notification.
    */
-  async function updateCreateBackupNotify(value: boolean) {
+  async function updatewhenCreateNotify(value: boolean) {
     const config = getConfig()
-    config.createBackup = value
+    config.whenCreate = value
     await execute(Command.UpdateConfig, 'notify', config)
       .then((config: AppConfig) => {
         setConfig(config.notify)
@@ -81,9 +81,9 @@ export const useNotifyStore = defineStore('notify', () => {
    * Update the failed backup notification setting.
    * @param value - The value to set for failed backup notification.
    */
-  async function updateFailedBackupNotify(value: boolean) {
+  async function updatewhenFailedNotify(value: boolean) {
     const config = getConfig()
-    config.failedBackup = value
+    config.whenFailed = value
     await execute(Command.UpdateConfig, 'notify', config)
       .then((config: AppConfig) => {
         setConfig(config.notify)
@@ -122,12 +122,12 @@ export const useNotifyStore = defineStore('notify', () => {
   return {
     isGranted,
     enable,
-    createBackup,
-    failedBackup,
+    whenCreate,
+    whenFailed,
     init,
     enableNotify,
-    updateCreateBackupNotify,
-    updateFailedBackupNotify,
+    updatewhenCreateNotify,
+    updatewhenFailedNotify,
     tryGetPermission,
   }
 })
@@ -140,7 +140,7 @@ export function defaultNotifyConfig(): NotifyConfig {
   return {
     isGranted: false,
     enable: false,
-    createBackup: false,
-    failedBackup: false,
+    whenCreate: false,
+    whenFailed: false,
   }
 }
