@@ -3,6 +3,11 @@ import Minimize from '~icons/mdi/minus'
 import Maxmize from '~icons/mdi/border-all-variant'
 import Close from '~icons/mdi/window-close'
 import Locked from '~icons/mdi/lock-outline'
+import Create from '~icons/mdi/plus'
+import CreateBox from '~icons/mdi/plus-box-outline'
+import Delete from '~icons/mdi/delete-outline'
+import Edit from '~icons/mdi/square-edit-outline'
+import Search from '~icons/mdi/search'
 
 export {
   Logo,
@@ -10,4 +15,9 @@ export {
   Maxmize,
   Close,
   Locked,
+  Create,
+  CreateBox,
+  Delete,
+  Edit,
+  Search,
 }

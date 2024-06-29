@@ -20,6 +20,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1",
     "@vueuse/core": "^10.11.0",
+    "cronstrue": "^2.50.0",
     "dayjs": "^1.11.11",
     "element-plus": "^2.7.6",
     "lodash": "^4.17.21",

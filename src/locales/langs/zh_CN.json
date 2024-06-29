@@ -18,6 +18,42 @@
   "screensaver": {
     "inputPwd": "请输入密码"
   },
+  "procedure": {
+    "newTitle": "新建程序",
+    "editTitle": "编辑程序",
+    "name": "名称",
+    "hasIgnore": "启用忽略",
+    "ignoreMethod": "忽略策略",
+    "customIgnore": "自定义",
+    "edit": "编辑",
+    "gitIgnore": ".gitignore",
+    "isCompress": "启用压缩",
+    "compressFormat": "压缩格式",
+    "zip": "zip",
+    "targz": "tar.gz",
+    "tarbz2": "tar.bz2",
+    "tarxz": "tar.xz",
+    "sevenz": "7z",
+    "trigger": "触发方式",
+    "cron": "定时",
+    "monitor": "监控",
+    "cronExpression": "Cron 表达式",
+    "restrict": "限制备份",
+    "restrictNone": "无",
+    "restrictDays": "时间",
+    "restrictSize": "大小",
+    "restrictDaysAndSize": "时间和大小",
+    "applied": "应用",
+    "operation": "操作",
+    "day": "天",
+    "size": "字节"
+  },
+  "ignore": {
+    "keyword": "关键词",
+    "operation": "操作",
+    "createTitle": "新建忽略项",
+    "editTitle": "编辑忽略项"
+  },
   "config": {
     "general": {
       "notify": "通知",

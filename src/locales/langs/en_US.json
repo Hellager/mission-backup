@@ -18,6 +18,42 @@
   "screensaver": {
     "inputPwd": "Input Password"
   },
+  "procedure": {
+    "newTitle": "New Procedure",
+    "editTitle": "Edit Procedure",
+    "name": "Name",
+    "hasIgnore": "Has Ignore",
+    "ignoreMethod": "Ignore Method",
+    "customIgnore": "Custom",
+    "edit": "edit",
+    "gitIgnore": ".gitignore",
+    "isCompress": "Comperss",
+    "compressFormat": "Format",
+    "zip": "zip",
+    "targz": "tar.gz",
+    "tarbz2": "tar.bz2",
+    "tarxz": "tar.xz",
+    "sevenz": "7z",
+    "trigger": "Trigger",
+    "cron": "Cron",
+    "monitor": "Monitor",
+    "cronExpression": "Cron",
+    "restrict": "Restrict",
+    "restrictNone": "None",
+    "restrictDays": "Days",
+    "restrictSize": "Size",
+    "restrictDaysAndSize": "Days and Size",
+    "applied": "Applied",
+    "operation": "Operation",
+    "day": "Days",
+    "size": "Bytes"
+  },
+  "ignore": {
+    "keyword": "Keyword",
+    "operation": "Operation",
+    "createTitle": "Create Ignores",
+    "editTitle": "Edit Ignores"
+  },
   "config": {
     "general": {
       "notify": "Notify",

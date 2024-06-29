@@ -38,7 +38,7 @@
         "height": 380,
         "minWidth": 640,
         "minHeight": 380,
-        "visible": false,
+        "visible": true,
         "center": true,
         "fileDropEnabled": true,
         "decorations": false

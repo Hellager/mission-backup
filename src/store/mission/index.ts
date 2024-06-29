@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import dayjs from 'dayjs'
 import { Command, execute } from '../../utils/cmd'
 import type { Backup, Ignore, Mission, Procedure, Record } from './types'
 
@@ -105,3 +106,108 @@ export const useMissionStore = defineStore('mission', () => {
     syncRecords,
   }
 })
+
+/**
+ * Get the default ignore object.
+ * @returns The default Ignore object.
+ */
+function defaultIgnore(): Ignore {
+  return {
+    id: 0,
+    ignoreId: '',
+    procedureId: '',
+    keyword: '',
+    createAt: dayjs.utc().format().slice(0, -1),
+    updateAt: dayjs.utc().format().slice(0, -1),
+    isDeleted: 0,
+    deleteAt: dayjs.utc().format().slice(0, -1),
+  }
+}
+
+/**
+ * Get the default procedure object.
+ * @returns The default Procedure object.
+ */
+function defaultProcedure(): Procedure {
+  return {
+    id: 0,
+    procedureId: '',
+    name: '',
+    hasIgnore: false,
+    ignoreMethod: 1,
+    isCompress: false,
+    compressFormat: 1,
+    trigger: 2,
+    cronExpression: '',
+    restrict: 0,
+    restrictDays: 3,
+    restrictSize: 1024,
+    backupMethod: 1,
+    createAt: dayjs.utc().format().slice(0, -1),
+    updateAt: dayjs.utc().format().slice(0, -1),
+    isDeleted: 0,
+    deleteAt: dayjs.utc().format().slice(0, -1),
+  }
+}
+
+/**
+ * Get the default mission object.
+ * @returns The default Mission object.
+ */
+function defaultMission(): Mission {
+  return {
+    id: 0,
+    missionId: '',
+    procedureId: '',
+    name: '',
+    status: 0,
+    description: '',
+    pathType: 1,
+    srcPath: '',
+    dstPath: '',
+    nextRuntime: dayjs.utc().format().slice(0, -1),
+    lastTrigger: dayjs.utc().format().slice(0, -1),
+    createAt: dayjs.utc().format().slice(0, -1),
+    updateAt: dayjs.utc().format().slice(0, -1),
+    isDeleted: 0,
+    deleteAt: dayjs.utc().format().slice(0, -1),
+  }
+}
+
+/**
+ * Get the default backup object.
+ * @returns The default Backup object.
+ */
+function defaultBackup(): Backup {
+  return {
+    id: 0,
+    backupId: '',
+    missionId: '',
+    savePath: '',
+    backupSize: 0,
+    createAt: dayjs.utc().format().slice(0, -1),
+    isDeleted: 0,
+    deleteAt: dayjs.utc().format().slice(0, -1),
+  }
+}
+
+/**
+ * Get the default record object.
+ * @returns The default Record object.
+ */
+function defaultRecord(): Record {
+  return {
+    ignore: defaultIgnore(),
+    procedure: defaultProcedure(),
+    mission: defaultMission(),
+    backup: defaultBackup(),
+  }
+}
+
+export {
+  defaultBackup,
+  defaultIgnore,
+  defaultMission,
+  defaultProcedure,
+  defaultRecord,
+}
