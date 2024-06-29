@@ -92,7 +92,7 @@ async function onDialogConfirmClicked() {
           {{ t("common.cancel") }}
         </el-button>
         <el-button type="primary" @click="onDialogConfirmClicked">
-          {{ t("cancel.confirm") }}
+          {{ t("common.confirm") }}
         </el-button>
       </div>
     </template>
