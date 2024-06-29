@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import * as dayjs from 'dayjs'
-import * as utc from 'dayjs/plugin/utc'
+import utc from 'dayjs/plugin/utc.js'
 import App from './App.vue'
 import router from './router'
 import i18n from './locales'
