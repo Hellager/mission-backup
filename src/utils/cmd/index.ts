@@ -4,6 +4,7 @@ import type { HandlerStatus } from '../../store/status/types'
 import { toCamelCase, toSnakeCase } from '../common/index'
 import { defaultAppConfig } from '../../store'
 import type { AppConfig } from '../../store/types'
+import type { Record } from '../../store/mission/types'
 import { Command } from './types'
 import type { Response } from './types'
 
@@ -12,9 +13,10 @@ import type { Response } from './types'
  * @param command - The command to execute.
  * @param arg0 - The first optional argument.
  * @param arg1 - The second optional argument.
+ * @param arg2 - The second optional argument.
  * @returns The result of the command execution.
  */
-async function execute(command: number, arg0?: any, arg1?: any) {
+async function execute(command: number, arg0?: any, arg1?: any, arg2?: any) {
   let result: any = false
 
   switch (command) {
@@ -70,6 +72,56 @@ async function execute(command: number, arg0?: any, arg1?: any) {
           throw error
         })
     } break
+
+    case Command.CreateRecord:
+      await invoke<Response<any>>('create_record', { table: arg0, data: toSnakeCase(arg1) }) // res -> Response(Record)
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as Record
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.UpdateRecord:
+      await invoke<Response<any>>('update_record', { table: arg0, data: toSnakeCase(arg1) }) // res -> Response(Record)
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as Record
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.QueryRecord:
+      await invoke<Response<any>>('query_record', { table: arg0, uuid: arg1 }) // res -> Response(Record[])
+        .then((res: Response<any>) => {
+          result = res.data.map((item: any) => toCamelCase(item)) as Record[]
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.DeleteRecord:
+      await invoke<Response<number>>('delete_record', { table: arg0, uuid0: arg1, uuid1: arg2 }) // res -> Response(number)
+        .then((res: Response<number>) => {
+          result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.ClearRecord:
+      await invoke<Response<number>>('clear_record', { table: arg0 }) // res -> Response(number)
+        .then((res: Response<number>) => {
+          result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
 
     default:
       throw new Error('invalid command')

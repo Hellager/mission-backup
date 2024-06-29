@@ -50,8 +50,9 @@ export const useMissionStore = defineStore('mission', () => {
   /**
    * Delete a record from the specified table.
    * @param table - The table name.
-   * @param uuid_0 - The first UUID.
-   * @param uuid_1 - The second UUID.
+   * @param uuid_0 - The first UUID for table record.
+   * @param uuid_1 - The second UUID optional for table `ignore` and `backup`.
+   *                 once set, `procedure` related ignores or `mission` related backups will be all deleted.
    * @returns True if the record is deleted successfully, otherwise the error data.
    */
   async function deleteRecord(table: string, uuid_0: string | undefined, uuid_1: string | undefined): Promise<number> {
