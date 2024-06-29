@@ -74,6 +74,11 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
         init_app,
         shutdown_app,
         web_log,
-        sync_config
+        sync_config,
+        create_record,
+        update_record,
+        query_record,
+        delete_record,
+        clear_record,
     ])
 }

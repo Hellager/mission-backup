@@ -9,6 +9,11 @@ enum Command {
   WebLog,
   InitConfig,
   UpdateConfig,
+  CreateRecord,
+  UpdateRecord,
+  QueryRecord,
+  DeleteRecord,
+  ClearRecord,
 }
 
 /**

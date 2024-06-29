@@ -219,3 +219,118 @@ pub async fn sync_config(group: &str, config: crate::config::AppConfig, overwrit
 
     return Ok(Response::success(cur.clone()));
 }
+
+#[command]
+pub async fn create_record(table: &str, data: crate::db::Record, state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::Record>, Response<bool>> {
+    use crate::db::create_db_record;
+    
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        let mut m_data = data.clone();
+        match create_db_record(table, &mut m_data, conn) {
+            Ok(val) => {
+                debug!("create record: {:?}", val);
+                return Ok(Response::success(val.clone()));
+            },
+            Err(error) => {
+                error!("failed to create record, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn update_record(table: &str, data: crate::db::Record, state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::Record>, Response<bool>> {
+    use crate::db::update_db_record;
+    
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        let mut m_data = data.clone();
+        match update_db_record(table, &mut m_data, conn) {
+            Ok(val) => {
+                // debug!("update record: {:?}", val);
+                return Ok(Response::success(val.clone()));
+            },
+            Err(error) => {
+                error!("failed to update record, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn query_record(table: &str, uuid: Option<&str>, state: State<'_, MissionHandlerState>) -> Result<Response<Vec<crate::db::Record>>, Response<bool>> {
+    use crate::db::query_db_record;
+    
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match query_db_record(table, uuid, conn) {
+            Ok(val) => {
+                debug!("query table {:?}, {:?} records found", table, val.len());
+                return Ok(Response::success(val));
+            },
+            Err(error) => {
+                error!("failed to query record, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn delete_record(table: &str, uuid0: &str, uuid1: &str, state: State<'_, MissionHandlerState>) -> Result<Response<usize>, Response<bool>> {
+    use crate::db::delete_db_record;
+    
+    let mut guard = state.0.lock().await;
+
+    let uid0 = if uuid0.is_empty() { None } else { Some(uuid0) };
+    let uid1 = if uuid1.is_empty() { None } else { Some(uuid1) };
+
+    if let Some(conn) = &mut guard.db_handler {
+        match delete_db_record(table, uid0, uid1, conn) {
+            Ok(cnt) => {
+                debug!("delete record {:?} or {:?} in table {:?} success", uuid0, uuid1, table);
+                return Ok(Response::success(cnt));
+            },
+            Err(error) => {
+                error!("failed to delete record: {:?} or {:?} in table {:?}, errMsg: {:?}", uuid0, uuid1, table, error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn clear_record(table: &str, state: State<'_, MissionHandlerState>) -> Result<Response<usize>, Response<bool>> {
+    use crate::db::clear_db_record;
+    
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match clear_db_record(table, conn) {
+            Ok(cnt) => {
+                debug!("clear record success, {:?} records removed, table {:?} is empty", cnt, table);
+                return Ok(Response::success(cnt));
+            },
+            Err(error) => {
+                error!("failed to clear table {:?} records, errMsg: {:?}", table, error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
