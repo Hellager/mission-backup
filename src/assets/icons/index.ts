@@ -8,6 +8,7 @@ import CreateBox from '~icons/mdi/plus-box-outline'
 import Delete from '~icons/mdi/delete-outline'
 import Edit from '~icons/mdi/square-edit-outline'
 import Search from '~icons/mdi/search'
+import Open from '~icons/mdi/folder-open-outline'
 
 export {
   Logo,
@@ -20,4 +21,5 @@ export {
   Delete,
   Edit,
   Search,
+  Open,
 }

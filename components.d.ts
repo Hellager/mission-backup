@@ -43,4 +43,7 @@ declare module 'vue' {
     SideMenu: typeof import('./src/components/SideMenu.vue')['default']
     TitleBar: typeof import('./src/components/TitleBar.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }

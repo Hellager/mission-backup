@@ -54,6 +54,12 @@
     "createTitle": "Create Ignores",
     "editTitle": "Edit Ignores"
   },
+  "backup": {
+    "date": "Date",
+    "mission": "Mission",
+    "size": "Size",
+    "operation": "Operation"
+  },
   "config": {
     "general": {
       "notify": "Notify",

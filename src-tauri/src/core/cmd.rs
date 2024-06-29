@@ -191,6 +191,21 @@ pub async fn web_log(level: &str, msg: &str, state: State<'_, MissionHandlerStat
 }
 
 #[command]
+pub fn show_item_in_explorer(path: &str) -> Result<Response<bool>, Response<bool>> {
+    use crate::utils::explorer::show_in_explorer;
+
+    match show_in_explorer(path) {
+        Ok(()) => {
+            return Ok(Response::success(true));
+        },
+        Err(error) => {
+            error!("Failed to open path {}, errMsg: {:?}", path, error);
+            return Err(Response::<bool>::error(500, format!("{:?}", error)));
+        }
+    }
+}
+
+#[command]
 pub async fn sync_config(group: &str, config: crate::config::AppConfig, overwrite: bool, state: State<'_, MissionHandlerState>) -> Result<Response<crate::config::AppConfig>, Response<bool>> {
     let mut guard = state.0.lock().await;
     
@@ -327,6 +342,28 @@ pub async fn clear_record(table: &str, state: State<'_, MissionHandlerState>) ->
             },
             Err(error) => {
                 error!("failed to clear table {:?} records, errMsg: {:?}", table, error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn delete_backup(uuid: &str, state: State<'_, MissionHandlerState>) -> Result<Response<bool>, Response<bool>> {
+    use crate::db::backup::delete_backup;
+
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match delete_backup(uuid, conn) {
+            Ok(_) => {
+                debug!("delete backup {}", uuid);
+                return Ok(Response::success(true));
+            },
+            Err(error) => {
+                error!("failed to delete backup, errMsg: {:?}", error);
                 return Err(Response::<bool>::error(500, format!("{:?}", error)));
             }
         }

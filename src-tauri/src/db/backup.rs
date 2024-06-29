@@ -443,50 +443,50 @@ pub fn clear_backup_record(
 //     Ok(cleaned)   
 // }
 
-// /// Physically delete backup in disk.
-// /// 
-// /// Logically delete backup in record.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `bid` - Uuid for backup.
-// /// * `conn` - Connection to database.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, backup::delete_backup};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     let bid = "661b7d0e-a52c-457e-89e1-2ffe9a230c14";
-// ///     match delete_backup(backup_id, &mut conn) {
-// ///         Ok(cnt) => {
-// ///             println!("remove {} backup with id {}", cnt, backup_id);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to remove backup, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn delete_backup(bid: &str, conn: &mut SqliteConnection) -> Result<(), std::io::Error> {
-//     use crate::utils::explorer::remove_all;
-//     use std::path::Path;
-//     use std::io::{ Error, ErrorKind };
+/// Physically delete backup in disk.
+/// 
+/// Logically delete backup in record.
+/// 
+/// # Arguments
+/// 
+/// * `bid` - Uuid for backup.
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, backup::delete_backup};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let bid = "661b7d0e-a52c-457e-89e1-2ffe9a230c14";
+///     match delete_backup(backup_id, &mut conn) {
+///         Ok(cnt) => {
+///             println!("remove {} backup with id {}", cnt, backup_id);
+///         },
+///         Err(error) => {
+///             println!("failed to remove backup, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn delete_backup(bid: &str, conn: &mut SqliteConnection) -> Result<(), std::io::Error> {
+    use crate::utils::explorer::remove_all;
+    use std::path::Path;
+    use std::io::{ Error, ErrorKind };
     
-//     if let Ok(record) = query_backup_record(conn, Some(bid), None) {
-//         if record.len() > 0 {
-//             let backup = record[0].clone();
+    if let Ok(record) = query_backup_record(conn, Some(bid), None) {
+        if record.len() > 0 {
+            let backup = record[0].clone();
 
-//             if let Some(backup_dir) = Path::new(&backup.save_path).parent() {
-//                 remove_all(backup_dir.display().to_string().as_str())?;
+            if let Some(backup_dir) = Path::new(&backup.save_path).parent() {
+                remove_all(backup_dir.display().to_string().as_str())?;
 
-//                 if let Ok(_) = delete_backup_record(conn, Some(bid), None) {
-//                     return Ok(());
-//                 }
-//             }            
-//         }
-//     }
+                if let Ok(_) = delete_backup_record(conn, Some(bid), None) {
+                    return Ok(());
+                }
+            }            
+        }
+    }
 
-//     Err(Error::from(ErrorKind::NotFound))
-// }
+    Err(Error::from(ErrorKind::NotFound))
+}

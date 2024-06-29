@@ -50,6 +50,16 @@ async function execute(command: number, arg0?: any, arg1?: any, arg2?: any) {
         })
       break
 
+    case Command.ShowInExplorer:
+      await invoke<Response<boolean>>('show_item_in_explorer', { path: arg0 })
+        .then((res: Response<boolean>) => {
+          result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
     case Command.InitConfig: {
       const defaultConfig = defaultAppConfig()
       await invoke<Response<any>>('sync_config', { group: arg0, overwrite: false, config: toSnakeCase(defaultConfig) })
@@ -116,6 +126,16 @@ async function execute(command: number, arg0?: any, arg1?: any, arg2?: any) {
     case Command.ClearRecord:
       await invoke<Response<number>>('clear_record', { table: arg0 }) // res -> Response(number)
         .then((res: Response<number>) => {
+          result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.DeleteBackup:
+      await invoke<Response<boolean>>('delete_backup', { uuid: arg0 }) // res -> Response(boolean)
+        .then((res: Response<boolean>) => {
           result = res.data
         })
         .catch((error: any) => {

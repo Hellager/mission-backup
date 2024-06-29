@@ -7,6 +7,7 @@ enum Command {
   InitApp,
   ShutdownApp,
   WebLog,
+  ShowInExplorer,
   InitConfig,
   UpdateConfig,
   CreateRecord,
@@ -14,6 +15,7 @@ enum Command {
   QueryRecord,
   DeleteRecord,
   ClearRecord,
+  DeleteBackup,
 }
 
 /**

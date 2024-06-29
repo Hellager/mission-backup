@@ -54,6 +54,12 @@
     "createTitle": "新建忽略项",
     "editTitle": "编辑忽略项"
   },
+  "backup": {
+    "date": "日期",
+    "mission": "任务",
+    "size": "大小",
+    "operation": "操作"
+  },
   "config": {
     "general": {
       "notify": "通知",
