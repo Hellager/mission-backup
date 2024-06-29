@@ -13,7 +13,7 @@ const { t } = useI18n({ useScope: 'global' })
  * Initializes the notify store and sets up necessary variables and functions for managing notifications.
  */
 const store = useNotifyStore()
-const { isGranted, enable, createBackup, failedBackup } = storeToRefs(store)
+const { isGranted, enable, whenCreate, whenFailed } = storeToRefs(store)
 
 /**
  * Updates the notification enable status.
@@ -29,8 +29,8 @@ async function onEnableNotifyUpdate(value: boolean) {
  *
  * @param value - The new value for mission notification status
  */
-async function onCreataBackupNotifyUpdate(value: boolean) {
-  store.updateCreateBackupNotify(value)
+async function onWhenCreateNotifyUpdate(value: boolean) {
+  store.updatewhenCreateNotify(value)
 }
 
 /**
@@ -38,8 +38,8 @@ async function onCreataBackupNotifyUpdate(value: boolean) {
  *
  * @param value - The new value for mission notification status
  */
-async function onFailedBackupUpdate(value: boolean) {
-  store.updateFailedBackupNotify(value)
+async function onWhenFailedNotifyUpdate(value: boolean) {
+  store.updatewhenFailedNotify(value)
 }
 </script>
 
@@ -50,12 +50,12 @@ async function onFailedBackupUpdate(value: boolean) {
         <el-switch v-model="enable" @change="onEnableNotifyUpdate" />
       </el-form-item>
 
-      <el-form-item :label="t('config.notify.createBackup')" :disable="isGranted">
-        <el-switch v-model="createBackup" @change="onCreataBackupNotifyUpdate" />
+      <el-form-item :label="t('config.notify.whenCreate')" :disable="isGranted">
+        <el-switch v-model="whenCreate" @change="onWhenCreateNotifyUpdate" />
       </el-form-item>
 
-      <el-form-item :label="t('config.notify.failedBackup')" :disable="isGranted">
-        <el-switch v-model="failedBackup" @change="onFailedBackupUpdate" />
+      <el-form-item :label="t('config.notify.whenFailed')" :disable="isGranted">
+        <el-switch v-model="whenFailed" @change="onWhenFailedNotifyUpdate" />
       </el-form-item>
     </el-form>
   </div>
