@@ -7,7 +7,7 @@ import type { ScreensaverConfig } from './types'
 export const useScreensaverStore = defineStore('screensaver', () => {
   const enable = ref<boolean>(false)
   const password = ref<string>('')
-  const is_locked = ref<boolean>(false)
+  const isLocked = ref<boolean>(false)
 
   /**
    * Gets the current screensaver configuration.
@@ -17,7 +17,7 @@ export const useScreensaverStore = defineStore('screensaver', () => {
     return {
       enable: enable.value,
       password: password.value,
-      isLocked: is_locked.value,
+      isLocked: isLocked.value,
     }
   }
 
@@ -28,7 +28,7 @@ export const useScreensaverStore = defineStore('screensaver', () => {
   function setConfig(config: ScreensaverConfig): void {
     enable.value = config.enable
     password.value = config.password
-    is_locked.value = config.isLocked
+    isLocked.value = config.isLocked
   }
 
   /**
@@ -80,7 +80,7 @@ export const useScreensaverStore = defineStore('screensaver', () => {
    * @param value - The new lock status for the screensaver.
    */
   async function updateLockStatus(value: boolean): Promise<void> {
-    is_locked.value = value
+    isLocked.value = value
   }
 
   /**
@@ -103,7 +103,7 @@ export const useScreensaverStore = defineStore('screensaver', () => {
   return {
     enable,
     password,
-    is_locked,
+    isLocked,
     init,
     enableScreensaver,
     updatePassword,

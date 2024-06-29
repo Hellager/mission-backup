@@ -2,13 +2,16 @@
 import { ref } from 'vue'
 import { appWindow } from '@tauri-apps/api/window'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import {
   Close,
+  Locked,
   Logo,
   Maxmize,
   Minimize,
 } from '../assets/icons'
-import { useSystemStore } from '../store'
+import { useScreensaverStore, useSystemStore } from '../store'
 import CloseDialog from './CloseDialog.vue'
 
 /**
@@ -17,14 +20,35 @@ import CloseDialog from './CloseDialog.vue'
 const { t } = useI18n({ useScope: 'global' })
 
 /**
+ * Used for routing within the application.
+ */
+const router = useRouter()
+
+/**
  * Custom stores for system settings.
  */
 const systemStore = useSystemStore()
 
 /**
+ * Custom stores for managing screensaver.
+ */
+const store = useScreensaverStore()
+const { isLocked } = storeToRefs(store)
+
+/**
  * Indicates whether the close dialog is visible.
  */
 const showCloseDialog = ref<boolean>(false)
+
+/**
+ * Handles the lock action of the application.
+ */
+async function onLockClicked() {
+  if (!isLocked.value) {
+    router.push('/screensaver')
+    store.updateLockStatus(true)
+  }
+}
 
 /**
  * Minimizes the application window.
@@ -67,6 +91,20 @@ async function onActionCloseClicked() {
     </div>
 
     <div class="bar__action">
+      <div class="bar__action__lock" @click="onLockClicked">
+        <transition
+          name="bar__action__lock__transition"
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
+        >
+          <el-icon v-if="!isLocked" class="bar__action__lock__icon">
+            <Locked />
+          </el-icon>
+        </transition>
+      </div>
+
+      <el-divider direction="vertical" />
+
       <div
         class="bar__action__minimize"
         @click="onActionMinimizeClicked"

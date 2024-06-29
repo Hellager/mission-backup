@@ -15,6 +15,9 @@
     "title": "Close Option",
     "remember": "Remember Choice"
   },
+  "screensaver": {
+    "inputPwd": "Input Password"
+  },
   "config": {
     "general": {
       "notify": "Notify",

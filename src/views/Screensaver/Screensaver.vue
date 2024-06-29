@@ -62,7 +62,7 @@ async function onInputConfirmed() {
 
       <div class="screensaver__confirm">
         <el-button type="primary" class="screensaver__confirm" @click="onInputConfirmed">
-          {{ t("screensaver.confirm") }}
+          {{ t("common.confirm") }}
         </el-button>
       </div>
     </div>

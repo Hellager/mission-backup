@@ -15,6 +15,9 @@
     "title": "退出选项",
     "remember": "记住选项"
   },
+  "screensaver": {
+    "inputPwd": "请输入密码"
+  },
   "config": {
     "general": {
       "notify": "通知",
