@@ -42,7 +42,7 @@ impl Default for SystemConfig {
             theme: get_sys_theme(),
             auto_start: false,
             close_option: 0,
-            close_cnt: 0,
+            close_cnt: 49,
             close_limit: 50,
             language: get_sys_locale()
         }
