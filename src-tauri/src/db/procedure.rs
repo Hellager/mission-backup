@@ -11,7 +11,7 @@ use crate::utils::common::rand_number;
 
 /// Struct Procedure
 #[derive(Debug, Queryable, Selectable, Insertable, AsChangeset, Serialize, Deserialize, Clone)]
-#[diesel(table_name = crate::schema::procedure)]
+#[diesel(table_name = super::schema::procedure)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Procedure {
     /// Primary key for table
@@ -139,7 +139,7 @@ impl Default for Procedure {
 }
 
 // #[derive(AsChangeset, Insertable)]
-// #[diesel(table_name = crate::schema::procedure)]
+// #[diesel(table_name = super::schema::procedure)]
 // pub struct UpdateProcedure<'a> {
 //     pub name:               Option<&'a String>,
 //     pub has_ignores:         Option<&'a bool>,
@@ -206,7 +206,7 @@ pub fn create_procedure_record(
     conn: &mut SqliteConnection,
     data: &mut Procedure
 ) -> Result<Procedure, diesel::result::Error> {
-    use crate::schema::procedure::dsl::*;
+    use super::schema::procedure::dsl::*;
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.id = procedure.count().get_result(conn).unwrap_or(0) as i32 + 1;
@@ -249,7 +249,7 @@ pub fn update_procedure_record(
     conn: &mut SqliteConnection,
     data: &mut Procedure,
 ) -> Result<Procedure, diesel::result::Error> {
-    use crate::schema::{procedure, procedure::procedure_id};
+    use super::schema::{procedure, procedure::procedure_id};
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.update_at = cur_time;
@@ -288,7 +288,7 @@ pub fn query_procedure_record(
     conn: &mut SqliteConnection,
     pid: Option<&str>,
 ) -> Result<Vec<Procedure>, diesel::result::Error> {
-    use crate::schema::procedure::dsl::*;
+    use super::schema::procedure::dsl::*;
 
     match pid {
         Some(uid) => {
@@ -333,7 +333,7 @@ pub fn delete_procedure_record(
     conn: &mut SqliteConnection,
     pid: Option<&str>,
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::procedure::dsl::*;
+    use super::schema::procedure::dsl::*;
     use diesel::result::Error;
 
     match pid {
@@ -377,7 +377,7 @@ pub fn delete_procedure_record(
 pub fn clear_procedure_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::procedure::dsl::*;
+    use super::schema::procedure::dsl::*;
 
     diesel::delete(procedure)
         .execute(conn)
@@ -410,7 +410,7 @@ pub fn clear_procedure_record(
 pub fn clean_procedure_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::procedure::dsl::*;
+    use super::schema::procedure::dsl::*;
 
     let cleaned: usize = diesel::delete(procedure.filter(is_deleted.eq(1))).execute(conn)?;
 

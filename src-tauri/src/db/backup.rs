@@ -12,7 +12,7 @@ use crate::utils::common::rand_number;
 
 /// Struct Backup
 #[derive(Debug, Queryable, Selectable, Insertable, AsChangeset, Serialize, Deserialize, Clone)]
-#[diesel(table_name = crate::schema::backup)]
+#[diesel(table_name = super::schema::backup)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Backup {
     /// Primary key for table
@@ -76,7 +76,7 @@ impl Default for Backup {
 }
 
 // #[derive(AsChangeset, Insertable)]
-// #[diesel(table_name = crate::schema::backup)]
+// #[diesel(table_name = super::schema::backup)]
 // pub struct UpdateBackup<'a> {
 //     pub backup_id:      Option<&'a String>,
 //     pub mission_id:     Option<&'a String>,
@@ -132,7 +132,7 @@ pub fn create_backup_record(
     data: &mut Backup,
     mission: &Mission
 ) -> Result<Backup, diesel::result::Error> {
-    use crate::schema::backup::dsl::*;
+    use super::schema::backup::dsl::*;
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.id = backup.count().get_result(conn).unwrap_or(0) as i32 + 1;
@@ -176,7 +176,7 @@ pub fn update_backup_record(
     conn: &mut SqliteConnection,
     data: &mut Backup,
 ) -> Result<Backup, diesel::result::Error> {
-    use crate::schema::{backup, backup::backup_id};
+    use super::schema::{backup, backup::backup_id};
 
     diesel::update(backup::table)
         .filter(backup_id.eq(&data.backup_id))
@@ -214,7 +214,7 @@ pub fn query_backup_record(
     bid: Option<&str>,
     mid: Option<&str>,
 ) -> Result<Vec<Backup>, diesel::result::Error> {
-    use crate::schema::backup::dsl::*;
+    use super::schema::backup::dsl::*;
 
     if let Some(uuid) = bid {
         backup.filter(backup_id.eq(uuid))
@@ -269,7 +269,7 @@ pub fn query_backup_record_with_date(
     start: Option<&NaiveDateTime>,
     stop: Option<&NaiveDateTime>,
 ) -> Result<Vec<Backup>, diesel::result::Error> {
-    use crate::schema::backup::dsl::*;
+    use super::schema::backup::dsl::*;
 
     if start == None && stop == None {
         return  backup.filter(mission_id.eq(mid))
@@ -335,7 +335,7 @@ pub fn delete_backup_record(
     bid: Option<&str>,
     mid: Option<&str>,
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::backup::dsl::*;
+    use super::schema::backup::dsl::*;
 
     if let Some(uuid) = bid {
         return diesel::update(backup)
@@ -383,7 +383,7 @@ pub fn delete_backup_record(
 pub fn clear_backup_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::backup::dsl::*;
+    use super::schema::backup::dsl::*;
 
     diesel::delete(backup)
         .execute(conn)
@@ -416,7 +416,7 @@ pub fn clear_backup_record(
 pub fn clean_backup_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::backup::dsl::*;
+    use super::schema::backup::dsl::*;
     use std::path::Path;
 
     // delete invalid backups

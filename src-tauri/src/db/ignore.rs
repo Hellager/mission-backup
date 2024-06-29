@@ -12,7 +12,7 @@ use crate::utils::common::rand_number;
 
 /// Struct Ignore
 #[derive(Debug, Queryable, Selectable, Insertable, AsChangeset, Serialize, Deserialize, Clone)]
-#[diesel(table_name = crate::schema::ignore)]
+#[diesel(table_name = super::schema::ignore)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Ignore {
     /// Primary key for table
@@ -72,7 +72,7 @@ impl Default for Ignore {
 }
 
 // #[derive(AsChangeset, Insertable)]
-// #[diesel(table_name = crate::schema::ignore)]
+// #[diesel(table_name = super::schema::ignore)]
 // pub struct UpdateIgnore<'a> {
 //     pub ignore_id:      Option<&'a String>,
 //     pub procedure_id:   Option<&'a String>,
@@ -128,7 +128,7 @@ pub fn create_ignore_record(
     data: &mut Ignore,
     procedure: &Procedure
 ) -> Result<Ignore, diesel::result::Error> {
-    use crate::schema::ignore::dsl::*;
+    use super::schema::ignore::dsl::*;
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.id = ignore.count().get_result(conn).unwrap_or(0) as i32 + 1;
@@ -172,7 +172,7 @@ pub fn update_ignore_record(
     conn: &mut SqliteConnection,
     data: &mut Ignore,
 ) -> Result<Ignore, diesel::result::Error> {
-    use crate::schema::{ignore, ignore::ignore_id};
+    use super::schema::{ignore, ignore::ignore_id};
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.update_at = cur_time;
@@ -211,7 +211,7 @@ pub fn query_ignore_record(
     conn: &mut SqliteConnection,
     uuid: Option<&str>,
 ) -> Result<Vec<Ignore>, diesel::result::Error> {
-    use crate::schema::ignore::dsl::*;
+    use super::schema::ignore::dsl::*;
 
     match uuid {
         Some(uid) => {
@@ -258,7 +258,7 @@ pub fn delete_ignore_record(
     nid: Option<&str>,
     pid: Option<&str>,
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::ignore::dsl::*;
+    use super::schema::ignore::dsl::*;
 
     if let Some(uuid) = nid {
         return diesel::update(ignore)
@@ -306,7 +306,7 @@ pub fn delete_ignore_record(
 pub fn clear_ignore_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::ignore::dsl::*;
+    use super::schema::ignore::dsl::*;
 
     diesel::delete(ignore)
         .execute(conn)
@@ -339,7 +339,7 @@ pub fn clear_ignore_record(
 pub fn clean_ignore_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::ignore::dsl::*;
+    use super::schema::ignore::dsl::*;
 
     let cleaned: usize = diesel::delete(ignore.filter(is_deleted.eq(1))).execute(conn)?;
 

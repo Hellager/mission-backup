@@ -2,6 +2,7 @@ pub mod ignore;
 pub mod mission;
 pub mod backup;
 pub mod procedure;
+pub mod schema;
 
 use self::backup::Backup;
 use self::ignore::Ignore;

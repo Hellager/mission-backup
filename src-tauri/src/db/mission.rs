@@ -11,7 +11,7 @@ use crate::utils::common::rand_number;
 
 /// Struct Mission
 #[derive(Debug, Queryable, Selectable, Insertable, AsChangeset, Serialize, Deserialize, Clone)]
-#[diesel(table_name = crate::schema::mission)]
+#[diesel(table_name = super::schema::mission)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Mission {
     /// Primary key for table
@@ -138,7 +138,7 @@ pub fn create_mission_record(
     conn: &mut SqliteConnection,
     data: &mut Mission
 ) -> Result<Mission, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.id = mission.count().get_result(conn).unwrap_or(0) as i32 + 1;
@@ -181,7 +181,7 @@ pub fn update_mission_record(
     conn: &mut SqliteConnection,
     data: &mut Mission,
 ) -> Result<Mission, diesel::result::Error> {
-    use crate::schema::{mission, mission::mission_id};
+    use super::schema::{mission, mission::mission_id};
 
     let cur_time: NaiveDateTime = Utc::now().naive_utc();
     data.update_at = cur_time;
@@ -224,7 +224,7 @@ pub fn update_mission_status(
     stat: i16,
     mid: &str,
 ) -> Result<Mission, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
 
     diesel::update(mission)
         .filter(mission_id.eq(mid))
@@ -267,7 +267,7 @@ pub fn update_mission_time(
     time: &chrono::DateTime<chrono::Utc>,
     mid: &str,
 ) -> Result<Mission, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
 
     let runtime = time.naive_utc();
 
@@ -319,7 +319,7 @@ pub fn query_mission_record(
     conn: &mut SqliteConnection,
     mid: Option<&str>,
 ) -> Result<Vec<Mission>, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
 
     match mid {
         Some(uid) => {
@@ -364,7 +364,7 @@ pub fn delete_mission_record(
     conn: &mut SqliteConnection,
     mid: Option<&str>,
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
     use diesel::result::Error;
 
     match mid {
@@ -408,7 +408,7 @@ pub fn delete_mission_record(
 pub fn clear_mission_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
 
     diesel::delete(mission)
         .execute(conn)
@@ -441,7 +441,7 @@ pub fn clear_mission_record(
 pub fn clean_mission_record(
     conn: &mut SqliteConnection, 
 ) -> Result<usize, diesel::result::Error> {
-    use crate::schema::mission::dsl::*;
+    use super::schema::mission::dsl::*;
 
     let cleaned: usize = diesel::delete(mission.filter(is_deleted.eq(1))).execute(conn)?;
 

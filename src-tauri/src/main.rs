@@ -5,7 +5,6 @@ mod utils;
 mod plugins;
 mod config;
 mod core;
-mod schema;
 mod db;
 
 use tauri_plugin_autostart::MacosLauncher;
