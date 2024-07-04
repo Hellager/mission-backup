@@ -371,3 +371,25 @@ pub async fn delete_backup(uuid: &str, state: State<'_, MissionHandlerState>) ->
 
     Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
 }
+
+#[command]
+pub async fn set_mission_status(uuid: &str, stat: i16, state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::mission::Mission>, Response<bool>> {    
+    use crate::db::mission::update_mission_status;
+
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match update_mission_status(conn, stat, uuid) {
+            Ok(val) => {
+                debug!("update mission {} status to {}", uuid, stat);
+                return Ok(Response::success(val.clone()));
+            },
+            Err(error) => {
+                error!("failed to update mission {} status, errMsg: {:?}", uuid, error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}

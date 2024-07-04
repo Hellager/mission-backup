@@ -18,6 +18,21 @@
   "screensaver": {
     "inputPwd": "Input Password"
   },
+  "mission": {
+    "name": "Name",
+    "status": "Status",
+    "operation": "Action",
+    "newTitle": "New Mission",
+    "editTitle": "Edit Mission",
+    "description": "Description",
+    "pathType": "Type",
+    "srcPath": "From",
+    "dstPath": "Save to",
+    "procedure": "Procedure",
+    "select": "Select",
+    "file": "File",
+    "directory": "Directory"
+  },
   "procedure": {
     "newTitle": "New Procedure",
     "editTitle": "Edit Procedure",

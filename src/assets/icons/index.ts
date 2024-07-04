@@ -9,6 +9,8 @@ import Delete from '~icons/mdi/delete-outline'
 import Edit from '~icons/mdi/square-edit-outline'
 import Search from '~icons/mdi/search'
 import Open from '~icons/mdi/folder-open-outline'
+import Start from '~icons/mdi/play-circle-outline'
+import Stop from '~icons/mdi/pause-circle-outline'
 
 export {
   Logo,
@@ -22,4 +24,6 @@ export {
   Edit,
   Search,
   Open,
+  Start,
+  Stop,
 }

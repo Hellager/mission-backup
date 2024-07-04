@@ -81,6 +81,7 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
         query_record,
         delete_record,
         clear_record,
-        delete_backup
+        delete_backup,
+        set_mission_status
     ])
 }

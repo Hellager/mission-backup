@@ -193,45 +193,45 @@ pub fn update_mission_record(
         .get_result(conn)
 }
 
-// /// Update mission status in database.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `conn` - Connection to database.
-// /// * `stat` - The status to update.
-// /// * `mid` - Which mission to update.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, mission::update_mission_status};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     let status = 1;
-// ///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
-// ///     match update_mission_time(&mut conn, status, mid) {
-// ///         Ok(record) => {
-// ///             println!("update mission time: {:?}", record);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to update mission time, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn update_mission_status(
-//     conn: &mut SqliteConnection,
-//     stat: i16,
-//     mid: &str,
-// ) -> Result<Mission, diesel::result::Error> {
-//     use super::schema::mission::dsl::*;
+/// Update mission status in database.
+/// 
+/// # Arguments
+/// 
+/// * `conn` - Connection to database.
+/// * `stat` - The status to update.
+/// * `mid` - Which mission to update.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, mission::update_mission_status};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let status = 1;
+///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
+///     match update_mission_time(&mut conn, status, mid) {
+///         Ok(record) => {
+///             println!("update mission time: {:?}", record);
+///         },
+///         Err(error) => {
+///             println!("failed to update mission time, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn update_mission_status(
+    conn: &mut SqliteConnection,
+    stat: i16,
+    mid: &str,
+) -> Result<Mission, diesel::result::Error> {
+    use super::schema::mission::dsl::*;
 
-//     diesel::update(mission)
-//         .filter(mission_id.eq(mid))
-//         .set(status.eq(stat))
-//         .returning(Mission::as_returning())
-//         .get_result(conn)
-// }
+    diesel::update(mission)
+        .filter(mission_id.eq(mid))
+        .set(status.eq(stat))
+        .returning(Mission::as_returning())
+        .get_result(conn)
+}
 
 // /// Update mission next_runtime or last_trigger time in database.
 // /// 

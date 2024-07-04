@@ -18,6 +18,21 @@
   "screensaver": {
     "inputPwd": "请输入密码"
   },
+  "mission": {
+    "name": "名称",
+    "status": "状态",
+    "operation": "操作",
+    "newTitle": "新建任务",
+    "editTitle": "编辑任务",
+    "description": "描述",
+    "pathType": "类型",
+    "srcPath": "源目标",
+    "dstPath": "保存至",
+    "procedure": "程序",
+    "select": "选择",
+    "file": "文件",
+    "directory": "目录"
+  },
   "procedure": {
     "newTitle": "新建程序",
     "editTitle": "编辑程序",

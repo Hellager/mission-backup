@@ -93,6 +93,27 @@ export const useMissionStore = defineStore('mission', () => {
     return records
   }
 
+  /**
+   * Set the status of a mission by UUID.
+   * @param uuid - The UUID of the mission.
+   * @param status - The status to set.
+   * @returns True if the status is set successfully, otherwise false.
+   */
+  async function setMissionStatus(uuid: string, status: number): Promise<boolean> {
+    const res = await execute(Command.SetMissionStatus, uuid, status)
+    return res
+  }
+
+  /**
+   * Delete a mission by UUID.
+   * @param uuid - The UUID of the mission to delete.
+   * @returns True if the mission is deleted successfully, otherwise false.
+   */
+  async function deleteMission(uuid: string): Promise<boolean> {
+    const res = await execute(Command.DeleteMission, uuid)
+    return res
+  }
+
   return {
     ignores,
     procedures,
@@ -104,6 +125,8 @@ export const useMissionStore = defineStore('mission', () => {
     updateRecord,
     deleteRecord,
     syncRecords,
+    setMissionStatus,
+    deleteMission,
   }
 })
 
