@@ -12,7 +12,7 @@ import Screensaver from '../views/Screensaver/Screensaver.vue'
  * Router record array
  */
 const routes: RouteRecordRaw[] = [
-  { path: '/', component: Mission },
+  { path: '/', component: Config },
   { path: '/backup', component: Backup },
   { path: '/config', component: Config },
   { path: '/mission', component: Mission },

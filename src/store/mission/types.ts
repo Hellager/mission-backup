@@ -53,6 +53,7 @@ enum PathType {
 enum MissionStatus {
   Stopped,
   Running,
+  Backuping,
 }
 
 /**
@@ -78,6 +79,21 @@ interface Ignore {
    * The keyword for the ignore.
    */
   keyword: string
+
+  /**
+   * Reserved value field
+   */
+  reserved0: string
+
+  /**
+   * Reserved value field
+   */
+  reserved1: string
+
+  /**
+   * Reserved value field
+   */
+  reserved2: string
 
   /**
    * The creation timestamp of the ignore.
@@ -122,7 +138,7 @@ interface Procedure {
   /**
    * Indicates if the procedure has ignore.
    */
-  hasIgnore: boolean
+  hasIgnores: boolean
 
   /**
    * The ignore method for the procedure.
@@ -165,9 +181,19 @@ interface Procedure {
   restrictSize: number
 
   /**
-   * The backup method for the procedure.
+   * Reserved value field
    */
-  backupMethod: number
+  reserved0: string
+
+  /**
+   * Reserved value field
+   */
+  reserved1: string
+
+  /**
+   * Reserved value field
+   */
+  reserved2: string
 
   /**
    * The creation timestamp of the procedure.
@@ -225,11 +251,6 @@ interface Mission {
   description: string
 
   /**
-   * The path type of the mission.
-   */
-  pathType: number
-
-  /**
    * The source path of the mission.
    */
   srcPath: string
@@ -240,6 +261,11 @@ interface Mission {
   dstPath: string
 
   /**
+   * The path type of the mission.
+   */
+  pathType: number
+
+  /**
    * The next runtime of the mission.
    */
   nextRuntime: string
@@ -248,6 +274,21 @@ interface Mission {
    * The last trigger timestamp of the mission.
    */
   lastTrigger: string
+
+  /**
+   * Reserved value field
+   */
+  reserved0: string
+
+  /**
+   * Reserved value field
+   */
+  reserved1: string
+
+  /**
+   * Reserved value field
+   */
+  reserved2: string
 
   /**
    * The creation timestamp of the mission.
@@ -300,9 +341,29 @@ interface Backup {
   backupSize: number
 
   /**
+   * Reserved value field
+   */
+  reserved0: string
+
+  /**
+   * Reserved value field
+   */
+  reserved1: string
+
+  /**
+   * Reserved value field
+   */
+  reserved2: string
+
+  /**
    * The creation timestamp of the backup.
    */
   createAt: string
+
+  /**
+   * The last update timestamp of the mission.
+   */
+  updateAt: string
 
   /**
    * Indicates if the backup is deleted.
