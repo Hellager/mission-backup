@@ -233,77 +233,77 @@ pub fn query_backup_record(
     }  
 }
 
-// /// Get backup records from database for statistic.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `conn` - Connection to database.
-// /// * `mid` - Uuid for mission, query mission related backups.
-// /// * `start` - Start date for backup.
-// /// * `stop` - Stop date for backup.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, backup::query_backup_record_with_date};
-// /// use chrono::{Duration, NaiveDateTime, Utc};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     let mid = "1c69eead-b7cf-457e-95e2-9c9f459120ff";
-// ///     let start = Utc::now().naive_utc();
-// ///     let stop_at = Utc::now() + Duration::days(1);
-// ///     let stop = stop_at.naive_utc();
-// ///     match query_backup_record_with_date(&mut conn, mid, start, stop) {
-// ///         Ok(records) => {
-// ///             println!("get records: {:?}", records);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to get records, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn query_backup_record_with_date(
-//     conn: &mut SqliteConnection,
-//     mid: &str,
-//     start: Option<&NaiveDateTime>,
-//     stop: Option<&NaiveDateTime>,
-// ) -> Result<Vec<Backup>, diesel::result::Error> {
-//     use super::schema::backup::dsl::*;
+/// Get backup records from database for statistic.
+/// 
+/// # Arguments
+/// 
+/// * `conn` - Connection to database.
+/// * `mid` - Uuid for mission, query mission related backups.
+/// * `start` - Start date for backup.
+/// * `stop` - Stop date for backup.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, backup::query_backup_record_with_date};
+/// use chrono::{Duration, NaiveDateTime, Utc};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let mid = "1c69eead-b7cf-457e-95e2-9c9f459120ff";
+///     let start = Utc::now().naive_utc();
+///     let stop_at = Utc::now() + Duration::days(1);
+///     let stop = stop_at.naive_utc();
+///     match query_backup_record_with_date(&mut conn, mid, start, stop) {
+///         Ok(records) => {
+///             println!("get records: {:?}", records);
+///         },
+///         Err(error) => {
+///             println!("failed to get records, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn query_backup_record_with_date(
+    conn: &mut SqliteConnection,
+    mid: &str,
+    start: Option<&NaiveDateTime>,
+    stop: Option<&NaiveDateTime>,
+) -> Result<Vec<Backup>, diesel::result::Error> {
+    use super::schema::backup::dsl::*;
 
-//     if start == None && stop == None {
-//         return  backup.filter(mission_id.eq(mid))
-//             .filter(is_deleted.eq(0))
-//             .select(Backup::as_select())
-//             .load(conn);     
-//     }
+    if start == None && stop == None {
+        return  backup.filter(mission_id.eq(mid))
+            .filter(is_deleted.eq(0))
+            .select(Backup::as_select())
+            .load(conn);     
+    }
 
-//     if let Some(s_date) = start{
-//         if let Some(e_date) = stop {
-//             return     backup.filter(mission_id.eq(mid))
-//                 .filter(is_deleted.eq(0))
-//                 .filter(create_at.between(s_date, e_date))
-//                 .select(Backup::as_select())
-//                 .load(conn);
-//         } else {
-//             return     backup.filter(mission_id.eq(mid))
-//                 .filter(is_deleted.eq(0))
-//                 .filter(create_at.ge(s_date))
-//                 .select(Backup::as_select())
-//                 .load(conn);
-//         }
-//     } else {
-//         if let Some(e_date) = stop {
-//             return     backup.filter(mission_id.eq(mid))
-//             .filter(is_deleted.eq(0))
-//             .filter(create_at.le(e_date))
-//             .select(Backup::as_select())
-//             .load(conn); 
-//         }
-//     }
+    if let Some(s_date) = start{
+        if let Some(e_date) = stop {
+            return     backup.filter(mission_id.eq(mid))
+                .filter(is_deleted.eq(0))
+                .filter(create_at.between(s_date, e_date))
+                .select(Backup::as_select())
+                .load(conn);
+        } else {
+            return     backup.filter(mission_id.eq(mid))
+                .filter(is_deleted.eq(0))
+                .filter(create_at.ge(s_date))
+                .select(Backup::as_select())
+                .load(conn);
+        }
+    } else {
+        if let Some(e_date) = stop {
+            return     backup.filter(mission_id.eq(mid))
+            .filter(is_deleted.eq(0))
+            .filter(create_at.le(e_date))
+            .select(Backup::as_select())
+            .load(conn); 
+        }
+    }
 
-//     Err(diesel::result::Error::NotFound)
-// }
+    Err(diesel::result::Error::NotFound)
+}
 
 /// Delete backup record in database logically.
 /// 

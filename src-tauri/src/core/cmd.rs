@@ -6,6 +6,7 @@ use serde::{ Serialize, Deserialize };
 use log::{ debug, info, warn, error };
 use crate::core::state::{ HandlerStatus, MissionHandlerState };
 use crate::db::{ Record, mission::Mission };
+use chrono::NaiveDateTime;
 
 /// Struct for command response
 #[derive(Clone, Serialize, Deserialize)]
@@ -425,4 +426,26 @@ pub async fn delete_mission(uuid: &str, state: State<'_, MissionHandlerState>) -
             return Err(Response::<bool>::error(500, format!("{:?}", error)));
         }
     }
+}
+
+#[command]
+pub async fn query_statistic_record(mid: &str, start: Option<NaiveDateTime>, stop: Option<NaiveDateTime>, state: State<'_, MissionHandlerState>) -> Result<Response<Vec<crate::db::backup::Backup>>, Response<bool>> {
+    use crate::db::backup::query_backup_record_with_date;
+    
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match query_backup_record_with_date(conn, mid, start.as_ref(), stop.as_ref()) {
+            Ok(val) => {
+                debug!("query statistic for mission {}, {:?} records found", mid, val.len());
+                return Ok(Response::success(val));
+            },
+            Err(error) => {
+                error!("failed to query record, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
 }

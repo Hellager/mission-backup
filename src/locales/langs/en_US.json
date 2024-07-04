@@ -82,6 +82,12 @@
     "size": "Size",
     "operation": "Operation"
   },
+  "statistic": {
+    "selectMission": "Select Mission",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "dateSeperator": "To"
+  },
   "config": {
     "general": {
       "notify": "Notify",

@@ -82,6 +82,12 @@
     "size": "大小",
     "operation": "操作"
   },
+  "statistic": {
+    "selectMission": "选择任务",
+    "startDate": "起始日期",
+    "endDate": "截止日期",
+    "dateSeperator": "到"
+  },
   "config": {
     "general": {
       "notify": "通知",

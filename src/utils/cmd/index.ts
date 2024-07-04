@@ -4,7 +4,7 @@ import type { HandlerStatus } from '../../store/status/types'
 import { toCamelCase, toSnakeCase } from '../common/index'
 import { defaultAppConfig } from '../../store'
 import type { AppConfig } from '../../store/types'
-import type { Mission, Record } from '../../store/mission/types'
+import type { Backup, Mission, Record } from '../../store/mission/types'
 import { Command } from './types'
 import type { Response } from './types'
 
@@ -167,6 +167,16 @@ async function execute(command: number, arg0?: any, arg1?: any, arg2?: any) {
       await invoke<Response<boolean>>('delete_mission', { uuid: arg0 }) // res -> Response(bool)
         .then((res: Response<boolean>) => {
           result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.QueryStatistic:
+      await invoke<Response<any>>('query_statistic_record', { mid: arg0, start: arg1, stop: arg2 }) // res -> Response(Backup[])
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as Backup
         })
         .catch((error: any) => {
           throw error

@@ -19,6 +19,7 @@ enum Command {
   SetMissionStatus,
   CreateMission,
   DeleteMission,
+  QueryStatistic,
 }
 
 /**
