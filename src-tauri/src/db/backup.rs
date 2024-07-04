@@ -443,6 +443,175 @@ pub fn clear_backup_record(
 //     Ok(cleaned)   
 // }
 
+/// Create backup for mission with coresponding procedure.
+/// 
+/// # Arguments
+/// 
+/// * `mid` - Uuid for mission.
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, backup::create_backup};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let mid = "1c69eead-b7cf-457e-95e2-9c9f459120ff";
+///     match create_backup(mid, &mut conn) {
+///         Ok(backup) => {
+///             println!("create backup and save at {}", backup.save_path);
+///         },
+///         Err(error) => {
+///             println!("failed to create backup, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn create_backup(mid: &str, conn: &mut SqliteConnection) -> Result<Backup, std::io::Error> {
+    use super::{
+        mission::{ get_mission_related_record, update_mission_status }, 
+        ignore::get_procedure_ignores
+    };
+    use crate::utils::{
+        compress::create_archive,
+        explorer::{
+            copy_all, remove_all, copy_dir_with_build_in_ignore, copy_dir_with_custom_ignores,
+            get_path_size, restrict_dir_subitems_count, restrict_dir_subitems_size
+        }
+    };
+    use std::path::Path;
+    use std::io::{ Error, ErrorKind };
+    
+    if let Ok(record) = get_mission_related_record(mid, conn) {
+        let mut backup = Backup::default();
+        let mission = &record.mission;
+        let procedure = &record.procedure;
+        let ignores = get_procedure_ignores(&mission.procedure_id, conn);
+
+        if mission.status == 0 {
+            return Err(Error::from(ErrorKind::InvalidData));
+        }
+
+        // update mission status
+        let _ = update_mission_status(conn, 2, &mission.mission_id);
+
+        // get the actual backup save dir and path
+        let cur_time = Utc::now().naive_utc();
+        let mut target_name = Path::new(&mission.src_path).file_name().unwrap_or("".as_ref()).to_str().expect("");
+        if target_name.is_empty() {
+            target_name = mission.mission_id.as_str();
+        }
+        // let mut target_stem = Path::new(&mission.src_path).file_stem().unwrap_or("".as_ref()).to_str().expect("");
+        // if target_stem.is_empty() {
+        //     target_stem = mission.mission_id.as_str();
+        // }
+
+        let backup_dir = &Path::new(&mission.dst_path)
+            .join(format!("{}", cur_time.and_utc().timestamp().to_string()));
+
+        let backup_path = backup_dir.join(target_name);
+
+        let mut save_path = backup_path.display().to_string();
+
+        // copy from src to dst with or without ignores
+        if Path::new(&mission.src_path).is_dir() { 
+            if procedure.has_ignores { // copy dir with ignore
+                match procedure.ignore_method {
+                    1 => { // with custom ignore
+                        copy_dir_with_custom_ignores(&mission.src_path, &save_path, &ignores)?;
+                    },
+                    2 => { // with .gitignore
+                        copy_dir_with_build_in_ignore(&mission.src_path, &save_path)?;
+                    },
+                    _ => {
+                        copy_all(&mission.src_path, &save_path)?;
+                    }
+                }
+            } else {
+                copy_all(&mission.src_path, &save_path)?;
+            }  
+        } else {
+            copy_all(&mission.src_path, &save_path)?;
+        }
+
+
+        // whether create archive
+        if procedure.is_compress {
+            let support_formats = Vec::from(["zip", "tar.gz", "tar.bz2", "tar.xz", "7z"]);
+            let mut archive_format: &str = "";
+            for (idx, format) in support_formats.iter().enumerate()  {
+                if procedure.compress_format - 1 == (idx as i16) {
+                    archive_format = format;
+                    break;
+                }
+            }
+
+            if !archive_format.is_empty() {
+                let archive_path = backup_dir.join(format!("{}.{}", target_name, archive_format));
+                if let Ok(()) = create_archive(&save_path, archive_path.display().to_string().as_str()) {
+                    remove_all(&save_path)?;
+                    save_path = archive_path.display().to_string();
+                }
+            }
+        }
+
+        // create backup record
+        backup.save_path = save_path.to_string();
+        if let Ok(save_size) = get_path_size(&save_path) {
+            backup.backup_size = save_size as i64;
+        }
+        match create_backup_record(conn, &mut backup, mission) {
+            Ok(data) => {
+                backup = data;
+            },
+            Err(_) => {
+                return Err(Error::from(ErrorKind::Other));
+            }
+        }
+
+        // restrict save path
+        if procedure.restrict != 0 {
+            if let Some(backup_path) = backup_dir.parent() {
+                let restrict_path = backup_path.display().to_string();
+
+                match procedure.restrict {
+                    1 => { // restrict days
+                        restrict_dir_subitems_count(&restrict_path, procedure.restrict_days as usize)?;
+                    },
+                    2 => { // restrict size
+                        restrict_dir_subitems_size(&restrict_path, procedure.restrict_size as u64)?;
+                    },
+                    3 => { // restrict days and size
+                        restrict_dir_subitems_count(&restrict_path, procedure.restrict_days as usize)?;
+                        restrict_dir_subitems_size(&restrict_path, procedure.restrict_size as u64)?;
+                    },
+                    _ => {
+                        // do nothing
+                    }
+                }                
+            }
+        }
+
+        // clear unavailable backup records
+        if let Ok(cur_backups) = query_backup_record(conn, None, Some(mid)) {
+            for item in &cur_backups {
+                if !Path::new(&item.save_path).exists() {
+                    if let Ok(_) = delete_backup_record(conn, Some(&item.backup_id), None) {
+                        println!("failed to delete invalid backup: {}", item.save_path);
+                    }
+                }
+            }
+        }
+
+        // update mission status
+        let _ = update_mission_status(conn, 1, &mission.mission_id);
+
+        return Ok(backup);
+    }
+
+    Err(Error::from(ErrorKind::NotFound))
+}
+
 /// Physically delete backup in disk.
 /// 
 /// Logically delete backup in record.

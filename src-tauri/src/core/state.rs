@@ -8,14 +8,19 @@ use crate::utils::logger::initialize_logger;
 use log::{debug, error, info, warn};
 use serde::{Serialize, Deserialize};
 use crate::config::AppConfig;
-use tauri::AppHandle;
+use tauri::{ AppHandle, Manager };
 use diesel::sqlite::SqliteConnection;
 use tokio_cron_scheduler::JobScheduler;
 use notify::{Error as NotifyError, ReadDirectoryChangesWatcher, RecursiveMode, Watcher};
 use notify_debouncer_full::{
     new_debouncer, DebounceEventResult, DebouncedEvent, Debouncer, FileIdMap,
 };
-use std::time::Duration;
+use std::{collections::HashMap, path::Path, time::Duration};
+use crate::db::{
+    mission::Mission,
+    procedure::Procedure,
+};
+use uuid::Uuid;
 
 /// Status for handler services
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -80,58 +85,24 @@ pub struct MissionHandler {
     
     /// Receiver for watcher handler
     pub watcher_receiver: Option<Receiver<Result<Vec<DebouncedEvent>, Vec<NotifyError>>>>,
+
+    /// Cron jobs
+    /// Mission id : Job ib
+    pub cron_jobs: HashMap<String, Uuid>,
+
+    /// Monitor jobs
+    /// Mission id : Watch path
+    pub monitor_jobs: HashMap<String, String>
 }
 
 impl MissionHandler {
     /// Init app status with default value.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_app_status() {
-    ///     println!("cur status: {:?}", handler.status);
-    /// }
-    /// ```
     fn init_app_status(&mut self) -> Result<(), std::io::Error> {
         self.status = HandlerStatus::default();
         Ok(())
     }
 
     /// Init app config from file, it config file not exists, use default config.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_app_config() {
-    ///     println!("cur config: {:?}", handler.config);
-    /// }
-    /// ```
     fn init_app_config(&mut self) -> Result<(), std::io::Error> {
         use crate::config::{ load_app_config, save_app_config };
 
@@ -154,33 +125,6 @@ impl MissionHandler {
     }
 
     /// Init app log handler.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_logger_handler() {
-    ///     #[cfg(debug_assertions)] {
-    ///         println!("cur log status: {:?}", handler.status.log);
-    ///     }
-    ///     
-    ///     #[cfg(not(debug_assertions))] {
-    ///         println!("cur log file: {}", handler.log_handler.unwrap());
-    ///     }
-    /// }
-    /// ```
     fn init_logger_handler(&mut self) -> Result<(), std::io::Error> {
         if let None = self.log_handler {
             match initialize_logger(None, None) {
@@ -205,32 +149,6 @@ impl MissionHandler {
     }
 
     /// Init app handler.
-    /// 
-    /// An app instance should be passed to the app_handler when handler initialize.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// use log::error;
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_app_handler() {
-    ///     println!("cur app status: {:?}", handler.status.app_handler);
-    /// } else {
-    ///     error!("app handler not exists!")
-    /// }
-    /// ```
     fn init_app_handler(&mut self) -> Result<(), std::io::Error> {
         if let None = self.app_handler {
             self.status.app = false;
@@ -244,30 +162,6 @@ impl MissionHandler {
     }
 
     /// Init database handler.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// use log::error;
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_db_handler() {
-    ///     println!("cur db status: {:?}", handler.status.db_handler);
-    /// } else {
-    ///     error!("db handler not exists!")
-    /// }
-    /// ```
     pub fn init_db_handler(&mut self) -> Result<(), std::io::Error> {
         use crate::db::{establish_sqlite_connection, init_database};
 
@@ -298,31 +192,6 @@ impl MissionHandler {
     }
 
     /// Init cron handler.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_cron_handler};
-    /// use log::error;
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    ///     cron_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_cron_handler() {
-    ///     println!("cur cron handler status: {:?}", handler.status.cron_handler);
-    /// } else {
-    ///     error!("failed to initialize cron handler!")
-    /// }
-    /// ```
     async fn init_cron_handler(&mut self) -> Result<(), std::io::Error> {
         if let None = self.cron_handler {
             if let Ok(handler) = JobScheduler::new().await {
@@ -345,32 +214,6 @@ impl MissionHandler {
     }
 
     /// Init watcher handler.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_watcher_handler};
-    /// use log::error;
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    ///     cron_handler: None,
-    ///     watcher_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.init_watcher_handler() {
-    ///     println!("cur watcher handler status: {:?}", handler.status.watcher_handler);
-    /// } else {
-    ///     error!("failed to initialize watcher handler!")
-    /// }
-    /// ```
     async fn init_watcher_handler(&mut self) -> Result<(), std::io::Error> {
         if let None = self.watcher_handler {
             let (tx, rx) = tokio::sync::mpsc::channel(1);
@@ -416,30 +259,6 @@ impl MissionHandler {
     }
 
     /// Initialize mission handler in sequence.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// use log::error;
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.initialize() {
-    ///     println!("init handler success: {:?}", handler);
-    /// } else {
-    ///     error!("init handler failed!");
-    /// }
-    /// ```
     pub async fn initialize(&mut self) -> Result<(), std::io::Error> {
         self.init_app_status()?;        
         self.init_logger_handler()?;
@@ -454,36 +273,269 @@ impl MissionHandler {
     }
 
     /// Shutdown mission handler in sequence.
-    /// 
-    /// # Arguments
-    /// 
-    /// # Examples
-    /// 
-    /// ```
-    /// use core::state::{MissionHandler, HandlerStatus, init_app_status};
-    /// use log::error;
-    /// 
-    /// let mut handler = MissionHandler {
-    ///     is_set: false,
-    ///     status: HandlerStatus::default(),
-    ///     config: AppConfig::default(),
-    ///     log_handler: None,
-    ///     app_handler: None,
-    ///     db_handler: None,
-    /// };
-    /// 
-    /// if let Ok(()) = handler.shutdown() {
-    ///     println!("shutdown handler success: {:?}", handler);
-    /// } else {
-    ///     error!("shutdown handler failed!");
-    /// }
-    /// ```
     pub fn shutdown(&mut self) -> Result<(), std::io::Error> {      
         use crate::config::save_app_config;
 
         save_app_config(&self.config)?;
 
         Ok(())
+    }
+
+    /// Watch change in path
+    pub async fn watch(&mut self, path: &str, mission_id: &str) -> Result<(), std::io::Error> {
+        use crate::db::{establish_sqlite_connection, backup::create_backup};
+        use super::cmd::Response;
+        use std::path::Path;
+
+        let watch_path = Path::new(path);
+        if !watch_path.exists() {
+            return Err(Error::from(ErrorKind::NotFound));
+        }
+
+        if let Some(watcher) = self.watcher_handler.as_mut() {
+            if let Ok(()) = watcher.watcher().watch(watch_path, RecursiveMode::Recursive) {
+                watcher
+                    .cache()
+                    .add_root(watch_path, RecursiveMode::Recursive);
+
+                if let Some(mut rx) = self.watcher_receiver.take() {
+                    let callback_id = mission_id.to_string().clone();
+                    let callback_app = self.app_handler.clone();
+                    tokio::spawn(async move {
+                        while let Some(res) = rx.recv().await {
+                            match res {
+                                Ok(_events) => {
+                                    if let Some(app) = &callback_app {
+                                        if let Ok(mut conn) = establish_sqlite_connection() {
+                                            match create_backup(&callback_id, &mut conn) {
+                                                Ok(backup) => {
+                                                    let _ = app.emit_all("backup", Response::success(backup));
+                                                },
+                                                Err(error) => {
+                                                    let _ = app.emit_all("backup", Response::<bool>::error(500, format!("{:?}", error)));
+                                                }
+                                            }
+                                        } else {
+                                            let _ = app.emit_all("backup", Response::<bool>::error(500, "Failed connect to database".to_string()));
+                                        }
+                                    } else {
+                                        error!("Invalid app instance when create backup");
+                                    }
+                                }
+                                Err(errors) => {
+                                    error!("Mission {} watch failed, errMsg: {:?}", callback_id, errors);
+                                }
+                            }
+                        }
+                    });
+
+                    return Ok(());
+                }
+            }
+            return Err(Error::from(ErrorKind::Unsupported));
+        }
+
+        Ok(())
+    }
+
+    /// create job for mission
+    pub async fn create_job(&mut self, mission: &Mission) -> Result<bool, std::io::Error> {
+        use crate::db::query_db_record;
+
+        if let Some(conn) = &mut self.db_handler {
+            if let Ok(records) = query_db_record("procedure", Some(mission.procedure_id.as_str()), conn) {
+                if records.len() == 0 {
+                    return Err(Error::from(ErrorKind::Unsupported));
+                }
+
+                let config = &records[0].procedure;
+                match config.trigger {
+                    1 => { // Cron
+                        self.create_cron_job(mission, config).await?;
+                    },
+                    2 => {
+                        self.create_monitor_job(mission).await?;
+                    },
+                    _ => {
+                        return Err(Error::from(ErrorKind::Unsupported));
+                    }
+                }
+            }
+        }
+
+        Ok(true)
+    }
+
+    /// create cron job for mission, mission will be executed by cron expression
+    async fn create_cron_job(&mut self, mission: &Mission, procedure: &Procedure) -> Result<bool, std::io::Error> {
+        use tokio_cron_scheduler::Job;
+        use crate::db::{establish_sqlite_connection, mission::update_mission_time, backup::create_backup};
+        use super::cmd::Response;
+
+        let callback_id = mission.clone().mission_id;
+        let callback_app = self.app_handler.clone();
+        let create_res = Job::new(procedure.cron_expression.as_str(), move |_uuid, _l| {
+            // if let Ok(mut conn) = establish_sqlite_connection() {
+            //     if let Ok(backup) = create_backup(&callback_mission.mission_id, &mut conn) {
+            //         info!("create backup success: {:?}", backup);
+            //     }
+            // }
+
+            if let Some(app) = &callback_app {
+                if let Ok(mut conn) = establish_sqlite_connection() {
+                    match create_backup(&callback_id, &mut conn) {
+                        Ok(backup) => {
+                            let _ = app.emit_all("backup", Response::success(backup));
+                        },
+                        Err(error) => {
+                            let _ = app.emit_all("backup", Response::<bool>::error(500, format!("{:?}", error)));
+                        }
+                    }
+                } else {
+                    let _ = app.emit_all("backup", Response::<bool>::error(500, "Failed connect to database".to_string()));
+                }
+            } else {
+                error!("Invalid app instance when create backup");
+            }
+        });     
+
+        match create_res {
+            Ok(cron_job) => {
+                if let Some(handler) = &mut self.cron_handler {
+                    if let Ok(job_id) = handler.add(cron_job).await {
+                        self.cron_jobs.insert(mission.mission_id.clone(), job_id);
+
+                        if let Ok(Some(next_tick)) = handler.next_tick_for_job(job_id).await {
+                            if let Some(conn) = &mut self.db_handler {
+                                if let Err(error) = update_mission_time(conn, "next", &next_tick, &mission.mission_id) {
+                                    error!("Failed to update cron job for time for mission {}, errMsg: {:?}", mission.name, error);
+                                    return Err(Error::from(ErrorKind::Interrupted));
+                                }                                
+                            }
+                        }                                
+                    }
+                }
+            },
+            Err(error) => {
+                error!("Failed to create cron job for mission {}, errMsg: {:?}", mission.name, error);
+                return Err(Error::from(ErrorKind::Interrupted));
+            }
+        }           
+
+        Ok(true)
+    }
+
+    /// create monitor job, mission will be executed if any change happens in watch path
+    async fn create_monitor_job(&mut self, mission: &Mission) -> Result<bool, std::io::Error> {
+        use crate::db::query_db_record;
+        
+        if let Some(conn) = &mut self.db_handler {
+            if let Ok(procedures) = query_db_record("procedure", Some(mission.procedure_id.as_str()), conn) {
+                if procedures.len() == 0 {
+                    return Err(Error::from(ErrorKind::Unsupported));
+                }
+
+                // let callback_mission = mission.clone();
+                // let callback_app = self.app_handler.clone();
+                // let config = &procedures[0].procedure;
+                let create_res = self.watch(&mission.src_path.as_str(), &mission.mission_id.as_str()).await;
+
+                match create_res {
+                    Ok(()) => {
+                        info!("create monitore job success for mission {}", mission.name);
+                        self.monitor_jobs.insert(mission.mission_id.clone(), mission.src_path.clone());
+                        return Ok(true);
+                    },
+                    Err(error) => {
+                        error!("Failed to create monitor job for mission {}, errMsg: {:?}", mission.name, error);
+                        return Err(Error::from(ErrorKind::Interrupted));
+                    }
+                }           
+            } else {
+                error!("Failed to create monitor job for mission {}, errMsg: failed to query procedure", mission.name);
+                return Err(Error::from(ErrorKind::InvalidData));
+            }
+        } 
+
+        Ok(true)
+    }
+
+    pub async fn remove_job(&mut self, mission_id: &str) -> Result<bool, std::io::Error> {
+        use crate::db::query_db_record;
+
+        if let Some(conn) = &mut self.db_handler {
+            if let Ok(m_records) = query_db_record("mission", Some(mission_id), conn) {
+                if m_records.len() == 0 {
+                    return Err(Error::from(ErrorKind::Unsupported));
+                }
+
+                let procedure_id = &m_records[0].mission.procedure_id;
+                if let Ok(records) = query_db_record("procedure", Some(procedure_id.as_str()), conn) {
+                    if records.len() == 0 {
+                        return Err(Error::from(ErrorKind::Unsupported));
+                    }
+
+                    let config = &records[0].procedure;
+                    debug!("mission procedure: {:?}", config);
+                    match config.trigger {
+                        1 => { // Cron
+                            self.remove_cron_job(mission_id).await?;
+                        },
+                        2 => {
+                            self.remove_monitore_job(mission_id)?;
+                        },
+                        _ => {
+                            debug!("may here?");
+                            return Err(Error::from(ErrorKind::Unsupported));
+                        }
+                    }
+                }                
+            }
+        }
+
+        Ok(true)
+    }
+
+    async fn remove_cron_job(&mut self, mission_id: &str) -> Result<bool, std::io::Error> {
+        if self.cron_jobs.contains_key(mission_id) {
+            if let Some(job_id) = self.cron_jobs.get(mission_id) {
+                if let Some(handler) = &mut self.cron_handler {
+                    match handler.remove(job_id).await {
+                        Ok(()) => {
+                            debug!("remove mission {}", mission_id);
+                            return Ok(true);
+                        },
+                        Err(error) => {
+                            error!("Failed to remove cron job for mission {}, errMsg: {:?}", mission_id, error);
+                            return Err(Error::from(ErrorKind::Other));
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(true)
+    }
+
+    fn remove_monitore_job(&mut self, mission_id: &str) -> Result<bool, std::io::Error> {
+        if self.monitor_jobs.contains_key(mission_id) {
+            if let Some(watch_path) = self.monitor_jobs.get(mission_id) {
+                if let Some(handler) = &mut self.watcher_handler {
+                    match handler.watcher().unwatch(Path::new(watch_path)) {
+                        Ok(()) => {
+                            debug!("remove mission {}", mission_id);
+                            return Ok(true);
+                        },
+                        Err(error) => {
+                            error!("Failed to remove cron job for mission {}, errMsg: {:?}", mission_id, error);
+                            return Err(Error::from(ErrorKind::Other));
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(true)
     }
 }
 

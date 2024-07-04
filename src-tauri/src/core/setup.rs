@@ -2,6 +2,7 @@
 //! 
 //! `setup` module contains functions about setup tauri app itself and its' commands.
 use tauri::{App, Manager};
+use std::collections::HashMap;
 
 /// Setup tauri app.
 /// 
@@ -47,6 +48,8 @@ pub fn setup_handler(app: &mut App) -> Result<(), Box<dyn std::error::Error + 's
         cron_handler: None,
         watcher_handler: None,
         watcher_receiver: None,
+        cron_jobs: HashMap::new(),
+        monitor_jobs: HashMap::new()
     }));
 
     app.manage(state);
@@ -85,6 +88,8 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
         delete_record,
         clear_record,
         delete_backup,
-        set_mission_status
+        set_mission_status,
+        create_mission,
+        delete_mission,
     ])
 }

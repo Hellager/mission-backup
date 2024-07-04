@@ -233,64 +233,64 @@ pub fn update_mission_status(
         .get_result(conn)
 }
 
-// /// Update mission next_runtime or last_trigger time in database.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `conn` - Connection to database.
-// /// * `label` - Determine which time to update.('next', 'last')
-// /// * `time` - The time to update.
-// /// * `mid` - Which mission to update.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, mission::update_mission_time};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     let label = "next";
-// ///     let time = chrono::Utc::now().naive_utc();
-// ///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
-// ///     match update_mission_time(&mut conn, label &time, mid) {
-// ///         Ok(record) => {
-// ///             println!("update mission time: {:?}", record);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to update mission time, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn update_mission_time(
-//     conn: &mut SqliteConnection,
-//     label: &str,
-//     time: &chrono::DateTime<chrono::Utc>,
-//     mid: &str,
-// ) -> Result<Mission, diesel::result::Error> {
-//     use super::schema::mission::dsl::*;
+/// Update mission next_runtime or last_trigger time in database.
+/// 
+/// # Arguments
+/// 
+/// * `conn` - Connection to database.
+/// * `label` - Determine which time to update.('next', 'last')
+/// * `time` - The time to update.
+/// * `mid` - Which mission to update.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, mission::update_mission_time};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let label = "next";
+///     let time = chrono::Utc::now().naive_utc();
+///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
+///     match update_mission_time(&mut conn, label &time, mid) {
+///         Ok(record) => {
+///             println!("update mission time: {:?}", record);
+///         },
+///         Err(error) => {
+///             println!("failed to update mission time, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn update_mission_time(
+    conn: &mut SqliteConnection,
+    label: &str,
+    time: &chrono::DateTime<chrono::Utc>,
+    mid: &str,
+) -> Result<Mission, diesel::result::Error> {
+    use super::schema::mission::dsl::*;
 
-//     let runtime = time.naive_utc();
+    let runtime = time.naive_utc();
 
-//     match label {
-//         "next" => {
-//             diesel::update(mission)
-//                 .filter(mission_id.eq(mid))
-//                 .set(next_runtime.eq(runtime))
-//                 .returning(Mission::as_returning())
-//                 .get_result(conn)
-//         },
-//         "last" => {
-//             diesel::update(mission)
-//                 .filter(mission_id.eq(mid))
-//                 .set(last_trigger.eq(runtime))
-//                 .returning(Mission::as_returning())
-//                 .get_result(conn)
-//         },
-//         _ => {
-//             return Err(diesel::result::Error::NotFound);
-//         }
-//     }
-// }
+    match label {
+        "next" => {
+            diesel::update(mission)
+                .filter(mission_id.eq(mid))
+                .set(next_runtime.eq(runtime))
+                .returning(Mission::as_returning())
+                .get_result(conn)
+        },
+        "last" => {
+            diesel::update(mission)
+                .filter(mission_id.eq(mid))
+                .set(last_trigger.eq(runtime))
+                .returning(Mission::as_returning())
+                .get_result(conn)
+        },
+        _ => {
+            return Err(diesel::result::Error::NotFound);
+        }
+    }
+}
 
 /// Get mission records from database.
 /// 
@@ -412,6 +412,59 @@ pub fn clear_mission_record(
 
     diesel::delete(mission)
         .execute(conn)
+}
+
+/// Get mission related record, return related mission and procedure.
+/// 
+/// # Arguments
+/// 
+/// * `mid` - Target mission id.
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, mission::get_mission_related_record};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let mid = "73d96957-f383-4f6e-8fb8-b0d3824d0fc9";
+///     match get_mission_related_record(mid, &mut conn) {
+///         Ok(record) => {
+///             println!("related record: {:?}", record);
+///         },
+///         Err(error) => {
+///             println!("failed to get related record, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn get_mission_related_record(mid: &str, conn: &mut SqliteConnection) -> Result<crate::db::Record, std::io::Error> {
+    use super::{Record, procedure::query_procedure_record};
+    use std::io::{ Error, ErrorKind };
+
+    let mut record = Record::default();
+    if let Ok(missions) = query_mission_record(conn, Some(mid)) {
+        if missions.len() == 0 {
+            return Err(Error::from(ErrorKind::NotFound));
+        }
+
+        let mission = &missions[0];
+        record.mission = missions[0].clone();
+        if let Ok(procedures) = query_procedure_record(conn, Some(&mission.procedure_id)) {
+            if procedures.len() == 0 {
+                return Err(Error::from(ErrorKind::NotFound));
+            }
+
+            record.procedure = procedures[0].clone();
+            if record.procedure.is_deleted == 1 {
+                return Err(Error::from(ErrorKind::NotFound));
+            }
+        }
+
+        return Ok(record);
+    }   
+
+    Err(Error::from(ErrorKind::NotFound))
 }
 
 // /// Clean 'mission' table records.

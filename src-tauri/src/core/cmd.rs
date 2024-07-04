@@ -5,6 +5,7 @@ use tauri::{ command, AppHandle, Manager, State, Window };
 use serde::{ Serialize, Deserialize };
 use log::{ debug, info, warn, error };
 use crate::core::state::{ HandlerStatus, MissionHandlerState };
+use crate::db::{ Record, mission::Mission };
 
 /// Struct for command response
 #[derive(Clone, Serialize, Deserialize)]
@@ -236,7 +237,7 @@ pub async fn sync_config(group: &str, config: crate::config::AppConfig, overwrit
 }
 
 #[command]
-pub async fn create_record(table: &str, data: crate::db::Record, state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::Record>, Response<bool>> {
+pub async fn create_record(table: &str, data: Record, state: State<'_, MissionHandlerState>) -> Result<Response<Record>, Response<bool>> {
     use crate::db::create_db_record;
     
     let mut guard = state.0.lock().await;
@@ -259,7 +260,7 @@ pub async fn create_record(table: &str, data: crate::db::Record, state: State<'_
 }
 
 #[command]
-pub async fn update_record(table: &str, data: crate::db::Record, state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::Record>, Response<bool>> {
+pub async fn update_record(table: &str, data: Record, state: State<'_, MissionHandlerState>) -> Result<Response<Record>, Response<bool>> {
     use crate::db::update_db_record;
     
     let mut guard = state.0.lock().await;
@@ -282,7 +283,7 @@ pub async fn update_record(table: &str, data: crate::db::Record, state: State<'_
 }
 
 #[command]
-pub async fn query_record(table: &str, uuid: Option<&str>, state: State<'_, MissionHandlerState>) -> Result<Response<Vec<crate::db::Record>>, Response<bool>> {
+pub async fn query_record(table: &str, uuid: Option<&str>, state: State<'_, MissionHandlerState>) -> Result<Response<Vec<Record>>, Response<bool>> {
     use crate::db::query_db_record;
     
     let mut guard = state.0.lock().await;
@@ -373,7 +374,7 @@ pub async fn delete_backup(uuid: &str, state: State<'_, MissionHandlerState>) ->
 }
 
 #[command]
-pub async fn set_mission_status(uuid: &str, stat: i16, state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::mission::Mission>, Response<bool>> {    
+pub async fn set_mission_status(uuid: &str, stat: i16, state: State<'_, MissionHandlerState>) -> Result<Response<Mission>, Response<bool>> {    
     use crate::db::mission::update_mission_status;
 
     let mut guard = state.0.lock().await;
@@ -392,4 +393,36 @@ pub async fn set_mission_status(uuid: &str, stat: i16, state: State<'_, MissionH
     }
 
     Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn create_mission(mission: Mission, state: State<'_, MissionHandlerState>) -> Result<Response<bool>, Response<bool>> {    
+    let mut guard = state.0.lock().await;
+
+    match guard.create_job(&mission).await {
+        Ok(val) => {
+            debug!("create record: {:?}", val);
+            return Ok(Response::success(val.clone()));
+        },
+        Err(error) => {
+            error!("failed to create mission, errMsg: {:?}", error);
+            return Err(Response::<bool>::error(500, format!("{:?}", error)));
+        }
+    }
+}
+
+#[command]
+pub async fn delete_mission(uuid: &str, state: State<'_, MissionHandlerState>) -> Result<Response<bool>, Response<bool>> {
+    let mut guard = state.0.lock().await;
+
+    match guard.remove_job(uuid).await {
+        Ok(val) => {
+            debug!("remove job: {:?}", val);
+            return Ok(Response::success(val.clone()));
+        },
+        Err(error) => {
+            error!("failed to remove mission, errMsg: {:?}", error);
+            return Err(Response::<bool>::error(500, format!("{:?}", error)));
+        }
+    }
 }

@@ -355,40 +355,40 @@ pub fn clear_ignore_record(
 //     Ok(cleaned)   
 // }
 
-// /// Get procedure related ignores.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `pid` - Target procedure.
-// /// * `conn` - Connection to database.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, ignore::get_procedure_ignores};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     let pid = "e56da9c2-851e-4cb5-a896-f371f2e3997f";
-// ///     match get_procedure_ignores(pid, &mut conn) {
-// ///         Ok(ignores) => {
-// ///             println!("get ignores {:?} for procedure {}", ignores, pid);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to get ignores for procedure {}, errMsg: {:?}", pid, error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn get_procedure_ignores(pid: &str, conn: &mut SqliteConnection) -> Vec<String> {
-//     let mut data = Vec::new();
-//     if let Ok(ignores) = query_ignore_record(conn, Some(pid)) {
-//         for ignore in ignores.iter() {
-//             if ignore.is_deleted == 1 {
-//                 continue;
-//             }
-//             data.push(ignore.keyword.clone());
-//         }
-//     }   
+/// Get procedure related ignores.
+/// 
+/// # Arguments
+/// 
+/// * `pid` - Target procedure.
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, ignore::get_procedure_ignores};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     let pid = "e56da9c2-851e-4cb5-a896-f371f2e3997f";
+///     match get_procedure_ignores(pid, &mut conn) {
+///         Ok(ignores) => {
+///             println!("get ignores {:?} for procedure {}", ignores, pid);
+///         },
+///         Err(error) => {
+///             println!("failed to get ignores for procedure {}, errMsg: {:?}", pid, error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn get_procedure_ignores(pid: &str, conn: &mut SqliteConnection) -> Vec<String> {
+    let mut data = Vec::new();
+    if let Ok(ignores) = query_ignore_record(conn, Some(pid)) {
+        for ignore in ignores.iter() {
+            if ignore.is_deleted == 1 {
+                continue;
+            }
+            data.push(ignore.keyword.clone());
+        }
+    }   
 
-//     data
-// }
+    data
+}
