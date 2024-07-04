@@ -143,6 +143,16 @@ async function execute(command: number, arg0?: any, arg1?: any, arg2?: any) {
         })
       break
 
+    case Command.CreateMission:
+      await invoke<Response<boolean>>('create_mission', { mission: toSnakeCase(arg0) }) // res -> Response(bool)
+        .then((res: Response<boolean>) => {
+          result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
     case Command.SetMissionStatus:
       await invoke<Response<any>>('set_mission_status', { uuid: arg0, stat: arg1 }) // res -> Response(Mission)
         .then((res: Response<any>) => {

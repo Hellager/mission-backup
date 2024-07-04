@@ -105,6 +105,16 @@ export const useMissionStore = defineStore('mission', () => {
   }
 
   /**
+   * Create a new mission.
+   * @param mission - The mission data to create.
+   * @returns True if the mission is created successfully, otherwise false.
+   */
+  async function createMission(mission: Mission): Promise<boolean> {
+    const res = await execute(Command.CreateMission, mission)
+    return res
+  }
+
+  /**
    * Delete a mission by UUID.
    * @param uuid - The UUID of the mission to delete.
    * @returns True if the mission is deleted successfully, otherwise false.
@@ -126,6 +136,7 @@ export const useMissionStore = defineStore('mission', () => {
     deleteRecord,
     syncRecords,
     setMissionStatus,
+    createMission,
     deleteMission,
   }
 })

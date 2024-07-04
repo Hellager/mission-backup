@@ -17,6 +17,7 @@ enum Command {
   ClearRecord,
   DeleteBackup,
   SetMissionStatus,
+  CreateMission,
   DeleteMission,
 }
 
