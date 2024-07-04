@@ -2,7 +2,7 @@
 //! 
 //! `state` module contains all about state that managed by tauri.
 
-use tokio::sync::Mutex;
+use tokio::{runtime::Handle, sync::mpsc::Receiver, sync::Mutex};
 use std::io::{Error, ErrorKind};
 use crate::utils::logger::initialize_logger;
 use log::{debug, error, info, warn};
@@ -11,6 +11,11 @@ use crate::config::AppConfig;
 use tauri::AppHandle;
 use diesel::sqlite::SqliteConnection;
 use tokio_cron_scheduler::JobScheduler;
+use notify::{Error as NotifyError, ReadDirectoryChangesWatcher, RecursiveMode, Watcher};
+use notify_debouncer_full::{
+    new_debouncer, DebounceEventResult, DebouncedEvent, Debouncer, FileIdMap,
+};
+use std::time::Duration;
 
 /// Status for handler services
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -29,6 +34,9 @@ pub struct HandlerStatus {
 
     /// Whether cron service available
     pub cron: bool,
+
+    /// Whether watcher service available
+    pub watcher: bool,
 }
 
 impl Default for HandlerStatus {
@@ -38,7 +46,8 @@ impl Default for HandlerStatus {
             app: false,
             config: false,
             database: false,
-            cron: false
+            cron: false,
+            watcher: false
         }
     }
 }
@@ -64,7 +73,13 @@ pub struct MissionHandler {
     pub db_handler: Option<SqliteConnection>,
 
     /// Cron handler for cron jobs
-    pub cron_handler: Option<JobScheduler>
+    pub cron_handler: Option<JobScheduler>,
+
+    /// Watcher handler for monitor jobs
+    pub watcher_handler: Option<Debouncer<ReadDirectoryChangesWatcher, FileIdMap>>,
+    
+    /// Receiver for watcher handler
+    pub watcher_receiver: Option<Receiver<Result<Vec<DebouncedEvent>, Vec<NotifyError>>>>,
 }
 
 impl MissionHandler {
@@ -329,6 +344,77 @@ impl MissionHandler {
         Ok(())
     }
 
+    /// Init watcher handler.
+    /// 
+    /// # Arguments
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use core::state::{MissionHandler, HandlerStatus, init_watcher_handler};
+    /// use log::error;
+    /// 
+    /// let mut handler = MissionHandler {
+    ///     is_set: false,
+    ///     status: HandlerStatus::default(),
+    ///     config: AppConfig::default(),
+    ///     log_handler: None,
+    ///     app_handler: None,
+    ///     db_handler: None,
+    ///     cron_handler: None,
+    ///     watcher_handler: None,
+    /// };
+    /// 
+    /// if let Ok(()) = handler.init_watcher_handler() {
+    ///     println!("cur watcher handler status: {:?}", handler.status.watcher_handler);
+    /// } else {
+    ///     error!("failed to initialize watcher handler!")
+    /// }
+    /// ```
+    async fn init_watcher_handler(&mut self) -> Result<(), std::io::Error> {
+        if let None = self.watcher_handler {
+            let (tx, rx) = tokio::sync::mpsc::channel(1);
+            let rt = Handle::current();
+
+            let timeout = self.config.watcher.timeout;
+
+            let debouncer = new_debouncer(
+                Duration::from_secs(timeout),
+                None,
+                move |result: DebounceEventResult| {
+                    let tx = tx.clone();
+
+                    println!("calling by notify -> {:?}", &result);
+                    rt.spawn(async move {
+                        if let Err(e) = tx.send(result).await {
+                            println!("Error sending event result: {:?}", e);
+                        }
+                    });
+                },
+            );
+
+            match debouncer {
+                Ok(watcher) => {
+                    self.watcher_handler = Some(watcher);
+                    self.watcher_receiver = Some(rx);
+                    self.status.watcher = true;
+                    debug!("Initialize notify handler success");
+                    return Ok(());
+                }
+                Err(error) => {
+                    self.status.watcher = false;
+                    error!("Failed to initialize notify handler, errMsg: {:?}", error);
+
+                    return Err(Error::from(ErrorKind::Other));
+                }
+            }                    
+        }else {
+            self.status.watcher = true;
+            warn!("Notify handler already success");
+            return Ok(());
+        }
+    }
+
     /// Initialize mission handler in sequence.
     /// 
     /// # Arguments
@@ -361,6 +447,7 @@ impl MissionHandler {
         self.init_app_handler()?;
         self.init_db_handler()?;
         self.init_cron_handler().await?;
+        self.init_watcher_handler().await?;
 
         self.is_set = true;
         Ok(())
