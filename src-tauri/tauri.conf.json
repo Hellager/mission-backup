@@ -26,6 +26,17 @@
         "unmaximize": true,
         "unminimize": true,
         "startDragging": true
+      },
+      "path": {
+        "all": true
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": true
       }
     },
     "windows": [

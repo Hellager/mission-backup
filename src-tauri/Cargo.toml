@@ -14,7 +14,7 @@ license = "Apache-2.0"
 tauri-build = { version = "1", features = [] }
 
 [dependencies]
-tauri = { version = "1", features = [ "window-minimize", "window-close", "window-unmaximize", "window-maximize", "window-unminimize", "window-hide", "window-show", "window-start-dragging", "system-tray", "shell-open"] }
+tauri = { version = "1", features = [ "dialog-open", "dialog-save", "path-all", "window-minimize", "window-close", "window-unmaximize", "window-maximize", "window-unminimize", "window-hide", "window-show", "window-start-dragging", "system-tray", "shell-open"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 chrono = { version = "0.4.35", features = ["serde"] }
