@@ -12,7 +12,7 @@ use tauri::AppHandle;
 use diesel::sqlite::SqliteConnection;
 
 /// Status for handler services
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HandlerStatus {
     /// Whether log service available
     pub log: bool,
