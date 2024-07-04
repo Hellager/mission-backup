@@ -87,7 +87,7 @@ impl<T> Response<T> {
 pub async fn init_app(window: Window, state: State<'_, MissionHandlerState>) -> Result<Response<HandlerStatus>, Response<bool>> {    
     let mut guard = state.0.lock().await;
     if !guard.is_set {
-        if let Err(error) = guard.initialize() {
+        if let Err(error) = guard.initialize().await {
             error!("Failed to initialize state, errMsg: {:?}", error);
             return Err(Response::<bool>::error(500, format!("{:?}", error)));
         }     

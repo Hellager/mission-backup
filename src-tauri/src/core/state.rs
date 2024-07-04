@@ -10,6 +10,7 @@ use serde::{Serialize, Deserialize};
 use crate::config::AppConfig;
 use tauri::AppHandle;
 use diesel::sqlite::SqliteConnection;
+use tokio_cron_scheduler::JobScheduler;
 
 /// Status for handler services
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,6 +26,9 @@ pub struct HandlerStatus {
 
     /// Whether database service available
     pub database: bool,
+
+    /// Whether cron service available
+    pub cron: bool,
 }
 
 impl Default for HandlerStatus {
@@ -33,7 +37,8 @@ impl Default for HandlerStatus {
             log: false,
             app: false,
             config: false,
-            database: false
+            database: false,
+            cron: false
         }
     }
 }
@@ -56,7 +61,10 @@ pub struct MissionHandler {
     pub app_handler: Option<AppHandle>,
         
     /// Connection to database
-    pub db_handler: Option<SqliteConnection>
+    pub db_handler: Option<SqliteConnection>,
+
+    /// Cron handler for cron jobs
+    pub cron_handler: Option<JobScheduler>
 }
 
 impl MissionHandler {
@@ -274,6 +282,53 @@ impl MissionHandler {
         }
     }
 
+    /// Init cron handler.
+    /// 
+    /// # Arguments
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use core::state::{MissionHandler, HandlerStatus, init_cron_handler};
+    /// use log::error;
+    /// 
+    /// let mut handler = MissionHandler {
+    ///     is_set: false,
+    ///     status: HandlerStatus::default(),
+    ///     config: AppConfig::default(),
+    ///     log_handler: None,
+    ///     app_handler: None,
+    ///     db_handler: None,
+    ///     cron_handler: None,
+    /// };
+    /// 
+    /// if let Ok(()) = handler.init_cron_handler() {
+    ///     println!("cur cron handler status: {:?}", handler.status.cron_handler);
+    /// } else {
+    ///     error!("failed to initialize cron handler!")
+    /// }
+    /// ```
+    async fn init_cron_handler(&mut self) -> Result<(), std::io::Error> {
+        if let None = self.cron_handler {
+            if let Ok(handler) = JobScheduler::new().await {
+                if let Err(error) = handler.start().await {
+                    error!("Failed to initialize cron handler, errMsg: {:?}", error);
+                    self.status.cron = false;
+                    return Err(Error::from(ErrorKind::Other));
+                } else {
+                    self.status.cron = true;
+                    self.cron_handler = Some(handler);
+                    debug!("Initialize cron handler success");
+                }
+            }          
+        } else {
+            warn!("Cron handler already success");
+            self.status.cron = true;
+        }
+
+        Ok(())
+    }
+
     /// Initialize mission handler in sequence.
     /// 
     /// # Arguments
@@ -299,12 +354,13 @@ impl MissionHandler {
     ///     error!("init handler failed!");
     /// }
     /// ```
-    pub fn initialize(&mut self) -> Result<(), std::io::Error> {
+    pub async fn initialize(&mut self) -> Result<(), std::io::Error> {
         self.init_app_status()?;        
         self.init_logger_handler()?;
         self.init_app_config()?;
         self.init_app_handler()?;
         self.init_db_handler()?;
+        self.init_cron_handler().await?;
 
         self.is_set = true;
         Ok(())

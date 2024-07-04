@@ -44,6 +44,7 @@ pub fn setup_handler(app: &mut App) -> Result<(), Box<dyn std::error::Error + 's
         app_handler: Some(app.handle().clone()),
         log_handler: None,
         db_handler: None,
+        cron_handler: None
     }));
 
     app.manage(state);

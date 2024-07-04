@@ -49,6 +49,7 @@ libsqlite3-sys = { version = "^0", features = ["bundled"] }
 diesel_migrations = { version = "2.2.0", features = ["sqlite"] }
 dotenvy = "0.15.7"
 tokio = "1.38.0"
+tokio-cron-scheduler = "0.10.2"
 
 [dependencies.uuid]
 version = "1.8.0"
