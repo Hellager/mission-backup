@@ -28,13 +28,13 @@ pub struct Ignore {
     pub keyword: String,
 
     /// Reserved for future use
-    pub reserved0: String,
+    pub reserved_0: String,
 
     /// Reserved for future use
-    pub reserved1: String,
+    pub reserved_1: String,
 
     /// Reserved for future use
-    pub reserved2: String,
+    pub reserved_2: String,
 
     /// Ignore create time
     pub create_at: NaiveDateTime,
@@ -60,9 +60,9 @@ impl Default for Ignore {
             ignore_id: Uuid::new_v4().to_string(),
             procedure_id: Uuid::new_v4().to_string(),
             keyword: "".to_string(),
-            reserved0: "".to_string(),
-            reserved1: "".to_string(),
-            reserved2: "".to_string(),
+            reserved_0: "".to_string(),
+            reserved_1: "".to_string(),
+            reserved_2: "".to_string(),
             create_at: Utc::now().naive_utc(),
             update_at: Utc::now().naive_utc(),
             is_deleted: 0,

@@ -105,7 +105,7 @@
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved0",
+                "name": "reserved_0",
                 "type": "text",
                 "size": 256,
                 "scale": -2147483648,
@@ -117,11 +117,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved0"
+                "oldName": "reserved_0"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved1",
+                "name": "reserved_1",
                 "type": "text",
                 "size": 256,
                 "scale": -2147483648,
@@ -133,11 +133,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved1"
+                "oldName": "reserved_1"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved2",
+                "name": "reserved_2",
                 "type": "text",
                 "size": 256,
                 "scale": -2147483648,
@@ -149,7 +149,7 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved2"
+                "oldName": "reserved_2"
               },
               {
                 "objectType": "TableField_SQLITE",
@@ -461,7 +461,7 @@
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved0",
+                "name": "reserved_0",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -473,11 +473,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved0"
+                "oldName": "reserved_0"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved1",
+                "name": "reserved_1",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -489,11 +489,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved1"
+                "oldName": "reserved_1"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved2",
+                "name": "reserved_2",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -505,7 +505,7 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved2"
+                "oldName": "reserved_2"
               },
               {
                 "objectType": "TableField_SQLITE",
@@ -801,7 +801,7 @@
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved0",
+                "name": "reserved_0",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -813,11 +813,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved0"
+                "oldName": "reserved_0"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved1",
+                "name": "reserved_1",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -829,11 +829,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved1"
+                "oldName": "reserved_1"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved2",
+                "name": "reserved_2",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -845,7 +845,7 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved2"
+                "oldName": "reserved_2"
               },
               {
                 "objectType": "TableField_SQLITE",
@@ -1045,7 +1045,7 @@
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved0",
+                "name": "reserved_0",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -1057,11 +1057,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved0"
+                "oldName": "reserved_0"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved1",
+                "name": "reserved_1",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -1073,11 +1073,11 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved1"
+                "oldName": "reserved_1"
               },
               {
                 "objectType": "TableField_SQLITE",
-                "name": "reserved2",
+                "name": "reserved_2",
                 "type": "text",
                 "size": 256,
                 "scale": 0,
@@ -1089,7 +1089,7 @@
                 "isAutoIncrement": false,
                 "generatedType": "None",
                 "generatedAlwaysAsValue": "",
-                "oldName": "reserved2"
+                "oldName": "reserved_2"
               },
               {
                 "objectType": "TableField_SQLITE",

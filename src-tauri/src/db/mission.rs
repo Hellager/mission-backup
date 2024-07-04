@@ -60,13 +60,13 @@ pub struct Mission {
     pub last_trigger: NaiveDateTime,
 
     /// Reserved for future use
-    pub reserved0: String,
+    pub reserved_0: String,
 
     /// Reserved for future use
-    pub reserved1: String,
+    pub reserved_1: String,
 
     /// Reserved for future use
-    pub reserved2: String,
+    pub reserved_2: String,
     
     /// Mission create time
     pub create_at: NaiveDateTime,
@@ -99,9 +99,9 @@ impl Default for Mission {
             path_type: 0,
             next_runtime: Utc::now().naive_utc(),
             last_trigger: Utc::now().naive_utc(),
-            reserved0: "".to_string(),
-            reserved1: "".to_string(),
-            reserved2: "".to_string(),
+            reserved_0: "".to_string(),
+            reserved_1: "".to_string(),
+            reserved_2: "".to_string(),
             create_at: Utc::now().naive_utc(),
             update_at: Utc::now().naive_utc(),
             is_deleted: 0,
