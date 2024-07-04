@@ -45,6 +45,14 @@ export const useSystemStore = defineStore('system', () => {
     closeCnt.value = config.closeCnt
     closeLimit.value = config.closeLimit
     language.value = config.language
+
+    // udpate theme
+    const isDark = useDark()
+    isDark.value = config.theme !== 'light'
+    useToggle(isDark)
+
+    // update lang
+    locale.value = config.language
   }
 
   /**
