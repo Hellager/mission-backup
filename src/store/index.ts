@@ -1,9 +1,34 @@
 import { createPinia } from 'pinia'
-import { useSettingStore } from './modules/setting'
-import { useMissionStore } from './modules/mission'
-import { useStatisticStore } from './modules/statistic'
+import { useStatusStore } from './status'
+import type { AppConfig } from './types'
+import { defaultSystemConfig, useSystemStore } from './system'
+import { defaultScreensaverConfig, useScreensaverStore } from './screensaver'
+import { defaultNotifyConfig, useNotifyStore } from './notify'
+import { defaultWatcherConfig, useWatcherStore } from './watcher'
+import { useMissionStore } from './mission'
 
 const pinia = createPinia()
 
-export { useSettingStore, useMissionStore, useStatisticStore }
+export {
+  useStatusStore,
+  useSystemStore,
+  useWatcherStore,
+  useNotifyStore,
+  useScreensaverStore,
+  useMissionStore,
+}
+
+/**
+ * Generates the default application configuration.
+ * @returns The default application configuration.
+ */
+export function defaultAppConfig(): AppConfig {
+  return {
+    system: defaultSystemConfig(),
+    notify: defaultNotifyConfig(),
+    watcher: defaultWatcherConfig(),
+    screensaver: defaultScreensaverConfig(),
+  }
+}
+
 export default pinia

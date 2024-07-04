@@ -3,78 +3,53 @@
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "distDir": "../dist"
   },
   "package": {
-    "productName": "MissionBackup",
-    "version": "1.0.0"
+    "productName": "mission-backup",
+    "version": "0.0.0"
   },
   "tauri": {
     "allowlist": {
-      "all": true,
-      "http": {
-        "scope": ["https://api.github.com/repos/Hellager/*"]
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
       },
-      "notification": {
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
+      },
+      "path": {
         "all": true
-      }
-    },
-    "macOSPrivateApi": true,
-    "systemTray": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": true
-    },
-    "bundle": {
-      "active": true,
-      "category": "Utility",
-      "copyright": "",
-      "deb": {
-        "depends": []
       },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "steins",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": true
       }
-    },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
     },
     "windows": [
       {
         "label": "main",
         "fullscreen": false,
         "resizable": true,
-        "title": "Mission Backup",
-        "width": 600,
-        "height": 300,
-        "minWidth": 600,
-        "minHeight": 360,
-        "visible": false,
+        "title": "MissionBackup",
+        "width": 640,
+        "height": 380,
+        "minWidth": 640,
+        "minHeight": 380,
+        "visible": true,
         "center": true,
         "fileDropEnabled": true,
         "decorations": false
@@ -89,6 +64,25 @@
         "title": "Loading",
         "transparent": true
       }
-    ]
+    ],
+    "systemTray": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
+    "security": {
+      "csp": null
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.tauri.dev",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ]
+    }
   }
 }

@@ -1,110 +1,211 @@
-<script lang="ts" setup>
-import { onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { appWindow } from '@tauri-apps/api/window'
-import { AppstoreOutlined, BorderOutlined } from '@vicons/antd'
-import { CloseBold, FullScreen, SemiSelect } from '@element-plus/icons-vue'
-import { useMissionStore, useSettingStore } from '../store/index'
-import { TauriCommand, execute_rust_command } from '../utils'
-import AppIcon from '~icons/icons/favicon'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import {
+  Close,
+  Locked,
+  Logo,
+  Maxmize,
+  Minimize,
+} from '../assets/icons'
+import { useScreensaverStore, useSystemStore } from '../store'
+import CloseDialog from './CloseDialog.vue'
 
-const { t, locale } = useI18n({ useScope: 'global' })
-const globalSetting = useSettingStore()
-const missionStore = useMissionStore()
+/**
+ * Used for internationalization.
+ */
+const { t } = useI18n({ useScope: 'global' })
 
-onMounted(() => {
-  (document.getElementById('titlebar-minimize') as HTMLElement).addEventListener('click', () => appWindow.minimize());
-  (document.getElementById('titlebar-maximize') as HTMLElement).addEventListener('click', () => appWindow.toggleMaximize());
-  (document.getElementById('titlebar-close') as HTMLElement).addEventListener('click', () => {
-    execute_rust_command(TauriCommand.COMMAND_UPDATE_LIST_INFO, missionStore.mission_list)
-    if (globalSetting.is_close_to_tray)
-      execute_rust_command(TauriCommand.COMMAND_CLOSE_TO_TRAY)
-    else
-      execute_rust_command(TauriCommand.COMMAND_EXIT_PROGRAM)
-  })
-})
+/**
+ * Used for routing within the application.
+ */
+const router = useRouter()
+
+/**
+ * Custom stores for system settings.
+ */
+const systemStore = useSystemStore()
+
+/**
+ * Custom stores for managing screensaver.
+ */
+const store = useScreensaverStore()
+const { isLocked } = storeToRefs(store)
+
+/**
+ * Indicates whether the close dialog is visible.
+ */
+const showCloseDialog = ref<boolean>(false)
+
+/**
+ * Handles the lock action of the application.
+ */
+async function onLockClicked() {
+  if (!isLocked.value) {
+    router.push('/screensaver')
+    store.updateLockStatus(true)
+  }
+}
+
+/**
+ * Minimizes the application window.
+ */
+function onActionMinimizeClicked() {
+  appWindow.minimize()
+}
+
+/**
+ * Toggles the application window between maximize and restore.
+ */
+function onActionMaxmizeClicked() {
+  appWindow.toggleMaximize()
+}
+
+/**
+ * Handles the close action of the application window.
+ */
+async function onActionCloseClicked() {
+  if (systemStore.closeConfirm())
+    showCloseDialog.value = !showCloseDialog.value
+  else
+    systemStore.tryClose(undefined, undefined)
+}
 </script>
 
 <template>
-  <div data-tauri-drag-region class="titlebar">
-    <div id="titlebar-left" class="titlebar-left">
-      <div id="titlebar-icon" class="titlebar-icon">
-        <el-icon class="app-icon">
-          <AppIcon />
+  <div
+    class="bar"
+    data-tauri-drag-region
+  >
+    <div class="bar__title">
+      <el-icon class="bar__title__icon">
+        <Logo />
+      </el-icon>
+
+      <el-text class="bar__title__text">
+        {{ t("common.appName") }}
+      </el-text>
+    </div>
+
+    <div class="bar__action">
+      <div class="bar__action__lock" @click="onLockClicked">
+        <transition
+          name="bar__action__lock__transition"
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
+        >
+          <el-icon v-if="!isLocked" class="bar__action__lock__icon">
+            <Locked />
+          </el-icon>
+        </transition>
+      </div>
+
+      <el-divider direction="vertical" />
+
+      <div
+        class="bar__action__minimize"
+        @click="onActionMinimizeClicked"
+      >
+        <el-icon>
+          <Minimize />
         </el-icon>
       </div>
-      <div id="titlebar-title" class="titlebar-title">
-        {{ t('general.AppTitle') }}
+
+      <div
+        class="bar__action__maxmize"
+        @click="onActionMaxmizeClicked"
+      >
+        <el-icon>
+          <Maxmize />
+        </el-icon>
       </div>
-    </div>
-    <div id="titlebar-right" class="titlebar-right">
-      <div id="titlebar-minimize" class="titlebar-button">
-        <el-icon><SemiSelect /></el-icon>
-      </div>
-      <div id="titlebar-maximize" class="titlebar-button">
-        <el-icon><BorderOutlined /></el-icon>
-      </div>
-      <div id="titlebar-close" class="titlebar-button">
-        <el-icon><CloseBold /></el-icon>
+
+      <div
+        class="bar__action__close"
+        @click="onActionCloseClicked"
+      >
+        <el-icon>
+          <Close />
+        </el-icon>
       </div>
     </div>
   </div>
+
+  <CloseDialog
+    :visiable="showCloseDialog"
+    @hide="showCloseDialog = false"
+  />
 </template>
 
-<style lang="less" scoped>
-@import "../assets/style/theme/default-vars.less";
-.titlebar {
-  height: 30px;
-  color: var(--el-text-color-regular);
-  background-color: var(--el-bg-color-page);
-  user-select: none;
+<style scoped lang="less">
+.bar {
+    height: 25px;
+    z-index: 1001;
+    background-color: var(--el-bg-color-page);
+    display: flex;
+    width: 100%;
+    user-select: none;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+}
+
+.bar__title {
+    display: flex;
+}
+
+.bar__title__icon {
+  margin-left: 3px;
+}
+
+.bar__title__text {
+  margin-left: 3px;
+}
+
+.bar__action {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
+  align-items: center;
+}
 
-  .titlebar-left {
-    display: flex;
-    flex-direction: row;
+.bar__action__minimize {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+}
 
-    .titlebar-icon {
-        width: 30px;
-        height: 30px;
-        padding-top: 5px;
-        padding-left: 5px;
+.bar__action__minimize:hover {
+  background-color: #d9d9d9;
+}
 
-        .app-icon {
-            font-size: 20px;
-        }
-    }
+.bar__action__maxmize {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+}
 
-    .titlebar-title {
-        padding-top: 6px;
-    }
-  }
+.bar__action__maxmize:hover {
+  background-color: #d9d9d9;
+}
 
-  .titlebar-right {
-    display: flex;
-    flex-direction: row;
+.bar__action__close {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+}
 
-    .titlebar-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    }
-    .titlebar-button:hover {
-        background: var(--el-border-color);
-    }
-
-    #titlebar-close:hover {
-        background: red;
-    }
-  }
+.bar__action__close:hover {
+  background-color: #ff4d4f;
 }
 </style>

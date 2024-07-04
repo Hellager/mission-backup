@@ -1,45 +1,31 @@
-import type { RouteLocationNormalized } from 'vue-router'
-import { createRouter, createWebHistory } from 'vue-router'
-import TablePage from '../views/TablePage.vue'
-import MissionConfig from '../views/MissionConfig.vue'
-import GlobalSetting from '../views/GlobalSetting.vue'
-import PasswordSetting from '../views/PasswordSetting.vue'
-import StatisticPage from '../views/StatisticPage.vue'
+import type { RouteRecordRaw, Router } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
-const routes = [
-  {
-    path: '/',
-    redirect: (_to: RouteLocationNormalized) => {
-      return {
-        path: '/table',
-      }
-    },
-  },
-  {
-    path: '/table',
-    component: TablePage,
-  },
-  {
-    path: '/config',
-    component: MissionConfig,
-    props: (route: any) => ({ mode: route.query.mode }),
-  },
-  {
-    path: '/setting',
-    component: GlobalSetting,
-  },
-  {
-    path: '/password_setting',
-    component: PasswordSetting,
-  },
-  {
-    path: '/statistic',
-    component: StatisticPage,
-  },
+import Backup from '../views/Backup/Backup.vue'
+import Config from '../views/Config/Config.vue'
+import Mission from '../views/Mission/Mission.vue'
+import Statistic from '../views/Statistic/Statistic.vue'
+import Procedure from '../views/Procedure/Procedure.vue'
+import Screensaver from '../views/Screensaver/Screensaver.vue'
+
+/**
+ * Router record array
+ */
+const routes: RouteRecordRaw[] = [
+  { path: '/', component: Config },
+  { path: '/backup', component: Backup },
+  { path: '/config', component: Config },
+  { path: '/mission', component: Mission },
+  { path: '/statistic', component: Statistic },
+  { path: '/procedure', component: Procedure },
+  { path: '/screensaver', component: Screensaver },
 ]
 
-const router = createRouter({
-  history: createWebHistory(),
+/**
+ * Create router instance
+ */
+const router: Router = createRouter({
+  history: createWebHashHistory(),
   routes,
   scrollBehavior(_to: any, _from: any, _savedPosition: any) {
     return {
@@ -47,27 +33,6 @@ const router = createRouter({
       behavior: 'smooth',
     }
   },
-})
-
-router.afterEach((to, from) => {
-  to.meta.transitionName = ''
-
-  if (to.path === '/config')
-    to.meta.transitionName = 'route-slide-in-right'
-  else if (to.path === '/lock')
-    to.meta.transitionName = 'route-slide-in-left'
-  else if (to.path === '/setting')
-    to.meta.transitionName = 'route-slide-in-up'
-  else if (to.path === '/statistic')
-    to.meta.transitionName = 'route-slide-in-down'
-  else if (to.path === '/table' && from.path === '/config')
-    to.meta.transitionName = 'route-slide-out-right'
-  else if (to.path === '/table' && from.path === '/lock')
-    to.meta.transitionName = 'route-slide-out-left'
-  else if (to.path === '/table' && from.path === '/setting')
-    to.meta.transitionName = 'route-slide-out-up'
-  else if (to.path === '/table' && from.path === '/statistic')
-    to.meta.transitionName = 'route-slide-out-down'
 })
 
 export default router
