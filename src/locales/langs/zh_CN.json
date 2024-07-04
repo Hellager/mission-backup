@@ -11,6 +11,13 @@
     "statistic": "统计",
     "config": "设置"
   },
+  "status": {
+    "error": "错误",
+    "stopped": "停止",
+    "running": "运行中",
+    "backuping": "备份中",
+    "default": "默认"
+  },
   "closeDialog": {
     "title": "退出选项",
     "remember": "记住选项"

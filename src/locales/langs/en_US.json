@@ -11,6 +11,13 @@
     "statistic": "Statistic",
     "config": "Config"
   },
+  "status": {
+    "error": "error",
+    "stopped": "stopped",
+    "running": "running",
+    "backuping": "backuping",
+    "default": "default"
+  },
   "closeDialog": {
     "title": "Close Option",
     "remember": "Remember Choice"
