@@ -5,7 +5,7 @@ import { defaultSystemConfig, useSystemStore } from './system'
 import { defaultScreensaverConfig, useScreensaverStore } from './screensaver'
 import { defaultNotifyConfig, useNotifyStore } from './notify'
 import { defaultWatcherConfig, useWatcherStore } from './watcher'
-import { defaultProcedure, useMissionStore } from './mission'
+import { useMissionStore } from './mission'
 
 const pinia = createPinia()
 
