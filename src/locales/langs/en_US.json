@@ -118,6 +118,7 @@
       "theme": "Theme",
       "themeLight": "Light",
       "themeDark": "Dark",
+      "themeOption": "Follow System",
       "autoStart": "Auto Start",
       "closeOption": "Close Option",
       "closeExit": "Exit",

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useSystemStore } from '../../../store'
@@ -14,10 +15,19 @@ const { t } = useI18n({ useScope: 'global' })
 const store = useSystemStore()
 const {
   theme,
+  themeOption,
   autoStart,
   closeOption,
   language,
 } = storeToRefs(store)
+
+/**
+ * Indicates the theme option in type of boolean
+ */
+const themeOptionBool = ref<boolean>(false)
+watch(themeOption, () => {
+  themeOptionBool.value = !!themeOption.value
+})
 
 /**
  * Updates the language setting.
@@ -47,6 +57,15 @@ async function onThemeUpdate(value: string) {
 }
 
 /**
+ * Updates the theme option.
+ *
+ * @param value - The new theme option
+ */
+async function onThemeOptionUpdate(value: boolean) {
+  store.updateThemeOption(value ? 1 : 0)
+}
+
+/**
  * Updates the close option setting.
  *
  * @param value - The new close option value
@@ -60,10 +79,14 @@ async function onCloseOptionUpdate(value: number) {
   <div class="config">
     <el-form class="config__form">
       <el-form-item :label="t('config.system.theme')">
-        <el-select v-model="theme" @change="onThemeUpdate">
+        <el-select v-model="theme" :disabled="themeOptionBool" @change="onThemeUpdate">
           <el-option :label="t('config.system.themeLight')" value="light" />
           <el-option :label="t('config.system.themeDark')" value="dark" />
         </el-select>
+      </el-form-item>
+
+      <el-form-item :label="t('config.system.themeOption')">
+        <el-switch v-model="themeOptionBool" @change="onThemeOptionUpdate" />
       </el-form-item>
 
       <el-form-item :label="t('config.system.language')">
@@ -90,7 +113,7 @@ async function onCloseOptionUpdate(value: number) {
 <style scoped lang="less">
 .config__form {
   :deep(.el-form-item__label) {
-    width: 100px;
+    width: 110px;
   }
 
   :deep(.el-select){

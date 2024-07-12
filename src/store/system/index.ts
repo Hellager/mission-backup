@@ -13,6 +13,8 @@ export const useSystemStore = defineStore('system', () => {
   const { locale } = useI18n({ useScope: 'global' })
 
   const theme = ref<string>('light')
+  const sysTheme = ref<string>('light')
+  const themeOption = ref<number>(0)
   const autoStart = ref<boolean>(false)
   const closeOption = ref<number>(0)
   const closeCnt = ref<number>(0)
@@ -26,6 +28,8 @@ export const useSystemStore = defineStore('system', () => {
   function getConfig(): SystemConfig {
     return {
       theme: theme.value,
+      sysTheme: sysTheme.value,
+      themeOption: themeOption.value,
       autoStart: autoStart.value,
       closeOption: closeOption.value,
       closeCnt: closeCnt.value,
@@ -40,6 +44,8 @@ export const useSystemStore = defineStore('system', () => {
    */
   function setConfig(config: SystemConfig): void {
     theme.value = config.theme
+    sysTheme.value = config.sysTheme
+    themeOption.value = config.themeOption
     autoStart.value = config.autoStart
     closeOption.value = config.closeOption
     closeCnt.value = config.closeCnt
@@ -48,7 +54,10 @@ export const useSystemStore = defineStore('system', () => {
 
     // udpate theme
     const isDark = useDark()
-    isDark.value = config.theme !== 'light'
+    if (config.themeOption)
+      isDark.value = config.sysTheme !== 'light'
+    else
+      isDark.value = config.theme !== 'light'
     useToggle(isDark)
 
     // update lang
@@ -79,8 +88,8 @@ export const useSystemStore = defineStore('system', () => {
   }
 
   /**
-   * Updates the theme of the system.
-   * @param theme - The new theme for the system.
+   * Updates the theme of the app.
+   * @param theme - The new theme for the app.
    */
   async function updateTheme(theme: string): Promise<void> {
     const config = getConfig()
@@ -91,6 +100,38 @@ export const useSystemStore = defineStore('system', () => {
         const isDark = useDark()
         isDark.value = config.system.theme !== 'light'
         useToggle(isDark)
+      })
+  }
+
+  /**
+   * Updates the theme of the system in config.
+   * @param theme - The new theme for the system.
+   */
+  async function updateSysTheme(theme: string): Promise<void> {
+    const config = getConfig()
+    config.sysTheme = theme
+    await execute(Command.UpdateConfig, 'system', config)
+      .then((config: AppConfig) => {
+        setConfig(config.system)
+
+        if (config.system.themeOption) {
+          const isDark = useDark()
+          isDark.value = config.system.sysTheme !== 'light'
+          useToggle(isDark)
+        }
+      })
+  }
+
+  /**
+   * Updates the theme option of the app.
+   * @param option - The new theme option for the app.
+   */
+  async function updateThemeOption(option: number): Promise<void> {
+    const config = getConfig()
+    config.themeOption = option
+    await execute(Command.UpdateConfig, 'system', config)
+      .then((config: AppConfig) => {
+        setConfig(config.system)
       })
   }
 
@@ -177,6 +218,7 @@ export const useSystemStore = defineStore('system', () => {
 
   return {
     theme,
+    themeOption,
     autoStart,
     closeOption,
     language,
@@ -184,6 +226,8 @@ export const useSystemStore = defineStore('system', () => {
     closeConfirm,
     tryClose,
     updateTheme,
+    updateSysTheme,
+    updateThemeOption,
     updateLanguage,
     updateAutoStart,
     updateCloseOption,
@@ -197,6 +241,8 @@ export const useSystemStore = defineStore('system', () => {
 export function defaultSystemConfig(): SystemConfig {
   return {
     theme: 'light',
+    sysTheme: 'light',
+    themeOption: 0,
     autoStart: false,
     closeOption: CloseOption.Exit,
     closeCnt: 0,

@@ -14,6 +14,16 @@ pub struct SystemConfig {
     /// - Dark -> `dark`
     pub theme: String,
 
+    /// Supported system theme:
+    /// - Light -> `light`
+    /// - Dark -> `dark`
+    pub sys_theme: String,
+
+    /// Theme option
+    /// `0` - use config theme
+    /// `1` - follow system theme
+    pub theme_option: u8,
+
     /// Whether auto start for app
     pub auto_start: bool,
 
@@ -40,6 +50,8 @@ impl Default for SystemConfig {
     fn default() -> Self {
         SystemConfig {
             theme: get_sys_theme(),
+            sys_theme: get_sys_theme(),
+            theme_option: 0,
             auto_start: false,
             close_option: 0,
             close_cnt: 49,

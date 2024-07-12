@@ -2,7 +2,7 @@
 //! 
 //! `window` module contains functions about tauri app window.
 
-use tauri::{ Wry, GlobalWindowEvent, WindowEvent, FileDropEvent, Theme, Window };
+use tauri::{ Wry, GlobalWindowEvent, WindowEvent, FileDropEvent, Theme, Window, Manager };
 
 /// Handle app window event.
 /// 
@@ -23,6 +23,9 @@ use tauri::{ Wry, GlobalWindowEvent, WindowEvent, FileDropEvent, Theme, Window }
 /// }
 /// ```
 pub fn on_window_event(event: GlobalWindowEvent<Wry>) {
+    use super::cmd::Response;
+    use log::{info, error};
+
     match event.event() {
         WindowEvent::CloseRequested { api, .. } => {
             let window = event.window();
@@ -49,10 +52,28 @@ pub fn on_window_event(event: GlobalWindowEvent<Wry>) {
         WindowEvent::ThemeChanged(theme) => {
             match theme {
                 Theme::Light => {
-                    println!("system switch to light theme");
+                    let window = event.window();
+                    let payload = Response::success("light");
+                    match window.emit_all("sys_theme", payload) {
+                        Ok(()) => {
+                            info!("Detect system theme update to light");
+                        },
+                        Err(error) => {
+                            error!("Failed to send sys_theme update event, errMsg: {:?}", error);
+                        }
+                    }
                 },
                 Theme::Dark => {
-                    println!("system switch to dark theme");
+                    let window = event.window();
+                    let payload = Response::success("dark");
+                    match window.emit_all("sys_theme", payload) {
+                        Ok(()) => {
+                            info!("Detect system theme update to dark");
+                        },
+                        Err(error) => {
+                            error!("Failed to send sys_theme update event, errMsg: {:?}", error);
+                        }
+                    }
                 },
                 _ => {}
             }

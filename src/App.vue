@@ -11,6 +11,7 @@ import TitleBar from './components/TitleBar.vue'
 import SideMenu from './components/SideMenu.vue'
 import { useNotifyStore, useScreensaverStore, useStatusStore, useSystemStore, useWatcherStore } from './store'
 import type { AppConfig } from './store/types'
+import { listenToEvents } from './utils/event'
 
 /**
  * Represents the status store instance.
@@ -79,6 +80,7 @@ onMounted(() => {
   document.addEventListener('DOMContentLoaded', async () => {
     await initApp()
     await initConfigStore()
+    await listenToEvents()
   })
 })
 </script>

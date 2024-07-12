@@ -1,6 +1,14 @@
 /**
  * Represents the options for closing.
  */
+export enum ThemeOption {
+  Scoped,
+  FollowSystem,
+}
+
+/**
+ * Represents the options for closing.
+ */
 export enum CloseOption {
   Exit,
   Hide,
@@ -11,9 +19,19 @@ export enum CloseOption {
  */
 export interface SystemConfig {
   /**
-   * The theme of the system.
+   * The theme of the app.
    */
   theme: string
+
+  /**
+   * The theme of the system.
+   */
+  sysTheme: string
+
+  /**
+   * The option for theme.
+   */
+  themeOption: ThemeOption
 
   /**
    * Indicates whether the system should auto-start.

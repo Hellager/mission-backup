@@ -118,6 +118,7 @@
       "theme": "主题",
       "themeLight": "明亮",
       "themeDark": "暗黑",
+      "themeOption": "跟随系统",
       "autoStart": "开机启动",
       "closeOption": "关闭选项",
       "closeExit": "退出程序",
