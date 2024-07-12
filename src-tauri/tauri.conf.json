@@ -21,6 +21,7 @@
         "close": true,
         "hide": true,
         "show": true,
+        "setFocus": true,
         "maximize": true,
         "minimize": true,
         "unmaximize": true,

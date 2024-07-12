@@ -127,5 +127,8 @@
       "langCN": "Chinese",
       "langEN": "English"
     }
+  },
+  "warning": {
+    "anotherInstance": "App is already running"
   }
 }

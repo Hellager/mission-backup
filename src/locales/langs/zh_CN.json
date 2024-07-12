@@ -127,5 +127,8 @@
       "langCN": "中文",
       "langEN": "英文"
     }
+  },
+  "warning": {
+    "anotherInstance": "程序已在运行"
   }
 }
