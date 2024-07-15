@@ -547,3 +547,18 @@ pub async fn clean_app_log(state: State<'_, MissionHandlerState>) -> Result<Resp
         return Err(Response::<bool>::error(404, "log file not found".to_string()));        
     }
 }
+
+#[command]
+pub fn migrate_from_old(path: &str) -> Result<Response<crate::utils::migrate::MigratedData>, Response<bool>> {
+  use crate::utils::migrate::parse_data_file;
+
+  match parse_data_file(path) {
+    Ok(data) => {
+        return Ok(Response::success(data));
+    },
+    Err(error) => {
+        error!("failed to migrate from {}", path);
+        return Err(Response::<bool>::error(500, format!("failed to migrate from {}, errMsg: {:?}", path, error)));
+    }
+  }
+}
