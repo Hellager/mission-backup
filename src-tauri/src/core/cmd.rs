@@ -449,3 +449,47 @@ pub async fn query_statistic_record(mid: &str, start: Option<NaiveDateTime>, sto
 
     Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
 }
+
+#[command]
+pub async fn query_db_info(state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::utils::DBInfo>, Response<bool>> {
+    use crate::db::utils::get_db_info;
+
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match get_db_info(conn) {
+            Ok(info) => {
+                debug!("get db info {:?}", info);
+                return Ok(Response::success(info.clone()));
+            },
+            Err(error) => {
+                error!("failed to get db info, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}
+
+#[command]
+pub async fn clean_database(state: State<'_, MissionHandlerState>) -> Result<Response<crate::db::utils::DBInfo>, Response<bool>> {
+    use crate::db::utils::clean_database_records;
+
+    let mut guard = state.0.lock().await;
+
+    if let Some(conn) = &mut guard.db_handler {
+        match clean_database_records(conn) {
+            Ok(info) => {
+                debug!("database cleaned, {:?} records removed", info.deleted);
+                return Ok(Response::success(info.clone()));
+            },
+            Err(error) => {
+                error!("failed to clean database, errMsg: {:?}", error);
+                return Err(Response::<bool>::error(500, format!("{:?}", error)));
+            }
+        }
+    }
+
+    Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
+}

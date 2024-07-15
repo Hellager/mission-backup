@@ -52,6 +52,7 @@ tokio = "1.38.0"
 tokio-cron-scheduler = "0.10.2"
 notify = "6.1.1"
 notify-debouncer-full = "0.3.1"
+path-absolutize = "3.1.1"
 
 [dependencies.uuid]
 version = "1.8.0"

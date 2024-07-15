@@ -467,45 +467,45 @@ pub fn get_mission_related_record(mid: &str, conn: &mut SqliteConnection) -> Res
     Err(Error::from(ErrorKind::NotFound))
 }
 
-// /// Clean 'mission' table records.
-// /// 
-// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `conn` - Connection to database.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, mission::clean_mission_record};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     match clean_mission_record(&mut conn) {
-// ///         Ok(cnt) => {
-// ///             println!("cleaned {} records", cnt);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to clean records, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn clean_mission_record(
-//     conn: &mut SqliteConnection, 
-// ) -> Result<usize, diesel::result::Error> {
-//     use super::schema::mission::dsl::*;
+/// Clean 'mission' table records.
+/// 
+/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+/// 
+/// # Arguments
+/// 
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, mission::clean_mission_record};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     match clean_mission_record(&mut conn) {
+///         Ok(cnt) => {
+///             println!("cleaned {} records", cnt);
+///         },
+///         Err(error) => {
+///             println!("failed to clean records, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn clean_record(
+    conn: &mut SqliteConnection, 
+) -> Result<usize, diesel::result::Error> {
+    use super::schema::mission::dsl::*;
 
-//     let cleaned: usize = diesel::delete(mission.filter(is_deleted.eq(1))).execute(conn)?;
+    let cleaned: usize = diesel::delete(mission.filter(is_deleted.eq(1))).execute(conn)?;
 
-//     let mut remaining: Vec<Mission> = mission.select(Mission::as_select()).load(conn)?;
-//     for (idx, item) in remaining.iter_mut().enumerate() {
-//         let new_id = (idx + 1) as i32;
-//         diesel::update(mission)
-//             .filter(mission_id.eq(&item.mission_id))
-//             .set(id.eq(new_id))
-//             .execute(conn)?;
-//     }
+    let mut remaining: Vec<Mission> = mission.select(Mission::as_select()).load(conn)?;
+    for (idx, item) in remaining.iter_mut().enumerate() {
+        let new_id = (idx + 1) as i32;
+        diesel::update(mission)
+            .filter(mission_id.eq(&item.mission_id))
+            .set(id.eq(new_id))
+            .execute(conn)?;
+    }
 
-//     Ok(cleaned)   
-// }
+    Ok(cleaned)   
+}

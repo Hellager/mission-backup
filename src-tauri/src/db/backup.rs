@@ -389,59 +389,59 @@ pub fn clear_backup_record(
         .execute(conn)
 }
 
-// /// Clean 'backup' table records.
-// /// 
-// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `conn` - Connection to database.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, backup::clean_backup_record};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     match clean_backup_record(&mut conn) {
-// ///         Ok(cnt) => {
-// ///             println!("cleaned {} records", cnt);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to clean records, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn clean_backup_record(
-//     conn: &mut SqliteConnection, 
-// ) -> Result<usize, diesel::result::Error> {
-//     use super::schema::backup::dsl::*;
-//     use std::path::Path;
+/// Clean 'backup' table records.
+/// 
+/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+/// 
+/// # Arguments
+/// 
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, backup::clean_backup_record};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     match clean_backup_record(&mut conn) {
+///         Ok(cnt) => {
+///             println!("cleaned {} records", cnt);
+///         },
+///         Err(error) => {
+///             println!("failed to clean records, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn clean_record(
+    conn: &mut SqliteConnection, 
+) -> Result<usize, diesel::result::Error> {
+    use super::schema::backup::dsl::*;
+    use std::path::Path;
 
-//     // delete invalid backups
-//     let cur_backups = query_backup_record(conn, None, None)?;
-//     for item in cur_backups.iter() {
-//         if !Path::new(&item.save_path).exists() {
-//             delete_backup_record(conn, Some(&item.backup_id), None)?;
-//         }
-//     }
+    // delete invalid backups
+    let cur_backups = query_backup_record(conn, None, None)?;
+    for item in cur_backups.iter() {
+        if !Path::new(&item.save_path).exists() {
+            delete_backup_record(conn, Some(&item.backup_id), None)?;
+        }
+    }
 
-//     // physically delete backup records
-//     let cleaned: usize = diesel::delete(backup.filter(is_deleted.eq(1))).execute(conn)?;
+    // physically delete backup records
+    let cleaned: usize = diesel::delete(backup.filter(is_deleted.eq(1))).execute(conn)?;
 
-//     // reorder remaining records
-//     let mut remaining: Vec<Backup> = backup.select(Backup::as_select()).load(conn)?;
-//     for (idx, item) in remaining.iter_mut().enumerate() {
-//         let new_id = (idx + 1) as i32;
-//         diesel::update(backup)
-//             .filter(backup_id.eq(&item.backup_id))
-//             .set(id.eq(new_id))
-//             .execute(conn)?;
-//     }
+    // reorder remaining records
+    let mut remaining: Vec<Backup> = backup.select(Backup::as_select()).load(conn)?;
+    for (idx, item) in remaining.iter_mut().enumerate() {
+        let new_id = (idx + 1) as i32;
+        diesel::update(backup)
+            .filter(backup_id.eq(&item.backup_id))
+            .set(id.eq(new_id))
+            .execute(conn)?;
+    }
 
-//     Ok(cleaned)   
-// }
+    Ok(cleaned)   
+}
 
 /// Create backup for mission with coresponding procedure.
 /// 
