@@ -9,7 +9,8 @@
     "procedure": "程序",
     "backup": "备份",
     "statistic": "统计",
-    "config": "设置"
+    "config": "设置",
+    "toolbox": "工具"
   },
   "status": {
     "error": "错误",
@@ -128,7 +129,31 @@
       "langEN": "英文"
     }
   },
+  "toolbox": {
+    "crontab": {
+      "title": "Cron 编辑器",
+      "next": "下次",
+      "second": "秒",
+      "minute": "分钟",
+      "hour": "小时",
+      "dayOfMonth": "日期",
+      "month": "月份",
+      "dayOfWeek": "周",
+      "asterisk": "任意时刻",
+      "comma": "分隔不同时间点",
+      "hyphen": "一段时间区间",
+      "slash": "每隔一段时间",
+      "valueRange": "可设定的数值范围",
+      "alterValues": "可替代英文简称"
+    }
+  },
+  "info": {
+    "valueCopied": "复制成功"
+  },
   "warning": {
     "anotherInstance": "程序已在运行"
+  },
+  "error": {
+    "invalidCron": "无效的 cron 表达式!"
   }
 }

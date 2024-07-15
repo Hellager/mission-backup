@@ -38,6 +38,11 @@
         "message": false,
         "open": true,
         "save": true
+      },
+      "clipboard": {
+        "all": true,
+        "writeText": true,
+        "readText": true
       }
     },
     "windows": [

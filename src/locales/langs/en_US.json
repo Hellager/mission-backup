@@ -9,7 +9,8 @@
     "procedure": "Procedure",
     "backup": "Backup",
     "statistic": "Statistic",
-    "config": "Config"
+    "config": "Config",
+    "toolbox": "Toolbox"
   },
   "status": {
     "error": "error",
@@ -128,7 +129,31 @@
       "langEN": "English"
     }
   },
+  "toolbox": {
+    "crontab": {
+      "title": "Crontab",
+      "next": "Next",
+      "second": "second",
+      "minute": "minute",
+      "hour": "hour",
+      "dayOfMonth": "day",
+      "month": "month",
+      "dayOfWeek": "week",
+      "asterisk": "any value",
+      "comma": "value list separator",
+      "hyphen": "range of values",
+      "slash": "step values",
+      "valueRange": "allowed values",
+      "alterValues": "alternative single values"
+    }
+  },
+  "info": {
+    "valueCopied": "Value Copied"
+  },
   "warning": {
     "anotherInstance": "App is already running"
+  },
+  "error": {
+    "invalidCron": "Invalid cron expression!"
   }
 }
