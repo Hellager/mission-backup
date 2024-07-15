@@ -2,7 +2,10 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { DialogMode } from '../../types'
-import CronTools from './components/CrontabTool.vue'
+import CrontabTool from './components/CrontabTool.vue'
+import DatabaseTool from './components/DatabaseTool.vue'
+import LogTool from './components/LogTool.vue'
+import MigrateTool from './components/MigrateTool.vue'
 
 /**
  * Used for internationalization.
@@ -28,8 +31,31 @@ async function handleDialogAction(toolIdx: number) {
           {{ t('toolbox.crontab.title') }}
         </el-card>
       </el-col>
+
+      <el-col :span="12">
+        <el-card shadow="hover" @click="handleShowDialogAction(1)">
+          {{ t('toolbox.database.title') }}
+        </el-card>
+      </el-col>
     </el-row>
-    <CronTools :visiable="showDialogs[0]" :mode="DialogMode.Create" expression="0 0/30 * * * *" @hide="handleDialogAction(0)" />
+
+    <el-row>
+      <el-col :span="12">
+        <el-card shadow="hover" @click="handleShowDialogAction(2)">
+          {{ t('toolbox.log.title') }}
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card shadow="hover" @click="handleShowDialogAction(3)">
+          {{ t('toolbox.migrate.title') }}
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <CrontabTool :visiable="showDialogs[0]" :mode="DialogMode.Create" expression="0 0/30 * * * *" @hide="handleDialogAction(0)" />
+    <DatabaseTool :visiable="showDialogs[1]" @hide="handleDialogAction(1)" />
+    <LogTool :visiable="showDialogs[2]" @hide="handleDialogAction(2)" />
+    <MigrateTool :visiable="showDialogs[3]" @hide="handleDialogAction(3)" />
   </div>
 </template>
 

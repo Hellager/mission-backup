@@ -1,4 +1,6 @@
 import { compareKeys } from '../common'
+import type { AppConfig } from '../../store/types'
+import type { Backup, Ignore, Mission, Procedure } from '../../store/mission/types'
 
 /**
  * Represents various commands for execution.
@@ -20,6 +22,11 @@ enum Command {
   CreateMission,
   DeleteMission,
   QueryStatistic,
+  QueryDBInfo,
+  CleanDatabase,
+  QueryLogInfo,
+  CleanAppLog,
+  MigrateFromOld,
 }
 
 /**
@@ -30,6 +37,24 @@ interface Response<T> {
   code: number
   data: T
   msg: string
+}
+
+interface DBInfo {
+  path: string
+  deleted: number
+}
+
+interface LogInfo {
+  path: string
+  size: number
+}
+
+interface MigratedData {
+  config: AppConfig
+  ignores: Ignore[]
+  procedures: Procedure[]
+  missions: Mission[]
+  backups: Backup[]
 }
 
 /**
@@ -56,4 +81,4 @@ function isResponse(data: any): boolean {
 }
 
 export { Command, defaultResponse, isResponse }
-export type { Response }
+export type { Response, DBInfo, LogInfo, MigratedData }

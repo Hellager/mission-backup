@@ -6,7 +6,7 @@ import { defaultAppConfig } from '../../store'
 import type { AppConfig } from '../../store/types'
 import type { Backup, Mission, Record } from '../../store/mission/types'
 import { Command } from './types'
-import type { Response } from './types'
+import type { DBInfo, LogInfo, MigratedData, Response } from './types'
 
 /**
  * Executes a command with optional arguments and returns the result.
@@ -177,6 +177,56 @@ async function execute(command: number, arg0?: any, arg1?: any, arg2?: any) {
       await invoke<Response<any>>('query_statistic_record', { mid: arg0, start: arg1, stop: arg2 }) // res -> Response(Backup[])
         .then((res: Response<any>) => {
           result = toCamelCase(res.data) as Backup
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.QueryDBInfo:
+      await invoke<Response<DBInfo>>('query_db_info')
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as DBInfo
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.CleanDatabase:
+      await invoke<Response<DBInfo>>('clean_database')
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as DBInfo
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.QueryLogInfo:
+      await invoke<Response<LogInfo>>('query_log_info')
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as LogInfo
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.CleanAppLog:
+      await invoke<Response<number>>('clean_app_log')
+        .then((res: Response<any>) => {
+          result = res.data
+        })
+        .catch((error: any) => {
+          throw error
+        })
+      break
+
+    case Command.MigrateFromOld:
+      await invoke<Response<MigratedData>>('migrate_from_old', { path: arg0 })
+        .then((res: Response<any>) => {
+          result = toCamelCase(res.data) as MigratedData
         })
         .catch((error: any) => {
           throw error

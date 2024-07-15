@@ -145,6 +145,33 @@
       "slash": "step values",
       "valueRange": "allowed values",
       "alterValues": "alternative single values"
+    },
+    "database": {
+      "title": "Database",
+      "check": "Check",
+      "clean": "Clean",
+      "preCleanHint": "Try clean database",
+      "sufCleanHint": "records will be cleaned, confirm to continue",
+      "cleanedHint": "records have been cleaned!"
+    },
+    "log": {
+      "title": "Log",
+      "check": "Check",
+      "clean": "Clean",
+      "preCleanHint": "Try clean log",
+      "sufCleanHint": "bytes of log data will be cleaned, confirm to continue",
+      "cleanedHint": "bytes log data have been cleaned!"
+    },
+    "migrate": {
+      "title": "Migrate",
+      "selectFile": "Select data file",
+      "select": "Select",
+      "migrate": "Migrate",
+      "data": "Data",
+      "count": "Count",
+      "config": "config",
+      "missionRelated": "mission related",
+      "action": "Action"
     }
   },
   "info": {
