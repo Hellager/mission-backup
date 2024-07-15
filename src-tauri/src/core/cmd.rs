@@ -493,3 +493,57 @@ pub async fn clean_database(state: State<'_, MissionHandlerState>) -> Result<Res
 
     Err(Response::<bool>::error(503, "database unavailalbe".to_string()))
 }
+
+#[command]
+pub async fn query_log_info(state: State<'_, MissionHandlerState>) -> Result<Response<crate::utils::logger::LogInfo>, Response<bool>> {
+    use crate::utils::logger::{ LogInfo, get_log_info};
+    let guard = state.0.lock().await;
+
+    match &guard.log_handler {
+        Some(log_path) => {
+            if let Ok(info) = get_log_info(log_path) {
+                return Ok(Response::success(info.clone()));
+            }
+        },
+        None => {
+            return Err(Response::<bool>::error(404, "log file not found".to_string()));
+        }
+    }
+
+    #[cfg(debug_assertions)] {
+        return Ok(Response::<LogInfo>::success(LogInfo {
+            path: "term".to_string(),
+            size: 0,
+        }));        
+    }
+
+
+    #[cfg(not(debug_assertions))] {
+        return Err(Response::<bool>::error(404, "log file not found".to_string()));        
+    }
+}
+
+#[command]
+pub async fn clean_app_log(state: State<'_, MissionHandlerState>) -> Result<Response<u64>, Response<bool>> {
+    use crate::utils::logger::clean_log;
+    let guard = state.0.lock().await;
+
+    match &guard.log_handler {
+        Some(log_path) => {
+            if let Ok(size) = clean_log(log_path) {
+                return Ok(Response::success(size));
+            }
+        },
+        None => {
+            return Err(Response::<bool>::error(404, "log file not found".to_string()));
+        }
+    }
+
+    #[cfg(debug_assertions)] {
+        return Ok(Response::<u64>::success(0));        
+    }
+
+    #[cfg(not(debug_assertions))] {
+        return Err(Response::<bool>::error(404, "log file not found".to_string()));        
+    }
+}
