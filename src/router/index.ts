@@ -7,6 +7,7 @@ import Mission from '../views/Mission/Mission.vue'
 import Statistic from '../views/Statistic/Statistic.vue'
 import Procedure from '../views/Procedure/Procedure.vue'
 import Screensaver from '../views/Screensaver/Screensaver.vue'
+import ToolBox from '../views/Toolbox/Toolbox.vue'
 
 /**
  * Router record array
@@ -19,6 +20,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/statistic', component: Statistic },
   { path: '/procedure', component: Procedure },
   { path: '/screensaver', component: Screensaver },
+  { path: '/toolbox', component: ToolBox },
 ]
 
 /**

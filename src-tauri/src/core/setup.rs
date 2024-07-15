@@ -91,6 +91,11 @@ pub fn setup_command() -> Box<dyn Fn(tauri::Invoke<tauri::Wry>) + Send + Sync> {
         set_mission_status,
         create_mission,
         delete_mission,
-        query_statistic_record
+        query_statistic_record,
+        query_db_info,
+        clean_database,
+        query_log_info,
+        clean_app_log,
+        migrate_from_old
     ])
 }

@@ -5,9 +5,11 @@ import App from './App.vue'
 import router from './router'
 import i18n from './locales'
 import pinia from './store'
+import { errorHandler } from './utils/error'
 
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/theme-chalk/el-message.css'
+import 'element-plus/theme-chalk/el-message-box.css'
 
 /**
  * Creates the Vue application instance.
@@ -34,10 +36,10 @@ app.use(i18n)
  */
 app.use(pinia)
 
-// /**
-//  * Sets the error handler for the application configuration.
-//  */
-// app.config.errorHandler = errorHandler
+/**
+ * Sets the error handler for the application configuration.
+ */
+app.config.errorHandler = errorHandler
 
 /**
  * Mounts the application to the specified element with id 'app'.

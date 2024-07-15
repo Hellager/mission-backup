@@ -9,7 +9,8 @@
     "procedure": "Procedure",
     "backup": "Backup",
     "statistic": "Statistic",
-    "config": "Config"
+    "config": "Config",
+    "toolbox": "Toolbox"
   },
   "status": {
     "error": "error",
@@ -127,5 +128,59 @@
       "langCN": "Chinese",
       "langEN": "English"
     }
+  },
+  "toolbox": {
+    "crontab": {
+      "title": "Crontab",
+      "next": "Next",
+      "second": "second",
+      "minute": "minute",
+      "hour": "hour",
+      "dayOfMonth": "day",
+      "month": "month",
+      "dayOfWeek": "week",
+      "asterisk": "any value",
+      "comma": "value list separator",
+      "hyphen": "range of values",
+      "slash": "step values",
+      "valueRange": "allowed values",
+      "alterValues": "alternative single values"
+    },
+    "database": {
+      "title": "Database",
+      "check": "Check",
+      "clean": "Clean",
+      "preCleanHint": "Try clean database",
+      "sufCleanHint": "records will be cleaned, confirm to continue",
+      "cleanedHint": "records have been cleaned!"
+    },
+    "log": {
+      "title": "Log",
+      "check": "Check",
+      "clean": "Clean",
+      "preCleanHint": "Try clean log",
+      "sufCleanHint": "bytes of log data will be cleaned, confirm to continue",
+      "cleanedHint": "bytes log data have been cleaned!"
+    },
+    "migrate": {
+      "title": "Migrate",
+      "selectFile": "Select data file",
+      "select": "Select",
+      "migrate": "Migrate",
+      "data": "Data",
+      "count": "Count",
+      "config": "config",
+      "missionRelated": "mission related",
+      "action": "Action"
+    }
+  },
+  "info": {
+    "valueCopied": "Value Copied"
+  },
+  "warning": {
+    "anotherInstance": "App is already running"
+  },
+  "error": {
+    "invalidCron": "Invalid cron expression!"
   }
 }

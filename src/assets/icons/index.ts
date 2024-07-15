@@ -11,6 +11,7 @@ import Search from '~icons/mdi/search'
 import Open from '~icons/mdi/folder-open-outline'
 import Start from '~icons/mdi/play-circle-outline'
 import Stop from '~icons/mdi/pause-circle-outline'
+import Copy from '~icons/mdi/content-copy'
 
 export {
   Logo,
@@ -26,4 +27,5 @@ export {
   Open,
   Start,
   Stop,
+  Copy,
 }

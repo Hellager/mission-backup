@@ -1,5 +1,7 @@
 //! The `logger` module contains functions about log.
 
+use serde::{Serialize, Deserialize};
+
 #[allow(dead_code)]
 /// Initialize simplelog.
 /// 
@@ -236,6 +238,65 @@ pub fn initialize_logger(name: Option<&str>, file: Option<&str>) -> Result<Strin
     }
 
     Ok(file_path)
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct LogInfo {
+    pub path: String,
+
+    pub size: u64,
+}
+
+pub fn get_log_info(log_path: &str) -> Result<LogInfo, std::io::Error> {
+    use std::path::Path;
+    use fs_extra::dir::get_size;
+    use std::io::{ Error, ErrorKind };
+
+    let mut info = LogInfo {
+        path: log_path.to_string(),
+        size: 0,
+    };
+
+    if Path::new(log_path).exists() {
+        match Path::new(log_path).parent() {
+            Some(log_dir) => {
+                if let Ok(dir_size) = get_size(log_dir) {
+                    info.size = dir_size;
+                }
+                return Ok(info);
+            },
+            None => {
+                println!("no log die detected!");
+                return Err(Error::from(ErrorKind::NotFound));
+            }
+        }
+    }
+
+    Err(Error::from(ErrorKind::NotFound))    
+}
+
+pub fn clean_log(log_path: &str) -> Result<u64, std::io::Error> {
+    use std::path::Path;
+    use super::explorer::remove_all;
+    use fs_extra::dir::get_size;
+    use std::io::{ Error, ErrorKind };
+
+    if Path::new(log_path).exists() {
+        match Path::new(log_path).parent() {
+            Some(log_dir) => {
+                if let Ok(dir_size) = get_size(log_dir) {
+                    remove_all(log_dir.to_str().expect(""))?;
+                    return Ok(dir_size);
+                }
+            },
+            None => {
+                println!("no log die detected!");
+                return Err(Error::from(ErrorKind::NotFound));
+            }
+        }
+    }
+
+    Err(Error::from(ErrorKind::NotFound))        
 }
 
 #[cfg(test)]

@@ -21,6 +21,7 @@
         "close": true,
         "hide": true,
         "show": true,
+        "setFocus": true,
         "maximize": true,
         "minimize": true,
         "unmaximize": true,
@@ -37,6 +38,11 @@
         "message": false,
         "open": true,
         "save": true
+      },
+      "clipboard": {
+        "all": true,
+        "writeText": true,
+        "readText": true
       }
     },
     "windows": [

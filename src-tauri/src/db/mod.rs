@@ -3,6 +3,7 @@ pub mod mission;
 pub mod backup;
 pub mod procedure;
 pub mod schema;
+pub mod utils;
 
 use self::backup::Backup;
 use self::ignore::Ignore;
@@ -411,52 +412,52 @@ pub fn clear_db_record(table: &str, conn: &mut SqliteConnection) -> Result<usize
     Ok(remove_cnt)    
 }
 
-// /// Clean db records.
-// /// 
-// /// Delete `is_deleted` items and reorder the remaining id.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `table` - Which table to handle.
-// /// * `conn` - Connection to database.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, clean_db_record};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     match clean_db_record("mission", &mut conn) {
-// ///         Ok(cnt) => {
-// ///             println!("table {} cleaned!", "mission");
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to clean table, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn clean_db_record(table: &str, conn: &mut SqliteConnection) -> Result<usize, diesel::result::Error> {
-//     use diesel::result::Error;
-//     let remove_cnt: usize;
+/// Clean db records.
+/// 
+/// Delete `is_deleted` items and reorder the remaining id.
+/// 
+/// # Arguments
+/// 
+/// * `table` - Which table to handle.
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, clean_db_record};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     match clean_db_record("mission", &mut conn) {
+///         Ok(cnt) => {
+///             println!("table {} cleaned!", "mission");
+///         },
+///         Err(error) => {
+///             println!("failed to clean table, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn clean_db_record(table: &str, conn: &mut SqliteConnection) -> Result<usize, diesel::result::Error> {
+    use diesel::result::Error;
+    let remove_cnt: usize;
     
-//     match table {
-//         "ignore" => {
-//             remove_cnt = ignore::clean_ignore_record(conn)?;
-//         },
-//         "procedure" => {
-//             remove_cnt = procedure::clean_procedure_record(conn)?;       
-//         },
-//         "mission" => {
-//             remove_cnt = mission::clean_mission_record(conn)?;
-//         },
-//         "backup" => {
-//             remove_cnt = backup::clean_backup_record(conn)?;
-//         },
-//         _ => {
-//             return Err(Error::from(Error::NotFound));
-//         }
-//     }
+    match table {
+        "ignore" => {
+            remove_cnt = ignore::clean_record(conn)?;
+        },
+        "procedure" => {
+            remove_cnt = procedure::clean_record(conn)?;       
+        },
+        "mission" => {
+            remove_cnt = mission::clean_record(conn)?;
+        },
+        "backup" => {
+            remove_cnt = backup::clean_record(conn)?;
+        },
+        _ => {
+            return Err(Error::from(Error::NotFound));
+        }
+    }
 
-//     Ok(remove_cnt)    
-// }
+    Ok(remove_cnt)    
+}

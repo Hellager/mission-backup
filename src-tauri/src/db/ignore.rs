@@ -312,48 +312,48 @@ pub fn clear_ignore_record(
         .execute(conn)
 }
 
-// /// Clean 'ignore' table records.
-// /// 
-// /// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
-// /// 
-// /// # Arguments
-// /// 
-// /// * `conn` - Connection to database.
-// /// 
-// /// # Examples
-// /// 
-// /// ```
-// /// use db::{establish_sqlite_connection, ignore::clean_ignore_record};
-// /// 
-// /// if let Ok(mut conn) = establish_sqlite_connection() {
-// ///     match clean_ignore_record(&mut conn) {
-// ///         Ok(cnt) => {
-// ///             println!("cleaned {} records", cnt);
-// ///         },
-// ///         Err(error) => {
-// ///             println!("failed to clean records, errMsg: {:?}", error);
-// ///         }
-// ///     }   
-// /// }
-// /// ```
-// pub fn clean_ignore_record(
-//     conn: &mut SqliteConnection, 
-// ) -> Result<usize, diesel::result::Error> {
-//     use super::schema::ignore::dsl::*;
+/// Clean 'ignore' table records.
+/// 
+/// Physically delete records where `is_deleted` is `1`, and reorder the remaining records.
+/// 
+/// # Arguments
+/// 
+/// * `conn` - Connection to database.
+/// 
+/// # Examples
+/// 
+/// ```
+/// use db::{establish_sqlite_connection, ignore::clean_ignore_record};
+/// 
+/// if let Ok(mut conn) = establish_sqlite_connection() {
+///     match clean_ignore_record(&mut conn) {
+///         Ok(cnt) => {
+///             println!("cleaned {} records", cnt);
+///         },
+///         Err(error) => {
+///             println!("failed to clean records, errMsg: {:?}", error);
+///         }
+///     }   
+/// }
+/// ```
+pub fn clean_record(
+    conn: &mut SqliteConnection, 
+) -> Result<usize, diesel::result::Error> {
+    use super::schema::ignore::dsl::*;
 
-//     let cleaned: usize = diesel::delete(ignore.filter(is_deleted.eq(1))).execute(conn)?;
+    let cleaned: usize = diesel::delete(ignore.filter(is_deleted.eq(1))).execute(conn)?;
 
-//     let mut remaining: Vec<Ignore> = ignore.select(Ignore::as_select()).load(conn)?;
-//     for (idx, item) in remaining.iter_mut().enumerate() {
-//         let new_id = (idx + 1) as i32;
-//         diesel::update(ignore)
-//             .filter(ignore_id.eq(&item.ignore_id))
-//             .set(id.eq(new_id))
-//             .execute(conn)?;
-//     }
+    let mut remaining: Vec<Ignore> = ignore.select(Ignore::as_select()).load(conn)?;
+    for (idx, item) in remaining.iter_mut().enumerate() {
+        let new_id = (idx + 1) as i32;
+        diesel::update(ignore)
+            .filter(ignore_id.eq(&item.ignore_id))
+            .set(id.eq(new_id))
+            .execute(conn)?;
+    }
 
-//     Ok(cleaned)   
-// }
+    Ok(cleaned)   
+}
 
 /// Get procedure related ignores.
 /// 

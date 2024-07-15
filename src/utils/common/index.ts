@@ -40,3 +40,36 @@ export function compareKeys(a: any, b: any) {
   const bKeys = Object.keys(b).sort()
   return JSON.stringify(aKeys) === JSON.stringify(bKeys)
 }
+
+/**
+ * Function that count occurrences of a substring in a string;
+ * @param src - The string
+ * @param sub - The subString            The sub string to search for
+ * @param allowOverlapping - Optional. (Default:false)
+ *
+ * @author Vitim.us https://gist.github.com/victornpb/7736865
+ * @see Unit Test https://jsfiddle.net/Victornpb/5axuh96u/
+ * @see https://stackoverflow.com/a/7924240/938822
+ */
+export function subStringOccurrences(src: string, sub: string, allowOverlapping?: boolean) {
+  src += ''
+  sub += ''
+  if (sub.length <= 0)
+    return (src.length + 1)
+
+  let n = 0
+  let pos = 0
+  const step = allowOverlapping ? 1 : sub.length
+
+  while (true) {
+    pos = src.indexOf(sub, pos)
+    if (pos >= 0) {
+      ++n
+      pos += step
+    }
+    else {
+      break
+    }
+  }
+  return n
+}

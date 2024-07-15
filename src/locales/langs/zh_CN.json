@@ -9,7 +9,8 @@
     "procedure": "程序",
     "backup": "备份",
     "statistic": "统计",
-    "config": "设置"
+    "config": "设置",
+    "toolbox": "工具"
   },
   "status": {
     "error": "错误",
@@ -127,5 +128,59 @@
       "langCN": "中文",
       "langEN": "英文"
     }
+  },
+  "toolbox": {
+    "crontab": {
+      "title": "Cron 编辑器",
+      "next": "下次",
+      "second": "秒",
+      "minute": "分钟",
+      "hour": "小时",
+      "dayOfMonth": "日期",
+      "month": "月份",
+      "dayOfWeek": "周",
+      "asterisk": "任意时刻",
+      "comma": "分隔不同时间点",
+      "hyphen": "一段时间区间",
+      "slash": "每隔一段时间",
+      "valueRange": "可设定的数值范围",
+      "alterValues": "可替代英文简称"
+    },
+    "database": {
+      "title": "数据库工具",
+      "check": "查看",
+      "clean": "清理",
+      "preCleanHint": "尝试清理数据库",
+      "sufCleanHint": "条数据将被清理, 点击 '确认' 以继续",
+      "cleanedHint": "条数据已被清理!"
+    },
+    "log": {
+      "title": "日志工具",
+      "check": "查看",
+      "clean": "清理",
+      "preCleanHint": "尝试清理日志",
+      "sufCleanHint": "字节日志数据将被清理, 点击 '确认' 以继续",
+      "cleanedHint": "字节日志数据已被清理!"
+    },
+    "migrate": {
+      "title": "数据迁移",
+      "selectFile": "选择数据文件",
+      "select": "选择",
+      "migrate": "迁移",
+      "data": "数据",
+      "count": "数量",
+      "config": "设置",
+      "missionRelated": "任务相关",
+      "action": "操作"
+    }
+  },
+  "info": {
+    "valueCopied": "复制成功"
+  },
+  "warning": {
+    "anotherInstance": "程序已在运行"
+  },
+  "error": {
+    "invalidCron": "无效的 cron 表达式!"
   }
 }

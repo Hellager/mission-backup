@@ -41,6 +41,10 @@ const menuitems: ASideMenuItems[] = [
     key: '/config',
     name: 'config',
   },
+  {
+    key: '/toolbox',
+    name: 'toolbox',
+  },
 ]
 </script>
 
