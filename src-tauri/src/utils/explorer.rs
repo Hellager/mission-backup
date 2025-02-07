@@ -1,4 +1,3 @@
-//! The `explorer` module contains functions about system explorer.
 use std::fs::{self, remove_file, remove_dir_all, create_dir_all, read_dir, copy, metadata, OpenOptions};
 use std::io::{Error, ErrorKind};
 use std::path::{Path, PathBuf};
