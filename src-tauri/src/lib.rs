@@ -11,13 +11,14 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_opener::init())
+        .plugin(plugins::initialize_plugin_os())
+        .plugin(plugins::initialize_plugin_notification())
+        .plugin(plugins::initialize_plugin_opener())
         .plugin(plugins::initialize_plugin_single_instance())
         .plugin(plugins::initialize_plugin_autostart())
         .plugin(plugins::initialize_plugin_window_state())
+
         .plugin(plugins::initialize_plugin_log())
         .setup(core::setup::setup_handler)
         .on_window_event(core::window::on_window_event)

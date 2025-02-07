@@ -1,5 +1,17 @@
 use tauri::{plugin::TauriPlugin, Emitter, Manager, Runtime};
 
+pub fn initialize_plugin_os<R: Runtime>() -> TauriPlugin<R> {
+    tauri_plugin_os::init()
+}
+
+pub fn initialize_plugin_notification<R: Runtime>() -> TauriPlugin<R> {
+    tauri_plugin_notification::init()
+}
+
+pub fn initialize_plugin_opener<R: Runtime>() -> TauriPlugin<R> {
+    tauri_plugin_opener::init()
+}
+
 pub fn initialize_plugin_single_instance<R: Runtime>() -> TauriPlugin<R> {
     tauri_plugin_single_instance::init(|app, _, _| {
         if let Some(main_window) = app.get_webview_window("main") {
