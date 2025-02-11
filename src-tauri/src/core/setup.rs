@@ -1,6 +1,7 @@
 use tauri::{App, Manager};
 use tauri_plugin_window_state::{StateFlags, WindowExt};
-use log::debug;
+use crate::config::{load_app_config, save_app_config, AppConfig};
+use log::{debug, info, error};
 use super::tray;
 
 pub fn setup_handler(app: &mut App) -> Result<(), Box<dyn std::error::Error + 'static>> {
@@ -10,6 +11,17 @@ pub fn setup_handler(app: &mut App) -> Result<(), Box<dyn std::error::Error + 's
     debug!("Window state restored");
 
     let _ = tray::create_system_tray(app.handle())?;
+
+    let _ = load_app_config().unwrap_or_else(|e| {
+        error!("Failed to load config: {}", e);
+        let default_config = AppConfig::default();
+        if let Err(e) = save_app_config(&default_config) {
+            error!("Failed to save default config: {}", e);
+        } else {
+            info!("Created and saved default config");
+        }
+        default_config
+    });
 
     Ok(())
 }
