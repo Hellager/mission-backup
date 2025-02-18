@@ -43,10 +43,7 @@ diesel::table! {
     db_version (id) {
         id -> Integer,
         version -> Text,
-        created_at -> Timestamp,
         updated_at -> Timestamp,
-        is_deleted -> Bool,
-        deleted_at -> Nullable<Timestamp>,
     }
 }
 
