@@ -43,6 +43,25 @@ test-log = "0.2.17"
 thiserror = "2.0.11"
 directories = "6.0.0"
 toml = "0.8.20"
+diesel = { version = "2.2.7", features = ["sqlite", "r2d2", "uuid", "chrono", "returning_clauses_for_sqlite_3_35"] }
+libsqlite3-sys = { version = "0.31.0", features = ["bundled"] }
+diesel_migrations = { version = "2.2.0", features = ["sqlite"] }
+dotenvy = "0.15.7"
+chrono = { version = "0.4.39", features = ["serde"] }
+path-absolutize = "3.1.1"
+regex = "1.11.1"
+glob = "0.3.2"
+fake = { version = "3.1.0", features = ["derive", "chrono"] }
+rand = "0.9.0"
+
+[dependencies.uuid]
+version = "1.12.1"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "serde",
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"
